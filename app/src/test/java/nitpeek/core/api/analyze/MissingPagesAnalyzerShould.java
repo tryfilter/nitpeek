@@ -2,6 +2,7 @@ package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.translation.DefaultEnglishTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MissingPagesAnalyzerShould {
+final class MissingPagesAnalyzerShould {
 
     private static final double DELTA = 0.0000001;
 
@@ -19,7 +20,7 @@ class MissingPagesAnalyzerShould {
 
     @BeforeEach
     void setup() {
-        analyzer = new MissingPagesAnalyzer();
+        analyzer = new MissingPagesAnalyzer(new DefaultEnglishTranslator());
     }
 
     @Test

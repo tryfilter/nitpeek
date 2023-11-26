@@ -2,12 +2,18 @@ package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.translation.Translator;
 
 import java.util.*;
 
-public class MissingPagesAnalyzer implements Analyzer {
+public final class MissingPagesAnalyzer implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();
+    private final Translator i18n;
+
+    public MissingPagesAnalyzer(Translator i18n) {
+        this.i18n = i18n;
+    }
 
     @Override
     public void processPage(TextPage page) {
@@ -41,7 +47,7 @@ public class MissingPagesAnalyzer implements Analyzer {
         TextCoordinate lastMissing = new TextCoordinate(lastMissingPage, Integer.MAX_VALUE, Integer.MAX_VALUE);
         TextSelection missingSelection = new TextSelection(firstMissing, lastMissing);
 
-        return new SimpleProblemComponent("Pages " + firstMissingPage + "-" + lastMissingPage + " are missing.", missingSelection);
+        return new SimpleProblemComponent(i18n.missingPagesComponentDescription(firstMissingPage, lastMissingPage), missingSelection);
     }
 
     private List<PageRange> getMissingSections(NavigableSet<Integer> sortedPageNumbers) {

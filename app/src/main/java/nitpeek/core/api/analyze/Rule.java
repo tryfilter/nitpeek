@@ -6,6 +6,8 @@ package nitpeek.core.api.analyze;
  * be produced by the rule's Analyzer.<br>
  * Each Problem has its own name and description which are not necessarily related
  * to the name and description of the rule.
+ * A rule has an abstract description of its intent, while a problem has a description specific to the way in
+ * which it breaks the rule, potentially including suggested fixes.
  */
 public interface Rule {
 
@@ -14,8 +16,9 @@ public interface Rule {
     String getDescription();
 
     /**
-     * @return an Analyzer that identifies violations of this Rule.
-     * Note that one Analyzer can identify many different kinds of Problems.
+     * @return an Analyzer that identifies violations of this Rule<br>
+     * <br>
+     * Note that one Analyzer may identify many different types of Problem.
      */
     Analyzer getAnalyzer();
 }

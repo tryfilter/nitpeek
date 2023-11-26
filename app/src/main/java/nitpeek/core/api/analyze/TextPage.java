@@ -1,14 +1,16 @@
 package nitpeek.core.api.analyze;
 
+import java.util.List;
+
 public interface TextPage {
 
     /**
-     * @return the text on this page
+     * @return the text on this page as a list of lines
      */
-    String getText();
+    List<String> getLines();
 
     /**
-     * @return the number (ordinal, 0-based) associated with this page
+     * @return the number (ordinal, 0-based) of this page
      */
     int getPageNumber();
 }

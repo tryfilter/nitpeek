@@ -12,5 +12,9 @@ public interface Problem {
 
     ProblemType getType();
 
+    /**
+     * @return a list of individual issues that make up the problem; this may be a single-element list, but it should
+     * generally not be empty, as there would be no reference to a location in the text
+     */
     List<ProblemComponent> getComponents();
 }

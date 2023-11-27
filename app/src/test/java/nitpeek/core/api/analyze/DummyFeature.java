@@ -1,4 +1,4 @@
-package nitpeek.core.api.analyze.notify;
+package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;

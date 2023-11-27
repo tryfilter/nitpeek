@@ -1,5 +1,6 @@
-package nitpeek.core.api.analyze.notify;
+package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.notify.FeatureSubscriber;
 import nitpeek.core.api.common.Feature;
 
 import java.util.*;
@@ -9,15 +10,15 @@ import java.util.*;
  */
 final class RecordingSubscriber implements FeatureSubscriber {
 
-    private final List<String> recordingTarget = new ArrayList<>();
+    private final List<Feature> recordingTarget = new ArrayList<>();
 
 
     @Override
     public void onNextFeature(Feature feature) {
-        recordingTarget.add(feature.getType().name());
+        recordingTarget.add(feature);
     }
 
-    public List<String> getRecording() {
+    public List<Feature> getRecording() {
         return Collections.unmodifiableList(recordingTarget);
     }
 }

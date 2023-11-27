@@ -1,5 +1,7 @@
-package nitpeek.core.api.analyze.notify;
+package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.notify.FeatureNotifier;
+import nitpeek.core.api.analyze.notify.ThreadsafeFeatureNotifier;
 import nitpeek.core.api.common.Feature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +38,7 @@ final class ThreadsafeNotifierShould {
 
         int notificationCount = notifier.notifyFeature(dummyFeature);
 
-        var expectedFeatureNames = List.of(DUMMY);
+        var expectedFeatureNames = List.of(dummyFeature);
 
         assertEquals(2, notificationCount);
         assertEquals(expectedFeatureNames, subscriber1.getRecording());
@@ -74,8 +76,7 @@ final class ThreadsafeNotifierShould {
             notifier.notifyFeature(feature);
         }
 
-        var expectedFeatureNames = features.stream().map(f -> f.getType().name()).toList();
-        assertEquals(expectedFeatureNames, subscriber.getRecording());
+        assertEquals(features, subscriber.getRecording());
     }
 
     @Test

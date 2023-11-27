@@ -2,6 +2,7 @@ package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.testutil.TestUtil;
 import nitpeek.translation.DefaultEnglishTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
+import static nitpeek.core.testutil.TestUtil.emptyPage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class MissingPagesAnalyzerShould {
@@ -31,23 +33,23 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportNothingIfFirstPageWasAnalyzed() {
-        TextPage firstPage = new SimpleTextPage(emptyList(), 0);
+        TextPage firstPage = emptyPage(0);
         analyzer.processPage(firstPage);
         assertEquals(emptyList(), analyzer.findFeatures());
     }
 
     @Test
     void reportMissingPagesIfFirstPageWasNotAnalyzedMediumConfidence() {
-        TextPage secondPage = new SimpleTextPage(emptyList(), 1);
+        TextPage secondPage = emptyPage(1);
         analyzer.processPage(secondPage);
         assertSingleFeature(Confidence.MEDIUM);
     }
 
     @Test
     void reportMissingPagesIfSeveralContiguousFirstPagesWereNotAnalyzedMediumConfidence() {
-        TextPage page10 = new SimpleTextPage(emptyList(), 10);
-        TextPage page11 = new SimpleTextPage(emptyList(), 11);
-        TextPage page12 = new SimpleTextPage(emptyList(), 12);
+        TextPage page10 = emptyPage(10);
+        TextPage page11 = emptyPage(11);
+        TextPage page12 = emptyPage(12);
         analyzer.processPage(page10);
         analyzer.processPage(page11);
         analyzer.processPage(page12);
@@ -56,8 +58,8 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportMissingPageIfMiddlePageWasNotAnalyzedHighConfidence() {
-        TextPage firstPage = new SimpleTextPage(emptyList(), 0);
-        TextPage thirdPage = new SimpleTextPage(emptyList(), 2);
+        TextPage firstPage = emptyPage(0);
+        TextPage thirdPage = emptyPage(2);
         analyzer.processPage(firstPage);
         analyzer.processPage(thirdPage);
         assertSingleFeature(Confidence.HIGH);
@@ -65,10 +67,10 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportEachPortionOfMissingPagesIfMiddlePagesWereNotAnalyzedHighConfidence() {
-        TextPage firstPage = new SimpleTextPage(emptyList(), 0);
-        TextPage thirdPage = new SimpleTextPage(emptyList(), 2);
-        TextPage fourthPage = new SimpleTextPage(emptyList(), 3);
-        TextPage sixthPage = new SimpleTextPage(emptyList(), 5);
+        TextPage firstPage = emptyPage(0);
+        TextPage thirdPage = emptyPage(2);
+        TextPage fourthPage = emptyPage(3);
+        TextPage sixthPage = emptyPage(5);
         analyzer.processPage(firstPage);
         analyzer.processPage(thirdPage);
         analyzer.processPage(fourthPage);
@@ -79,10 +81,10 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportEachPortionOfContiguousMissingPagesIfMiddlePagesWereNotAnalyzedHighConfidence() {
-        TextPage page0 = new SimpleTextPage(emptyList(), 0);
-        TextPage page4 = new SimpleTextPage(emptyList(), 4);
-        TextPage page5 = new SimpleTextPage(emptyList(), 5);
-        TextPage page10 = new SimpleTextPage(emptyList(), 10);
+        TextPage page0 = emptyPage(0);
+        TextPage page4 = emptyPage(4);
+        TextPage page5 = emptyPage(5);
+        TextPage page10 = emptyPage(10);
         analyzer.processPage(page0);
         analyzer.processPage(page4);
         analyzer.processPage(page5);
@@ -93,7 +95,7 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportMissingFirstPageDetailsInFeatureComponents() {
-        TextPage secondPage = new SimpleTextPage(emptyList(), 1);
+        TextPage secondPage = emptyPage(1);
 
         analyzer.processPage(secondPage);
 
@@ -104,11 +106,11 @@ final class MissingPagesAnalyzerShould {
 
     @Test
     void reportMissingPagesDetailsInFeatureComponents() {
-        TextPage page0 = new SimpleTextPage(emptyList(), 0);
-        TextPage page4 = new SimpleTextPage(emptyList(), 4);
-        TextPage page5 = new SimpleTextPage(emptyList(), 5);
-        TextPage page12 = new SimpleTextPage(emptyList(), 12);
-        TextPage page14 = new SimpleTextPage(emptyList(), 14);
+        TextPage page0 = emptyPage(0);
+        TextPage page4 = emptyPage(4);
+        TextPage page5 = emptyPage(5);
+        TextPage page12 = emptyPage(12);
+        TextPage page14 = emptyPage(14);
         analyzer.processPage(page0);
         analyzer.processPage(page4);
         analyzer.processPage(page5);

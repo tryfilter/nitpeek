@@ -9,7 +9,8 @@ import nitpeek.core.api.common.Feature;
  * feedback, or when complete text processing does not have a well-defined finite length.
  * <br>
  * <br>
- * Calling the {@link Analyzer#findFeatures()} method shall return all features that have so far been published through {@link FeatureNotifier#notifyFeature(Feature)}
+ * Calling the {@link Analyzer#findFeatures()} method shall return all features (and no more than those) that have so
+ * far been published through {@link FeatureNotifier#notifyFeature(Feature)}
  */
 public interface NotifyingAnalyzer extends Analyzer, FeatureNotifier {
 }

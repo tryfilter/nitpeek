@@ -2,6 +2,7 @@ package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.translation.DefaultEnglishTranslator;
 import nitpeek.translation.Translator;
 
 import java.util.*;
@@ -10,6 +11,13 @@ public final class MissingPagesAnalyzer implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();
     private final Translator i18n;
+
+    /**
+     * Uses the default english translator for user-facing text
+     */
+    public MissingPagesAnalyzer() {
+        this(new DefaultEnglishTranslator());
+    }
 
     public MissingPagesAnalyzer(Translator i18n) {
         this.i18n = i18n;
@@ -34,14 +42,14 @@ public final class MissingPagesAnalyzer implements Analyzer {
         return features;
     }
 
-    private List<Feature> findMissingPagesInBeginning(TreeSet<Integer> sortedPageNumbers) {
+    private List<Feature> findMissingPagesInBeginning(NavigableSet<Integer> sortedPageNumbers) {
         // first page was processed: no missing pages in beginning
         if (sortedPageNumbers.first() == 0) return List.of();
 
         return List.of(missingPageProblem(missingPageRange(0, sortedPageNumbers.first() - 1), Confidence.MEDIUM));
     }
 
-    private List<Feature> findMissingPagesInMiddle(TreeSet<Integer> sortedPageNumbers) {
+    private List<Feature> findMissingPagesInMiddle(NavigableSet<Integer> sortedPageNumbers) {
         List<Feature> features = new ArrayList<>();
         List<PageRange> missingSections = getMissingSections(sortedPageNumbers);
         for (var missingSection : missingSections) {

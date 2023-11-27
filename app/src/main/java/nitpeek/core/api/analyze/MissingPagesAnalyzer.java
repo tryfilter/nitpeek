@@ -23,31 +23,47 @@ public final class MissingPagesAnalyzer implements Analyzer {
     @Override
     public List<Problem> findProblems() {
         if (processedPageNumbers.isEmpty())
-            return List.of(new SimpleProblem(StandardProblem.MISSING_PAGES.getType(), Collections.emptyList(), Confidence.HIGH.value()));
+            return List.of(missingPageProblem(null, Confidence.HIGH));
 
         var sortedPageNumbers = new TreeSet<>(processedPageNumbers);
         List<Problem> problems = new ArrayList<>();
 
-        if (sortedPageNumbers.first() != 0) {
-            ProblemComponent missingPageRange = component(0, sortedPageNumbers.first() - 1);
-            problems.add(new SimpleProblem(StandardProblem.MISSING_PAGES.getType(), Collections.singletonList(missingPageRange), Confidence.MEDIUM.value()));
-        }
-
-        List<PageRange> missingSections = getMissingSections(sortedPageNumbers);
-        for (var missingSection : missingSections) {
-            ProblemComponent missingPageRange = component(missingSection.firstPage(), missingSection.lastPage());
-            problems.add(new SimpleProblem(StandardProblem.MISSING_PAGES.getType(), Collections.singletonList(missingPageRange), Confidence.HIGH.value()));
-        }
+        problems.addAll(findMissingPagesInBeginning(sortedPageNumbers));
+        problems.addAll(findMissingPagesInMiddle(sortedPageNumbers));
 
         return problems;
     }
 
-    private ProblemComponent component(int firstMissingPage, int lastMissingPage) {
+    private List<Problem> findMissingPagesInBeginning(TreeSet<Integer> sortedPageNumbers) {
+        // first page was processed: no missing pages in beginning
+        if (sortedPageNumbers.first() == 0) return List.of();
+
+        return List.of(missingPageProblem(missingPageRange(0, sortedPageNumbers.first() - 1), Confidence.MEDIUM));
+    }
+
+    private List<Problem> findMissingPagesInMiddle(TreeSet<Integer> sortedPageNumbers) {
+        List<Problem> problems = new ArrayList<>();
+        List<PageRange> missingSections = getMissingSections(sortedPageNumbers);
+        for (var missingSection : missingSections) {
+            TextSelection missingPageRange = missingPageRange(missingSection.firstPage(), missingSection.lastPage());
+            problems.add(missingPageProblem(missingPageRange, Confidence.HIGH));
+        }
+        return problems;
+    }
+
+    private TextSelection missingPageRange(int firstMissingPage, int lastMissingPage) {
         TextCoordinate firstMissing = new TextCoordinate(firstMissingPage, 0, 0);
         TextCoordinate lastMissing = new TextCoordinate(lastMissingPage, Integer.MAX_VALUE, Integer.MAX_VALUE);
-        TextSelection missingSelection = new TextSelection(firstMissing, lastMissing);
+        return new TextSelection(firstMissing, lastMissing);
+    }
 
-        return new SimpleProblemComponent(i18n.missingPagesComponentDescription(firstMissingPage, lastMissingPage), missingSelection);
+    private Problem missingPageProblem(TextSelection pages, Confidence confidence) {
+        List<ProblemComponent> components = pages == null ? List.of() : List.of(problemComponent(pages));
+        return new SimpleProblem(StandardProblem.MISSING_PAGES.getType(), components, confidence.value());
+    }
+
+    private ProblemComponent problemComponent(TextSelection missingPages) {
+        return new SimpleProblemComponent(i18n.missingPagesComponentDescription(missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
     }
 
     private List<PageRange> getMissingSections(NavigableSet<Integer> sortedPageNumbers) {

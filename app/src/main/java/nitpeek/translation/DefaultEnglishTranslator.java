@@ -11,4 +11,14 @@ public class DefaultEnglishTranslator implements Translator {
     public String missingPagesComponentDescription(int firstMissingPage, int lastMissingPage) {
         return "Pages " + firstMissingPage + "-" + lastMissingPage + " have not been processed.";
     }
+
+    @Override
+    public String missingPagesFeatureName() {
+        return "Missing pages";
+    }
+
+    @Override
+    public String missingPagesFeatureDescription() {
+        return "Fewer pages were processed than expected.";
+    }
 }

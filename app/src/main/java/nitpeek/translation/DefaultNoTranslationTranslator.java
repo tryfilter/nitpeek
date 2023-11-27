@@ -28,6 +28,16 @@ public class DefaultNoTranslationTranslator implements Translator {
         return missingTranslation("missingPagesComponentDescription");
     }
 
+    @Override
+    public String missingPagesFeatureName() {
+        return missingTranslation("missingPagesFeatureName");
+    }
+
+    @Override
+    public String missingPagesFeatureDescription() {
+        return missingTranslation("missingPagesFeatureDescription");
+    }
+
     private String missingTranslation(String methodName) {
         return messagePrefix + "'" + methodName + "'" + messageBetweenMethodNameAndTranslatorName + translatorName + messageSuffix;
     }

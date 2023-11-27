@@ -12,4 +12,6 @@ package nitpeek.translation;
 public interface Translator {
 
     String missingPagesComponentDescription(int firstMissingPage, int lastMissingPage);
+    String missingPagesFeatureName();
+    String missingPagesFeatureDescription();
 }

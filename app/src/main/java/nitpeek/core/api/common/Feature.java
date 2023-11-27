@@ -2,6 +2,9 @@ package nitpeek.core.api.common;
 
 import java.util.List;
 
+/**
+ * Represents some point of interest in a text. This may be a problem found in the text, or a statistic about one of the pages, etc.
+ */
 public interface Feature {
 
     /**

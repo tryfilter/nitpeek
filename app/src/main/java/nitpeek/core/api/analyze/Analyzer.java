@@ -1,6 +1,6 @@
 package nitpeek.core.api.analyze;
 
-import nitpeek.core.api.common.Problem;
+import nitpeek.core.api.common.Feature;
 
 import java.util.List;
 
@@ -11,14 +11,14 @@ import java.util.List;
  */
 public interface Analyzer {
     /**
-     * Performs analysis to determine currently detectable problems.<br>
-     * Implementations shall provide the complete list of problems they can detect with the currently available information.
+     * Performs analysis to determine currently detectable features.<br>
+     * Implementations shall provide the complete list of features they can detect with the currently available information.
      * That is, each invocation of this method should be treated by the implementation as potentially being the only invocation
      * in the object's lifetime.
      *
-     * @return the list of problems detected at the time of calling this method
+     * @return the list of features detected at the time of calling this method
      */
-    List<Problem> findProblems();
+    List<Feature> findFeatures();
 
     /**
      * Ingests a blob of text, interpreted as the contents of one page, for analysis.

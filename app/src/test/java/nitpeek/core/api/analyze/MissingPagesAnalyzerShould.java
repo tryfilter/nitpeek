@@ -26,21 +26,21 @@ final class MissingPagesAnalyzerShould {
     @Test
     void reportThatNoPagesWereAnalyzedHighConfidence() {
         // no pages processed
-        assertSingleProblem(Confidence.HIGH);
+        assertSingleFeature(Confidence.HIGH);
     }
 
     @Test
     void reportNothingIfFirstPageWasAnalyzed() {
         TextPage firstPage = new SimpleTextPage(emptyList(), 0);
         analyzer.processPage(firstPage);
-        assertEquals(emptyList(), analyzer.findProblems());
+        assertEquals(emptyList(), analyzer.findFeatures());
     }
 
     @Test
     void reportMissingPagesIfFirstPageWasNotAnalyzedMediumConfidence() {
         TextPage secondPage = new SimpleTextPage(emptyList(), 1);
         analyzer.processPage(secondPage);
-        assertSingleProblem(Confidence.MEDIUM);
+        assertSingleFeature(Confidence.MEDIUM);
     }
 
     @Test
@@ -51,7 +51,7 @@ final class MissingPagesAnalyzerShould {
         analyzer.processPage(page10);
         analyzer.processPage(page11);
         analyzer.processPage(page12);
-        assertSingleProblem(Confidence.MEDIUM);
+        assertSingleFeature(Confidence.MEDIUM);
     }
 
     @Test
@@ -60,7 +60,7 @@ final class MissingPagesAnalyzerShould {
         TextPage thirdPage = new SimpleTextPage(emptyList(), 2);
         analyzer.processPage(firstPage);
         analyzer.processPage(thirdPage);
-        assertSingleProblem(Confidence.HIGH);
+        assertSingleFeature(Confidence.HIGH);
     }
 
     @Test
@@ -74,7 +74,7 @@ final class MissingPagesAnalyzerShould {
         analyzer.processPage(fourthPage);
         analyzer.processPage(sixthPage);
 
-        assertMultipleProblems(Confidence.HIGH, 2);
+        assertFeatures(Confidence.HIGH, 2);
     }
 
     @Test
@@ -88,22 +88,22 @@ final class MissingPagesAnalyzerShould {
         analyzer.processPage(page5);
         analyzer.processPage(page10);
 
-        assertMultipleProblems(Confidence.HIGH, 2);
+        assertFeatures(Confidence.HIGH, 2);
     }
 
     @Test
-    void reportMissingFirstPageDetailsInProblemComponents() {
+    void reportMissingFirstPageDetailsInFeatureComponents() {
         TextPage secondPage = new SimpleTextPage(emptyList(), 1);
 
         analyzer.processPage(secondPage);
 
-        Problem onlyProblem = analyzer.findProblems().getFirst();
-        assertMissingPages(onlyProblem, pages(0, 0));
+        Feature onlyFeature = analyzer.findFeatures().getFirst();
+        assertMissingPages(onlyFeature, pages(0, 0));
 
     }
 
     @Test
-    void reportMissingPagesDetailsInProblemComponents() {
+    void reportMissingPagesDetailsInFeatureComponents() {
         TextPage page0 = new SimpleTextPage(emptyList(), 0);
         TextPage page4 = new SimpleTextPage(emptyList(), 4);
         TextPage page5 = new SimpleTextPage(emptyList(), 5);
@@ -115,10 +115,10 @@ final class MissingPagesAnalyzerShould {
         analyzer.processPage(page12);
         analyzer.processPage(page14);
 
-        List<Problem> problems = analyzer.findProblems();
-        Problem missingFrom1To3 = problems.get(0); // missing pages between page 0 and page 4
-        Problem missingFrom6To11 = problems.get(1); // missing pages between page 5 and page 12
-        Problem missing13 = problems.get(2); // missing page between page 12 and page 14
+        List<Feature> features = analyzer.findFeatures();
+        Feature missingFrom1To3 = features.get(0); // missing pages between page 0 and page 4
+        Feature missingFrom6To11 = features.get(1); // missing pages between page 5 and page 12
+        Feature missing13 = features.get(2); // missing page between page 12 and page 14
 
         assertMissingPages(missingFrom1To3, pages(1, 3));
         assertMissingPages(missingFrom6To11, pages(6, 11));
@@ -132,25 +132,25 @@ final class MissingPagesAnalyzerShould {
         return new TextSelection(new TextCoordinate(firstPage, 0, 0), new TextCoordinate(lastPage, 0, 0));
     }
 
-    private static void assertMissingPages(Problem problem, TextSelection... coordinates) {
+    private static void assertMissingPages(Feature feature, TextSelection... coordinates) {
 
         List<PageRange> expectedCoordinates = Arrays.stream(coordinates).map(PageRange::pageRange).toList();
-        List<PageRange> actualCoordinates = problem.getComponents().stream().map(ProblemComponent::getCoordinates).map(PageRange::pageRange).toList();
+        List<PageRange> actualCoordinates = feature.getComponents().stream().map(FeatureComponent::getCoordinates).map(PageRange::pageRange).toList();
 
         assertEquals(expectedCoordinates, actualCoordinates);
     }
 
-    private void assertSingleProblem(Confidence confidence) {
-        assertMultipleProblems(confidence, 1);
+    private void assertSingleFeature(Confidence confidence) {
+        assertFeatures(confidence, 1);
     }
 
-    private void assertMultipleProblems(Confidence confidence, int problemCount) {
-        List<Problem> problems = analyzer.findProblems();
-        assertEquals(problemCount, problems.size());
+    private void assertFeatures(Confidence confidence, int featureCount) {
+        List<Feature> features = analyzer.findFeatures();
+        assertEquals(featureCount, features.size());
 
-        for (Problem problem : problems) {
-            assertEquals(StandardProblem.MISSING_PAGES.getType(), problem.getType());
-            assertEquals(confidence.value(), problem.getConfidence(), DELTA);
+        for (Feature feature : features) {
+            assertEquals(StandardFeature.MISSING_PAGES.getType(), feature.getType());
+            assertEquals(confidence.value(), feature.getConfidence(), DELTA);
         }
     }
 }

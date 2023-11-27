@@ -21,34 +21,34 @@ public final class MissingPagesAnalyzer implements Analyzer {
     }
 
     @Override
-    public List<Problem> findProblems() {
+    public List<Feature> findFeatures() {
         if (processedPageNumbers.isEmpty())
             return List.of(missingPageProblem(null, Confidence.HIGH));
 
         var sortedPageNumbers = new TreeSet<>(processedPageNumbers);
-        List<Problem> problems = new ArrayList<>();
+        List<Feature> features = new ArrayList<>();
 
-        problems.addAll(findMissingPagesInBeginning(sortedPageNumbers));
-        problems.addAll(findMissingPagesInMiddle(sortedPageNumbers));
+        features.addAll(findMissingPagesInBeginning(sortedPageNumbers));
+        features.addAll(findMissingPagesInMiddle(sortedPageNumbers));
 
-        return problems;
+        return features;
     }
 
-    private List<Problem> findMissingPagesInBeginning(TreeSet<Integer> sortedPageNumbers) {
+    private List<Feature> findMissingPagesInBeginning(TreeSet<Integer> sortedPageNumbers) {
         // first page was processed: no missing pages in beginning
         if (sortedPageNumbers.first() == 0) return List.of();
 
         return List.of(missingPageProblem(missingPageRange(0, sortedPageNumbers.first() - 1), Confidence.MEDIUM));
     }
 
-    private List<Problem> findMissingPagesInMiddle(TreeSet<Integer> sortedPageNumbers) {
-        List<Problem> problems = new ArrayList<>();
+    private List<Feature> findMissingPagesInMiddle(TreeSet<Integer> sortedPageNumbers) {
+        List<Feature> features = new ArrayList<>();
         List<PageRange> missingSections = getMissingSections(sortedPageNumbers);
         for (var missingSection : missingSections) {
             TextSelection missingPageRange = missingPageRange(missingSection.firstPage(), missingSection.lastPage());
-            problems.add(missingPageProblem(missingPageRange, Confidence.HIGH));
+            features.add(missingPageProblem(missingPageRange, Confidence.HIGH));
         }
-        return problems;
+        return features;
     }
 
     private TextSelection missingPageRange(int firstMissingPage, int lastMissingPage) {
@@ -57,13 +57,13 @@ public final class MissingPagesAnalyzer implements Analyzer {
         return new TextSelection(firstMissing, lastMissing);
     }
 
-    private Problem missingPageProblem(TextSelection pages, Confidence confidence) {
-        List<ProblemComponent> components = pages == null ? List.of() : List.of(problemComponent(pages));
-        return new SimpleProblem(StandardProblem.MISSING_PAGES.getType(), components, confidence.value());
+    private Feature missingPageProblem(TextSelection pages, Confidence confidence) {
+        List<FeatureComponent> components = pages == null ? List.of() : List.of(problemComponent(pages));
+        return new SimpleFeature(StandardFeature.MISSING_PAGES.getType(), components, confidence.value());
     }
 
-    private ProblemComponent problemComponent(TextSelection missingPages) {
-        return new SimpleProblemComponent(i18n.missingPagesComponentDescription(missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
+    private FeatureComponent problemComponent(TextSelection missingPages) {
+        return new SimpleFeatureComponent(i18n.missingPagesComponentDescription(missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
     }
 
     private List<PageRange> getMissingSections(NavigableSet<Integer> sortedPageNumbers) {

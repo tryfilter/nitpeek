@@ -1,10 +1,10 @@
 package nitpeek.core.api.report;
 
-import nitpeek.core.api.common.Problem;
+import nitpeek.core.api.common.Feature;
 
 import java.util.List;
 
 public interface Reporter {
 
-    void reportProblems(List<Problem> problems);
+    void reportFeatures(List<Feature> features);
 }

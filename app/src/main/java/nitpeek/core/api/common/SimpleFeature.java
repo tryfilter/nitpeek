@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public record SimpleProblem(ProblemType type, List<ProblemComponent> components, double confidence) implements Problem {
-    public SimpleProblem {
+public record SimpleFeature(FeatureType type, List<FeatureComponent> components, double confidence) implements Feature {
+    public SimpleFeature {
         if (confidence < 0 || confidence > 1)
             throw new IllegalArgumentException("confidence must be in the interval [0, 1] but was " + confidence);
         Objects.requireNonNull(type);
@@ -20,12 +20,12 @@ public record SimpleProblem(ProblemType type, List<ProblemComponent> components,
     }
 
     @Override
-    public ProblemType getType() {
+    public FeatureType getType() {
         return type;
     }
 
     @Override
-    public List<ProblemComponent> getComponents() {
+    public List<FeatureComponent> getComponents() {
         return Collections.unmodifiableList(components);
     }
 }

@@ -1,6 +1,6 @@
 package nitpeek.core.api.common;
 
-public record SimpleProblemComponent(String description, TextSelection coordinates) implements ProblemComponent {
+public record SimpleFeatureComponent(String description, TextSelection coordinates) implements FeatureComponent {
     @Override
     public String getDescription() {
         return description;

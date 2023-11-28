@@ -24,7 +24,7 @@ final class DummyFeature implements Feature {
 
     @Override
     public FeatureType getType() {
-        return new FeatureType(name, FeatureType.Classification.INFO, "");
+        return new FeatureType("dummy-feature", name, FeatureType.Classification.INFO, "");
     }
 
     @Override

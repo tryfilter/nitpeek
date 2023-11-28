@@ -36,6 +36,6 @@ public enum StandardFeature {
      * @return the FeatureType of this standard feature, with its name and description translated by the provided translator
      */
     public FeatureType getType(Translator translator) {
-        return new FeatureType(nameSupplier.apply(translator), classification, descriptionSupplier.apply(translator));
+        return new FeatureType("nitpeek." + this.name(), nameSupplier.apply(translator), classification, descriptionSupplier.apply(translator));
     }
 }

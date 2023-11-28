@@ -7,6 +7,17 @@ import nitpeek.translation.Translator;
 
 import java.util.*;
 
+/**
+ * Reports sections of pages that were expected to be processed but weren't.<br>
+ * <br>
+ * This analyzer is <i>not</i> thread safe.<br>
+ * This analyzer is <i>not</i> independent of page processing order: if pages were processed out of order and
+ * {@link #findFeatures()} is called before all pages were processed, then this analyzer may over-eagerly report
+ * missing pages that may yet be processed. <br>
+ * Note that this has implications also on the behavior of an observable version of this analyzer: if pages
+ * are processed out of order, the observable wrapper may send notifications classifying as missing pages that are
+ * yet to be processed.
+ */
 public final class MissingPagesAnalyzer implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();

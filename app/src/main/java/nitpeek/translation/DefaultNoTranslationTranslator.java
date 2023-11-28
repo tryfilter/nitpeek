@@ -1,5 +1,7 @@
 package nitpeek.translation;
 
+import nitpeek.core.api.common.TextSelection;
+
 /**
  * This class may be extended to create partially implemented translators or to create custom translators that are
  * resilient against new additions to the Translator interface: instead of a compilation/runtime error, yet not-implemented
@@ -36,6 +38,61 @@ public class DefaultNoTranslationTranslator implements Translator {
     @Override
     public String missingPagesFeatureDescription() {
         return missingTranslation("missingPagesFeatureDescription");
+    }
+
+    @Override
+    public String foundFeatureName(String featureName) {
+        return missingTranslation("foundFeatureMessage");
+    }
+
+    @Override
+    public String description(String featureName) {
+        return missingTranslation("foundFeatureDescription");
+    }
+
+    @Override
+    public String textMatch(String textMatch) {
+        return missingTranslation("textMatch");
+    }
+
+    @Override
+    public String foundFeatureComponentCoordinates(TextSelection coordinates) {
+        return missingTranslation("foundFeatureComponentCoordinates");
+    }
+
+    @Override
+    public String page() {
+        return missingTranslation("page");
+    }
+
+    @Override
+    public String line() {
+        return missingTranslation("line");
+    }
+
+    @Override
+    public String character() {
+        return missingTranslation("character");
+    }
+
+    @Override
+    public String axisCompound(String axisName, int value) {
+        return missingTranslation("axisCompound");
+    }
+
+    @Override
+    public String axisPinpoint(String axisName, int value) {
+        return missingTranslation("axisPinpoint");
+    }
+
+    @Override
+    public String axisStart(String axisName, int value) {
+        return missingTranslation("axisStart");
+    }
+
+    @Override
+    public String axisEnd(String axisName, int value) {
+        return missingTranslation("axisEnd");
     }
 
     private String missingTranslation(String methodName) {

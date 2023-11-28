@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @param lines
  * @param number
  */

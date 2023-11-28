@@ -25,7 +25,6 @@ public enum StandardFeature {
     }
 
     /**
-     *
      * @return the FeatureType of this standard feature, with any user-facing text translated by the standard english translator
      */
     public FeatureType getType() {
@@ -33,7 +32,6 @@ public enum StandardFeature {
     }
 
     /**
-     *
      * @param translator the translator to use as a source for the feature name and feature description
      * @return the FeatureType of this standard feature, with its name and description translated by the provided translator
      */

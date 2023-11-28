@@ -2,8 +2,6 @@ package nitpeek.core.api.analyze;
 
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
-import nitpeek.core.testutil.TestUtil;
-import nitpeek.translation.DefaultEnglishTranslator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +12,7 @@ import static java.util.Collections.emptyList;
 import static nitpeek.core.testutil.TestUtil.emptyPage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-final class MissingPagesAnalyzerShould {
+final class MissingPagesAnalyzerPlainShould {
 
     private static final double DELTA = 0.0000001;
 
@@ -22,7 +20,7 @@ final class MissingPagesAnalyzerShould {
 
     @BeforeEach
     void setup() {
-        analyzer = new MissingPagesAnalyzer(new DefaultEnglishTranslator());
+        analyzer = new MissingPagesAnalyzer();
     }
 
     @Test
@@ -34,14 +32,14 @@ final class MissingPagesAnalyzerShould {
     @Test
     void reportNothingIfFirstPageWasAnalyzed() {
         TextPage firstPage = emptyPage(0);
-        analyzer.processPage(firstPage);
+        processPages(firstPage);
         assertEquals(emptyList(), analyzer.findFeatures());
     }
 
     @Test
     void reportMissingPagesIfFirstPageWasNotAnalyzedMediumConfidence() {
         TextPage secondPage = emptyPage(1);
-        analyzer.processPage(secondPage);
+        processPages(secondPage);
         assertSingleFeature(Confidence.MEDIUM);
     }
 
@@ -50,9 +48,7 @@ final class MissingPagesAnalyzerShould {
         TextPage page10 = emptyPage(10);
         TextPage page11 = emptyPage(11);
         TextPage page12 = emptyPage(12);
-        analyzer.processPage(page10);
-        analyzer.processPage(page11);
-        analyzer.processPage(page12);
+        processPages(page10, page11, page12);
         assertSingleFeature(Confidence.MEDIUM);
     }
 
@@ -60,8 +56,7 @@ final class MissingPagesAnalyzerShould {
     void reportMissingPageIfMiddlePageWasNotAnalyzedHighConfidence() {
         TextPage firstPage = emptyPage(0);
         TextPage thirdPage = emptyPage(2);
-        analyzer.processPage(firstPage);
-        analyzer.processPage(thirdPage);
+        processPages(firstPage, thirdPage);
         assertSingleFeature(Confidence.HIGH);
     }
 
@@ -71,10 +66,7 @@ final class MissingPagesAnalyzerShould {
         TextPage thirdPage = emptyPage(2);
         TextPage fourthPage = emptyPage(3);
         TextPage sixthPage = emptyPage(5);
-        analyzer.processPage(firstPage);
-        analyzer.processPage(thirdPage);
-        analyzer.processPage(fourthPage);
-        analyzer.processPage(sixthPage);
+        processPages(firstPage, thirdPage, fourthPage, sixthPage);
 
         assertFeatures(Confidence.HIGH, 2);
     }
@@ -85,10 +77,7 @@ final class MissingPagesAnalyzerShould {
         TextPage page4 = emptyPage(4);
         TextPage page5 = emptyPage(5);
         TextPage page10 = emptyPage(10);
-        analyzer.processPage(page0);
-        analyzer.processPage(page4);
-        analyzer.processPage(page5);
-        analyzer.processPage(page10);
+        processPages(page0, page4, page5, page10);
 
         assertFeatures(Confidence.HIGH, 2);
     }
@@ -97,7 +86,7 @@ final class MissingPagesAnalyzerShould {
     void reportMissingFirstPageDetailsInFeatureComponents() {
         TextPage secondPage = emptyPage(1);
 
-        analyzer.processPage(secondPage);
+        processPages(secondPage);
 
         Feature onlyFeature = analyzer.findFeatures().getFirst();
         assertMissingPages(onlyFeature, pages(0, 0));
@@ -111,11 +100,7 @@ final class MissingPagesAnalyzerShould {
         TextPage page5 = emptyPage(5);
         TextPage page12 = emptyPage(12);
         TextPage page14 = emptyPage(14);
-        analyzer.processPage(page0);
-        analyzer.processPage(page4);
-        analyzer.processPage(page5);
-        analyzer.processPage(page12);
-        analyzer.processPage(page14);
+        processPages(page0, page4, page5, page12, page14);
 
         List<Feature> features = analyzer.findFeatures();
         Feature missingFrom1To3 = features.get(0); // missing pages between page 0 and page 4
@@ -125,6 +110,24 @@ final class MissingPagesAnalyzerShould {
         assertMissingPages(missingFrom1To3, pages(1, 3));
         assertMissingPages(missingFrom6To11, pages(6, 11));
         assertMissingPages(missing13, pages(13, 13));
+    }
+
+    private void processPages(TextPage... pages) {
+        for (var page : pages) analyzer.processPage(page);
+    }
+
+    private void assertSingleFeature(Confidence confidence) {
+        assertFeatures(confidence, 1);
+    }
+
+    private void assertFeatures(Confidence confidence, int featureCount) {
+        List<Feature> features = analyzer.findFeatures();
+        assertEquals(featureCount, features.size());
+
+        for (Feature feature : features) {
+            assertEquals(StandardFeature.MISSING_PAGES.getType(), feature.getType());
+            assertEquals(confidence.value(), feature.getConfidence(), DELTA);
+        }
     }
 
     private static TextSelection pages(int firstPage, int lastPage) {
@@ -140,19 +143,5 @@ final class MissingPagesAnalyzerShould {
         List<PageRange> actualCoordinates = feature.getComponents().stream().map(FeatureComponent::getCoordinates).map(PageRange::pageRange).toList();
 
         assertEquals(expectedCoordinates, actualCoordinates);
-    }
-
-    private void assertSingleFeature(Confidence confidence) {
-        assertFeatures(confidence, 1);
-    }
-
-    private void assertFeatures(Confidence confidence, int featureCount) {
-        List<Feature> features = analyzer.findFeatures();
-        assertEquals(featureCount, features.size());
-
-        for (Feature feature : features) {
-            assertEquals(StandardFeature.MISSING_PAGES.getType(), feature.getType());
-            assertEquals(confidence.value(), feature.getConfidence(), DELTA);
-        }
     }
 }

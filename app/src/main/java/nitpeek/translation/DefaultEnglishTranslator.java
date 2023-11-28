@@ -48,7 +48,7 @@ public class DefaultEnglishTranslator implements Translator {
 
     @Override
     public String textMatch(String textMatch) {
-        return "Text match: " + textMatch;
+        return "Text Match: " + textMatch;
     }
 
     @Override

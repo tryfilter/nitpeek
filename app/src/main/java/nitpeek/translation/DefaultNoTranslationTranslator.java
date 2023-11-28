@@ -47,7 +47,7 @@ public class DefaultNoTranslationTranslator implements Translator {
 
     @Override
     public String description(String featureName) {
-        return missingTranslation("foundFeatureDescription");
+        return missingTranslation("description");
     }
 
     @Override

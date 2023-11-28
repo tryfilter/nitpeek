@@ -9,7 +9,7 @@ public class IndentingFeatureFormatter implements FeatureFormatter {
 
     private final FeatureComponentFormatter componentFormatter;
     private final Indent indent;
-    private final Translator translator;
+    private final Translator i18n;
 
 
     public IndentingFeatureFormatter() {
@@ -28,15 +28,15 @@ public class IndentingFeatureFormatter implements FeatureFormatter {
 
     public IndentingFeatureFormatter(Translator translator, Indent indent, FeatureComponentFormatter componentFormatter) {
         this.componentFormatter = componentFormatter;
-        this.translator = translator;
+        this.i18n = translator;
         this.indent = indent;
     }
 
     @Override
     public String format(Feature feature) {
 
-        return translator.foundFeatureName(feature.getType().name()) + '\n' +
-                indent.indentContainedLines(translator.description(feature.getType().description())) + '\n' +
+        return i18n.foundFeatureName(feature.getType().name()) + '\n' +
+                indent.indentContainedLines(i18n.description(feature.getType().description())) + '\n' +
                 '\n' +
                 formatComponents(feature);
     }

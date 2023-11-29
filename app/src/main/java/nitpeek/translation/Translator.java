@@ -17,6 +17,11 @@ public interface Translator {
     String missingPagesFeatureName();
     String missingPagesFeatureDescription();
 
+    String processedPagesFeatureName();
+    String processedPagesFeatureDescription();
+    String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage);
+    String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage, int pageCount);
+
     String foundFeatureName(String featureName);
     String description(String featureName);
 

@@ -1,5 +1,7 @@
 package nitpeek.core.api.common;
 
+import nitpeek.core.api.common.util.PageRange;
+
 public record TextSelection(TextCoordinate fromInclusive, TextCoordinate toInclusive) {
     public TextSelection {
         if (fromInclusive.page() > toInclusive.page())
@@ -10,5 +12,13 @@ public record TextSelection(TextCoordinate fromInclusive, TextCoordinate toInclu
         boolean pagesAndLinesAreEqual = pagesAreEqual && (fromInclusive.line() == toInclusive.line());
         if (pagesAndLinesAreEqual && fromInclusive.character() > toInclusive.character())
             throw new IllegalArgumentException("from-character may not be > to-character when pages and lines are equal (" + fromInclusive.character() + ">" + toInclusive.character() + ")");
+    }
+
+    public static TextSelection fullPages(PageRange range) {
+        return new TextSelection(new TextCoordinate(range.firstPage(), 0, 0), new TextCoordinate(range.lastPage(), Integer.MAX_VALUE, Integer.MAX_VALUE));
+    }
+
+    public static TextSelection emptyPages(PageRange range) {
+        return new TextSelection(new TextCoordinate(range.firstPage(), 0, 0), new TextCoordinate(range.lastPage(), 0, 0));
     }
 }

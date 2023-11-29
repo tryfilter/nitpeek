@@ -41,6 +41,26 @@ public class DefaultNoTranslationTranslator implements Translator {
     }
 
     @Override
+    public String processedPagesFeatureName() {
+        return missingTranslation("processedPagesFeatureName");
+    }
+
+    @Override
+    public String processedPagesFeatureDescription() {
+        return missingTranslation("processedPagesFeatureDescription");
+    }
+
+    @Override
+    public String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage) {
+        return missingTranslation("processedPagesComponentDescription");
+    }
+
+    @Override
+    public String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage, int pageCount) {
+        return missingTranslation("processedPagesComponentDescription");
+    }
+
+    @Override
     public String foundFeatureName(String featureName) {
         return missingTranslation("foundFeatureMessage");
     }

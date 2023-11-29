@@ -7,7 +7,8 @@ import java.util.function.Function;
 
 public enum StandardFeature {
 
-    MISSING_PAGES(Translator::missingPagesFeatureName, Translator::missingPagesFeatureDescription, FeatureType.Classification.WARNING);
+    MISSING_PAGES(Translator::missingPagesFeatureName, Translator::missingPagesFeatureDescription, FeatureType.Classification.WARNING),
+    PROCESSED_PAGES(Translator::processedPagesFeatureName, Translator::processedPagesFeatureDescription, FeatureType.Classification.INFO);
 
 
     private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();
@@ -36,6 +37,6 @@ public enum StandardFeature {
      * @return the FeatureType of this standard feature, with its name and description translated by the provided translator
      */
     public FeatureType getType(Translator translator) {
-        return new FeatureType("nitpeek." + this.name(), nameSupplier.apply(translator), classification, descriptionSupplier.apply(translator));
+        return new FeatureType("nitpeek.core." + this.name(), nameSupplier.apply(translator), classification, descriptionSupplier.apply(translator));
     }
 }

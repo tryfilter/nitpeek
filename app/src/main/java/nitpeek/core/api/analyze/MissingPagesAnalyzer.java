@@ -64,16 +64,13 @@ public final class MissingPagesAnalyzer implements Analyzer {
         List<Feature> features = new ArrayList<>();
         List<PageRange> missingSections = getMissingSections(sortedPageNumbers);
         for (var missingSection : missingSections) {
-            TextSelection missingPageRange = missingPageRange(missingSection.firstPage(), missingSection.lastPage());
-            features.add(missingPageProblem(missingPageRange, Confidence.HIGH));
+            features.add(missingPageProblem(TextSelection.fullPages(missingSection), Confidence.HIGH));
         }
         return features;
     }
 
     private TextSelection missingPageRange(int firstMissingPage, int lastMissingPage) {
-        TextCoordinate firstMissing = new TextCoordinate(firstMissingPage, 0, 0);
-        TextCoordinate lastMissing = new TextCoordinate(lastMissingPage, Integer.MAX_VALUE, Integer.MAX_VALUE);
-        return new TextSelection(firstMissing, lastMissing);
+        return TextSelection.fullPages(new PageRange(firstMissingPage, lastMissingPage));
     }
 
     private Feature missingPageProblem(TextSelection pages, Confidence confidence) {

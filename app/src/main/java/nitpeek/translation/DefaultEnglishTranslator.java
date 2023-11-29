@@ -37,6 +37,27 @@ public class DefaultEnglishTranslator implements Translator {
     }
 
     @Override
+    public String processedPagesFeatureName() {
+        return "Processed pages";
+    }
+
+    @Override
+    public String processedPagesFeatureDescription() {
+        return "Counts the number of pages that were processed and lists them.";
+    }
+
+    @Override
+    public String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage) {
+        if (firstProcessedPage == lastProcessedPage) return "page " + firstProcessedPage;
+        else return "pages " + firstProcessedPage + "-" + lastProcessedPage;
+    }
+
+    @Override
+    public String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage, int pageCount) {
+        return "Processed " + pageCount + " total pages from page " + firstProcessedPage + " to page " + lastProcessedPage;
+    }
+
+    @Override
     public String foundFeatureName(String featureName) {
         return "Found feature '" + featureName + "'";
     }

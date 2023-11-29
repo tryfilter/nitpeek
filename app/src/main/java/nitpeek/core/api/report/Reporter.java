@@ -6,5 +6,8 @@ import java.util.List;
 
 public interface Reporter {
 
-    void reportFeatures(List<Feature> features);
+    /**
+     * @throws ReportingException when the implementation was unable to report all features
+     */
+    void reportFeatures(List<Feature> features) throws ReportingException;
 }

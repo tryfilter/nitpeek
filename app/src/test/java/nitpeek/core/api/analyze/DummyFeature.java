@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Placeholder feature to use for tests
  */
-final class DummyFeature implements Feature {
+public final class DummyFeature implements Feature {
 
     private final String name;
 
@@ -24,7 +24,12 @@ final class DummyFeature implements Feature {
 
     @Override
     public FeatureType getType() {
-        return new FeatureType("dummy-feature", name, FeatureType.Classification.INFO, "");
+        return new FeatureType(
+                "dummy-feature",
+                name,
+                FeatureType.Classification.INFO,
+                "This is a dummy feature implementation for testing purposes"
+        );
     }
 
     @Override

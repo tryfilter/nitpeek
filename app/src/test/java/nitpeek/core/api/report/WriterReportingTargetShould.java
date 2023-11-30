@@ -7,7 +7,7 @@ import java.io.Writer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-final class WriterReporterShould {
+final class WriterReportingTargetShould {
 
     @Test
     void reportStrings() throws ReportingException {
@@ -16,7 +16,7 @@ final class WriterReporterShould {
         String s3 = "s3";
 
         Writer writer = new StringWriter();
-        StringReporter reporter = new WriterReporter(writer);
+        ReportingTarget reporter = new WriterReportingTarget(writer);
         reporter.report(s1);
         reporter.report(s2);
         reporter.report(s3);

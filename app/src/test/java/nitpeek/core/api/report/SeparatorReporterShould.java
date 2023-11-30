@@ -22,7 +22,7 @@ final class SeparatorReporterShould {
     void reportNothingForEmptyFeatureList() throws Exception {
         Writer writer = new StringWriter();
 
-        Reporter reporter = new SeparatorReporter("~", new WriterReporter(writer), new DummyFormatter());
+        Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
         reporter.reportFeatures(List.of());
 
         String expected = "";
@@ -33,7 +33,7 @@ final class SeparatorReporterShould {
     void reportNoSeparatorForSingleElementList() throws Exception {
         Writer writer = new StringWriter();
 
-        Reporter reporter = new SeparatorReporter("~", new WriterReporter(writer), new DummyFormatter());
+        Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
         reporter.reportFeatures(List.of(new DummyFeature("Feature1")));
 
         String expected = "Feature1";
@@ -43,7 +43,7 @@ final class SeparatorReporterShould {
     void reportFeatures() throws Exception {
         Writer writer = new StringWriter();
 
-        Reporter reporter = new SeparatorReporter("~", new WriterReporter(writer), new DummyFormatter());
+        Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
         reporter.reportFeatures(features);
 
         String expected = "Feature1~Feature2~Feature3";
@@ -54,7 +54,7 @@ final class SeparatorReporterShould {
     void reportFeatures2() throws Exception {
         Writer writer = new StringWriter();
 
-        Reporter reporter = new SeparatorReporter("~", new WriterReporter(writer), new DummyFormatter());
+        Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
         reporter.reportFeatures(features.subList(1, 3));
 
         String expected = "Feature2~Feature3";
@@ -66,7 +66,7 @@ final class SeparatorReporterShould {
         Writer writer = new StringWriter();
 
 
-        Reporter reporter = new SeparatorReporter("\n", new WriterReporter(writer), new DummyFormatter());
+        Reporter reporter = new SeparatorReporter("\n", new WriterReportingTarget(writer), new DummyFormatter());
         reporter.reportFeatures(features);
 
         String expected = """

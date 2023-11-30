@@ -3,11 +3,11 @@ package nitpeek.core.api.report;
 import java.io.IOException;
 import java.io.Writer;
 
-public final class WriterReporter implements StringReporter {
+public final class WriterReportingTarget implements ReportingTarget {
 
     private final Writer writer;
 
-    public WriterReporter(Writer writer) {
+    public WriterReportingTarget(Writer writer) {
         this.writer = writer;
     }
 

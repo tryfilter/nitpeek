@@ -1,6 +1,6 @@
 package nitpeek.core.api.report;
 
-public interface StringReporter {
+public interface ReportingTarget {
 
     void report(String string) throws ReportingException;
 }

@@ -1,5 +1,6 @@
 package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.analyzer.ObservableAnalyzer;
 import nitpeek.core.api.analyze.notify.FeatureNotifier;
 import nitpeek.core.api.analyze.notify.NotifyingAnalyzer;
 

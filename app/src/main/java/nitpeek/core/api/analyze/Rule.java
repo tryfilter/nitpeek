@@ -1,5 +1,7 @@
 package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.analyzer.Analyzer;
+
 /**
  * A rule with an id, a name and a description.<br>
  * Note that although there is a single description per rule, many Feature instances of potentially different types can

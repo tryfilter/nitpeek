@@ -1,9 +1,9 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.internal;
 
 /**
  * Note that the specific confidence levels are not guaranteed to be stable
  */
-enum Confidence {
+public enum Confidence {
     MIN(0.0),
     LOW(0.25),
     MEDIUM(0.5),

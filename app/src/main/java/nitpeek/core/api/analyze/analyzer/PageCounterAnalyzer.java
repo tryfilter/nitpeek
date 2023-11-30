@@ -1,5 +1,6 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
 import nitpeek.translation.DefaultEnglishTranslator;
@@ -15,7 +16,7 @@ public final class PageCounterAnalyzer implements Analyzer {
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
     private final Translator i18n;
 
-    PageCounterAnalyzer() {
+    public PageCounterAnalyzer() {
         this(new DefaultEnglishTranslator());
     }
 

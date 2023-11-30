@@ -1,7 +1,9 @@
 package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.analyzer.Analyzer;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.internal.Confidence;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

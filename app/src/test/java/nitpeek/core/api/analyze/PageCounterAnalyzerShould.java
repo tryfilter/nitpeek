@@ -1,5 +1,6 @@
 package nitpeek.core.api.analyze;
 
+import nitpeek.core.api.analyze.analyzer.PageCounterAnalyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;

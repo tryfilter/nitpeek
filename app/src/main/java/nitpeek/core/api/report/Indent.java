@@ -1,6 +1,6 @@
 package nitpeek.core.api.report;
 
-public class Indent {
+public final class Indent {
 
     public static final String DEFAULT_INDENT_SYMBOL = " ";
 

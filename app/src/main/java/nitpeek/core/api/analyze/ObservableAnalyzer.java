@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * This a convenience decorator for adding notification capabilities to existing analyzers.
  */
-public class ObservableAnalyzer implements NotifyingAnalyzer {
+public final class ObservableAnalyzer implements NotifyingAnalyzer {
 
     private final Analyzer analyzer;
     private final FeatureNotifier notifier;

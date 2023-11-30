@@ -2,7 +2,7 @@ package nitpeek.core.api.analyze;
 
 import org.junit.jupiter.api.BeforeEach;
 
-public class ObservableAnalyzerMissingPagesNoCustomNotifierShould implements ObservableAnalyzerMissingPagesShould {
+final class ObservableAnalyzerMissingPagesNoCustomNotifierShould implements ObservableAnalyzerMissingPagesShould {
     private ObservableAnalyzer analyzer;
 
     @BeforeEach

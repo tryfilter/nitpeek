@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static nitpeek.core.api.common.TextSelection.emptyPages;
 
-public class PageCounterAnalyzer implements Analyzer {
+public final class PageCounterAnalyzer implements Analyzer {
 
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
     private final Translator i18n;

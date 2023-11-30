@@ -6,7 +6,7 @@ import nitpeek.translation.Translator;
 
 import java.util.Optional;
 
-public class IndentingFeatureComponentFormatter implements FeatureComponentFormatter {
+public final class IndentingFeatureComponentFormatter implements FeatureComponentFormatter {
 
     private final Indent indent;
     private final Translator i18n;

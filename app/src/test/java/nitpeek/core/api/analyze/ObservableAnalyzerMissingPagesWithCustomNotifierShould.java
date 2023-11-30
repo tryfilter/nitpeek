@@ -3,7 +3,7 @@ package nitpeek.core.api.analyze;
 import nitpeek.core.api.analyze.notify.ThreadsafeFeatureNotifier;
 import org.junit.jupiter.api.BeforeEach;
 
-public class ObservableAnalyzerMissingPagesWithCustomNotifierShould implements ObservableAnalyzerMissingPagesShould {
+final class ObservableAnalyzerMissingPagesWithCustomNotifierShould implements ObservableAnalyzerMissingPagesShould {
     private ObservableAnalyzer analyzer;
 
     @BeforeEach

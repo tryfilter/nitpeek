@@ -6,7 +6,7 @@ import nitpeek.translation.Translator;
 
 import java.util.List;
 
-public class FancyTextRangeDescription implements TextRangeDescription {
+public final class FancyTextRangeDescription implements TextRangeDescription {
 
     private final Translator i18n;
 

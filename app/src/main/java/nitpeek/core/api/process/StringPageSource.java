@@ -62,7 +62,6 @@ public final class StringPageSource implements PageSource {
     }
 
     private List<String> splitPages(String pages, int rowsPerPage) {
-        Objects.requireNonNull(pages);
         if (rowsPerPage > pages.length()) return List.of(pages);
 
 

@@ -3,6 +3,7 @@ package nitpeek.core.api.analyze.analyzer;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.internal.Confidence;
 import nitpeek.translation.DefaultEnglishTranslator;
 import nitpeek.translation.Translator;
 
@@ -11,6 +12,13 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static nitpeek.core.api.common.TextSelection.emptyPages;
 
+/**
+ * Reports how many pages were processed and which ones.<br>
+ * <br>
+ * This analyzer is thread safe.<br>
+ * This analyzer is independent of page processing order, however if {@link #findFeatures()} is called
+ * before all pages were processed, pages will be missing from the report.
+ */
 public final class PageCounterAnalyzer implements Analyzer {
 
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
@@ -33,8 +41,7 @@ public final class PageCounterAnalyzer implements Analyzer {
     public List<Feature> findFeatures() {
         FeatureType featureType = StandardFeature.PROCESSED_PAGES.getType(i18n);
 
-
-        return List.of(new SimpleFeature(featureType, calculateComponents(), 1.0));
+        return List.of(new SimpleFeature(featureType, calculateComponents(), Confidence.MAX.value()));
     }
 
     private List<FeatureComponent> calculateComponents() {
@@ -64,10 +71,9 @@ public final class PageCounterAnalyzer implements Analyzer {
         for (var range : contiguousRanges()) {
             result.add(new SimpleFeatureComponent(
                     i18n.processedPagesComponentDescription(range.firstPage(), range.lastPage()),
-                    emptyPages(new PageRange(range.firstPage(), range.lastPage()))
+                    emptyPages(range)
             ));
         }
-
 
         return result;
     }

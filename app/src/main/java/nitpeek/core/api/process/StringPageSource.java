@@ -67,7 +67,7 @@ public final class StringPageSource implements PageSource {
 
         List<String> result = new ArrayList<>();
 
-        List<String> lines = List.of(pages.split("\n"));
+        List<String> lines = pages.lines().toList();
         final int fullPageCount = lines.size() / rowsPerPage;
 
         for (int page = 0; page < fullPageCount; page++) {
@@ -111,7 +111,7 @@ public final class StringPageSource implements PageSource {
     }
 
     private List<String> splitPagesUsing(String pages, List<Integer> pageLengthsInRows) {
-        List<String> lines = List.of(pages.split("\n"));
+        List<String> lines = pages.lines().toList();
         if (pageLengthsInRows.get(0) > lines.size()) return List.of(pages);
 
         var result = new ArrayList<String>();

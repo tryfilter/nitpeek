@@ -13,7 +13,7 @@ public record SimpleTextPage(List<String> lines, int number) implements TextPage
     }
 
     public SimpleTextPage(String pageContent, int number) {
-        this(List.of(pageContent.split("\n")), number);
+        this(pageContent.lines().toList(), number);
     }
 
     @Override

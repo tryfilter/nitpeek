@@ -2,11 +2,11 @@ package nitpeek.core.api.process;
 
 import nitpeek.core.api.analyze.SimpleTextPage;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
+
+import static java.util.stream.IntStream.concat;
 
 public final class StringPageSource implements PageSource {
 
@@ -63,9 +63,9 @@ public final class StringPageSource implements PageSource {
     }
 
     private List<String> splitPages(String pages, int rowsPerPage) {
-
         List<String> lines = pages.lines().toList();
         if (rowsPerPage > lines.size()) return List.of(pages);
+
         final int fullPageCount = lines.size() / rowsPerPage;
 
         return splitPagesUsing(pages, Collections.nCopies(fullPageCount, rowsPerPage).stream().toList());
@@ -99,30 +99,29 @@ public final class StringPageSource implements PageSource {
         this.pages = splitPagesUsing(pages, pageLengthsInRows);
     }
 
-    private List<String> splitPagesUsing(String pages, List<Integer> pageLengthsInRows) {
+    private List<String> splitPagesUsing(String pages, List<Integer> pageLengthsInLines) {
         List<String> lines = pages.lines().toList();
-        if (pageLengthsInRows.get(0) > lines.size()) return List.of(pages);
+        if (pageLengthsInLines.get(0) > lines.size()) return List.of(pages);
 
+        var indexes = generateIndexes(pageLengthsInLines, lines.size());
         var result = new ArrayList<String>();
-        int currentPageStartIndex = 0;
-        for (int pageLength : pageLengthsInRows) {
-            if (pageLength <= 0)
-                throw new IllegalArgumentException("Page lengths must be strictly positive but received length " + pageLength);
-
-            if (currentPageStartIndex + pageLength >= lines.size()) {
-                result.add(joinLines(lines.subList(currentPageStartIndex, lines.size())));
-                return result;
-            }
-
-            result.add(joinLines(lines.subList(currentPageStartIndex, currentPageStartIndex + pageLength)));
-            currentPageStartIndex += pageLength;
+        for (int i = 1; i < indexes.length; i++) {
+            result.add(joinLines(lines.subList(indexes[i - 1], indexes[i])));
         }
 
-        // not enough page lengths specified, must place remaining lines into a final page
-        if (currentPageStartIndex < lines.size()) {
-            result.add(joinLines(lines.subList(currentPageStartIndex, lines.size())));
-        }
         return result;
+    }
+
+    private int[] generateIndexes(List<Integer> pageLengthsInRows, int totalLineCount) {
+        var zero = IntStream.of(0);
+        var pageLengthsAsArray = concat(zero, pageLengthsInRows.stream().mapToInt(x -> x > 0 ? x : throwIllegalArgument(x))).toArray();
+        Arrays.parallelPrefix(pageLengthsAsArray, Integer::sum);
+        var length = IntStream.of(totalLineCount);
+        return concat(Arrays.stream(pageLengthsAsArray).filter(len -> len < totalLineCount), length).toArray();
+    }
+
+    private int throwIllegalArgument(int pageLength) {
+        throw new IllegalArgumentException("Page lengths must be strictly positive but received length " + pageLength);
     }
 
 

@@ -3,6 +3,7 @@ package nitpeek.core.api.process;
 import nitpeek.core.api.analyze.SimpleTextPage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -62,24 +63,12 @@ public final class StringPageSource implements PageSource {
     }
 
     private List<String> splitPages(String pages, int rowsPerPage) {
-        if (rowsPerPage > pages.length()) return List.of(pages);
-
-
-        List<String> result = new ArrayList<>();
 
         List<String> lines = pages.lines().toList();
+        if (rowsPerPage > lines.size()) return List.of(pages);
         final int fullPageCount = lines.size() / rowsPerPage;
 
-        for (int page = 0; page < fullPageCount; page++) {
-            result.add(joinLines(lines.subList(page * rowsPerPage, (page + 1) * rowsPerPage)));
-        }
-
-        // not all pages are full
-        if (lines.size() > fullPageCount * rowsPerPage) {
-            result.add(joinLines(lines.subList(fullPageCount * rowsPerPage, lines.size())));
-        }
-
-        return result;
+        return splitPagesUsing(pages, Collections.nCopies(fullPageCount, rowsPerPage).stream().toList());
     }
 
     private String joinLines(List<String> lines) {

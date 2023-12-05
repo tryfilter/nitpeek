@@ -108,6 +108,28 @@ public class StringPageSourceShould {
     }
 
     @Test
+    void producePagesSplitByLineCountSinglePageThreshold() {
+        String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
+        int linesPerPage = PAGE0.size() + PAGE1.size() + PAGE2.size();
+
+        var pageSource = new StringPageSource(concatenatedPages, linesPerPage);
+        pageSource.dischargeTo(consumer);
+
+        assertSinglePage(concatenatedPages);
+    }
+
+    @Test
+    void producePagesSplitByLineCountSinglePageThresholdPlus1() {
+        String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
+        int linesPerPage = PAGE0.size() + PAGE1.size() + PAGE2.size() + 1;
+
+        var pageSource = new StringPageSource(concatenatedPages, linesPerPage);
+        pageSource.dischargeTo(consumer);
+
+        assertSinglePage(concatenatedPages);
+    }
+
+    @Test
     void throwsWhenLinesPerPageLessThan1() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
         int linesPerPage = 0;

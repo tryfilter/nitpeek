@@ -39,4 +39,12 @@ public interface Translator {
     String axisPinpoint(String axisName, int value);
     String axisStart(String axisName, int value);
     String axisEnd(String axisName, int value);
+
+    String describePageProcessingInfoRuleName();
+
+    String describePageProcessingInfoRuleDescription();
+
+    String appliedRuleName(String ruleName);
+
+    String appliedRuleDescription(String ruleDescription);
 }

@@ -111,4 +111,25 @@ public class DefaultEnglishTranslator implements Translator {
     public String axisEnd(String axisName, int value) {
         return "to " + axisName + " " + value;
     }
+
+    @Override
+    public String describePageProcessingInfoRuleName() {
+        return "Process Page Information";
+    }
+
+    @Override
+    public String describePageProcessingInfoRuleDescription() {
+        return "This rule scans the text and reports various pieces of information about it," +
+                " like the number of pages that were processed, any pages that were skipped, etc.";
+    }
+
+    @Override
+    public String appliedRuleName(String ruleName) {
+        return "Applied rule \"" + ruleName + "\"";
+    }
+
+    @Override
+    public String appliedRuleDescription(String ruleDescription) {
+        return "(" + ruleDescription + ")";
+    }
 }

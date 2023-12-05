@@ -115,6 +115,26 @@ public class DefaultNoTranslationTranslator implements Translator {
         return missingTranslation("axisEnd");
     }
 
+    @Override
+    public String describePageProcessingInfoRuleName() {
+        return missingTranslation("describePageProcessingInfoRuleName");
+    }
+
+    @Override
+    public String describePageProcessingInfoRuleDescription() {
+        return missingTranslation("describePageProcessingInfoRuleDescription");
+    }
+
+    @Override
+    public String appliedRuleName(String ruleName) {
+        return missingTranslation("appliedRuleName");
+    }
+
+    @Override
+    public String appliedRuleDescription(String ruleDescription) {
+        return missingTranslation("appliedRuleDescription");
+    }
+
     private String missingTranslation(String methodName) {
         return messagePrefix + "'" + methodName + "'" + messageBetweenMethodNameAndTranslatorName + translatorName + messageSuffix;
     }

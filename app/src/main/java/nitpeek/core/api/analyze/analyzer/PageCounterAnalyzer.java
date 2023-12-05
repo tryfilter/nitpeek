@@ -37,6 +37,9 @@ public final class PageCounterAnalyzer implements Analyzer {
         processedPageNumbers.add(page.getPageNumber());
     }
 
+    /**
+     * @return an unmodifiable snapshot
+     */
     @Override
     public List<Feature> findFeatures() {
         FeatureType featureType = StandardFeature.PROCESSED_PAGES.getType(i18n);
@@ -96,5 +99,4 @@ public final class PageCounterAnalyzer implements Analyzer {
 
         return contiguousRanges;
     }
-
 }

@@ -29,7 +29,7 @@ public final class StringPageSource implements PageSource {
      */
     public StringPageSource(List<String> pages) {
         Objects.requireNonNull(pages);
-        this.pages = new ArrayList<>(pages);
+        this.pages = List.copyOf(pages);
     }
 
     /**

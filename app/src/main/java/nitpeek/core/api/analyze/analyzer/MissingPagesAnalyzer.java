@@ -41,6 +41,9 @@ public final class MissingPagesAnalyzer implements Analyzer {
         processedPageNumbers.add(page.getPageNumber());
     }
 
+    /**
+     * @return an unmodifiable snapshot
+     */
     @Override
     public List<Feature> findFeatures() {
         if (processedPageNumbers.isEmpty())
@@ -52,7 +55,7 @@ public final class MissingPagesAnalyzer implements Analyzer {
         features.addAll(findMissingPagesInBeginning(sortedPageNumbers));
         features.addAll(findMissingPagesInMiddle(sortedPageNumbers));
 
-        return features;
+        return Collections.unmodifiableList(features);
     }
 
     private List<Feature> findMissingPagesInBeginning(NavigableSet<Integer> sortedPageNumbers) {

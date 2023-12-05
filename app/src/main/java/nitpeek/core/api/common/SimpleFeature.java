@@ -1,7 +1,5 @@
 package nitpeek.core.api.common;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,7 +9,7 @@ public record SimpleFeature(FeatureType type, List<FeatureComponent> components,
             throw new IllegalArgumentException("confidence must be in the interval [0, 1] but was " + confidence);
         Objects.requireNonNull(type);
         Objects.requireNonNull(components);
-        components = new ArrayList<>(components);
+        components = List.copyOf(components);
     }
 
     @Override
@@ -24,8 +22,11 @@ public record SimpleFeature(FeatureType type, List<FeatureComponent> components,
         return type;
     }
 
+    /**
+     * @return an unmodifiable copy
+     */
     @Override
     public List<FeatureComponent> getComponents() {
-        return Collections.unmodifiableList(components);
+        return components;
     }
 }

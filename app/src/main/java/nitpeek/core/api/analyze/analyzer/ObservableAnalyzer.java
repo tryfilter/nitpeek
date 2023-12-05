@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This a convenience decorator for adding notification capabilities to existing analyzers.
+ * A convenience decorator for adding notification capabilities to existing analyzers.
  */
 public final class ObservableAnalyzer implements NotifyingAnalyzer {
 
@@ -37,9 +37,12 @@ public final class ObservableAnalyzer implements NotifyingAnalyzer {
         this.notifier = notifier;
     }
 
+    /**
+     * @return an unmodifiable snapshot
+     */
     @Override
     public List<Feature> findFeatures() {
-        return analyzer.findFeatures();
+        return List.copyOf(analyzer.findFeatures());
     }
 
     @Override

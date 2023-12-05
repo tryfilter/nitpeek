@@ -4,6 +4,7 @@ import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.Feature;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -15,13 +16,16 @@ public final class AggregatingAnalyzer implements Analyzer {
         this.analyzers = analyzers;
     }
 
+    /**
+     * @return an unmodifiable snapshot
+     */
     @Override
     public List<Feature> findFeatures() {
         List<Feature> features = new ArrayList<>();
         for (var analyzer : analyzers) {
             features.addAll(analyzer.findFeatures());
         }
-        return features;
+        return Collections.unmodifiableList(features);
     }
 
     @Override

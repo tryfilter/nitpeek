@@ -12,16 +12,19 @@ import nitpeek.translation.Translator;
 
 import java.io.PrintWriter;
 
-public final class StandardOutputProcessor implements Processor, PageConsumer {
+public final class StandardOutputProcessor implements Processor {
 
     private final ReportingTarget reportingTarget = new WriterReportingTarget(new PrintWriter(System.out));
     private final RuleSetProvider ruleSetProvider;
     private final Reporter featureReporter;
     private final Translator translator;
 
+    private final PageConsumer innerConsumer = new Consumer();
+
     public StandardOutputProcessor(RuleSetProvider ruleSetProvider) {
         this(ruleSetProvider, new DefaultEnglishTranslator());
     }
+
     public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator translator) {
         this(ruleSetProvider, translator, new IndentingFeatureFormatter(translator));
     }
@@ -34,37 +37,40 @@ public final class StandardOutputProcessor implements Processor, PageConsumer {
 
     @Override
     public void startProcessing(PageSource pageSource) {
-        pageSource.dischargeTo(this);
+        pageSource.dischargeTo(innerConsumer);
     }
 
-    @Override
-    public void consumePage(TextPage page) {
-        for (var rule : ruleSetProvider.getRules()) {
-            rule.getAnalyzer().processPage(page);
-        }
-    }
+    // Delegate to this private inner class, so we don't need to expose the PageConsumer API to our clients.
+    private final class Consumer implements PageConsumer {
 
-    @Override
-    public void finish() {
-        try {
+        @Override
+        public void consumePage(TextPage page) {
             for (var rule : ruleSetProvider.getRules()) {
-                reportRule(rule);
+                rule.getAnalyzer().processPage(page);
             }
-        } catch (ReportingException e) {
-            throw new IllegalStateException("Exception when trying to write to std out. Not much we can do at this point.", e);
         }
 
-    }
+        @Override
+        public void finish() {
+            try {
+                for (var rule : ruleSetProvider.getRules()) {
+                    reportRule(rule);
+                }
+            } catch (ReportingException e) {
+                throw new IllegalStateException("Exception when trying to write to std out. Not much we can do at this point.", e);
+            }
+        }
 
-    private void reportRule(Rule rule) throws ReportingException {
-        var type = rule.getType();
-        reportingTarget.report(translator.appliedRuleName(type.name()));
-        reportingTarget.report("\n");
-        reportingTarget.report(translator.appliedRuleDescription(type.description()));
-        reportingTarget.report("\n");
-        featureReporter.reportFeatures(rule.getAnalyzer().findFeatures());
-        reportingTarget.report("\n");
-        reportingTarget.report("\n");
-        reportingTarget.report("\n");
+        private void reportRule(Rule rule) throws ReportingException {
+            var type = rule.getType();
+            reportingTarget.report(translator.appliedRuleName(type.name()));
+            reportingTarget.report("\n");
+            reportingTarget.report(translator.appliedRuleDescription(type.description()));
+            reportingTarget.report("\n");
+            featureReporter.reportFeatures(rule.getAnalyzer().findFeatures());
+            reportingTarget.report("\n");
+            reportingTarget.report("\n");
+            reportingTarget.report("\n");
+        }
     }
 }

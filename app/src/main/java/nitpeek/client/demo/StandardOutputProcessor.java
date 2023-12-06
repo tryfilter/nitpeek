@@ -12,7 +12,7 @@ import nitpeek.translation.Translator;
 
 import java.io.PrintWriter;
 
-public class StandardOutputProcessor implements Processor, PageConsumer {
+public final class StandardOutputProcessor implements Processor, PageConsumer {
 
     private final ReportingTarget reportingTarget = new WriterReportingTarget(new PrintWriter(System.out));
     private final RuleSetProvider ruleSetProvider;

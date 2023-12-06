@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Set;
 
-public class AggregateAnalyzerWrappingMissingPagesAnalyzerShould implements MissingPagesAnalyzerShould {
+final class AggregateAnalyzerWrappingMissingPagesAnalyzerShould implements MissingPagesAnalyzerShould {
 
     private Analyzer simpleAggregate;
 

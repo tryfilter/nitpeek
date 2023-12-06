@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class StringPageSourceShould {
+final class StringPageSourceShould {
 
     private static final List<String> PAGE0 = List.of(
             "Simple Heading Page 0",
@@ -97,7 +97,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountSinglePage() {
+    void produceSinglePageSplitByLineCountWhenPageLengthExceedsTotalTextLength() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
         int linesPerPage = 100;
 
@@ -108,7 +108,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountSinglePageThreshold() {
+    void produceSinglePageSplitByLineCountWhenPageLengthEqualsTotalTextLength() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
         int linesPerPage = PAGE0.size() + PAGE1.size() + PAGE2.size();
 
@@ -119,7 +119,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountSinglePageThresholdPlus1() {
+    void produceSinglePageSplitByLineCountWhenPageLengthEqualsTotalTextLengthPlus1() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
         int linesPerPage = PAGE0.size() + PAGE1.size() + PAGE2.size() + 1;
 
@@ -130,7 +130,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void throwsWhenLinesPerPageLessThan1() {
+    void throwWhenLinesPerPageLessThan1() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2));
         int linesPerPage = 0;
 
@@ -160,7 +160,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountLastPageShorter() {
+    void reproducePagesSplitByLineCountWhenLastPageShorter() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2,PAGE3));
         int linesPerPage = 3;
 
@@ -171,7 +171,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountLastPageLonger() {
+    void produceAdditionalPageSplitByLineCountWhenLastPageTooLong() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0,PAGE1,PAGE2,PAGE4));
         int linesPerPage = 3;
 
@@ -182,7 +182,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByEqualLineCounts() {
+    void reproducePagesSplitByEqualLineCounts() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0, PAGE1, PAGE2));
         List<Integer> linesPerPage = List.of(3, 3, 3);
 
@@ -193,7 +193,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void throwsWhenLengthsEmpty() {
+    void throwWhenLengthsEmpty() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0, PAGE1, PAGE2));
         List<Integer> linesPerPage = List.of();
 
@@ -201,7 +201,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void throwsWhenAnyLengthLessThan1() {
+    void throwWhenAnyLengthLessThan1() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0, PAGE1, PAGE2));
         List<Integer> linesPerPage = List.of(3, 3, 0);
 
@@ -209,7 +209,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountsSinglePage() {
+    void produceSinglePageSplitByLineCountsWhenFirstLineCountExceedsTotalTextLength() {
         String concatenatedPages = joinByNewlines(List.of(PAGE0, PAGE1, PAGE2));
         List<Integer> linesPerPage = List.of(100, 3, 3);
 
@@ -220,7 +220,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountsExactLengths() {
+    void reproducePagesSplitByLineCounts() {
         String concatenatedPages = joinByNewlines(List.of(PAGE2, PAGE3, PAGE1));
         List<Integer> linesPerPage = List.of(3, 2, 3);
 
@@ -242,7 +242,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountsLeftOverLengthsPart() {
+    void produceAdditionalPageSplitByLineCountsWhenLastLengthTooShort() {
         String concatenatedPages = joinByNewlines(List.of(PAGE2, PAGE3, PAGE1));
         List<Integer> linesPerPage = List.of(3, 2, 2, 5, 1, 10);
 
@@ -253,7 +253,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountsLeftOverLines() {
+    void reproducePagesSplitByLineCountsWithLeftOverLines() {
         String concatenatedPages = joinByNewlines(List.of(PAGE2, PAGE3, PAGE1));
         List<Integer> linesPerPage = List.of(3, 2);
 
@@ -264,7 +264,7 @@ public class StringPageSourceShould {
     }
 
     @Test
-    void producePagesSplitByLineCountsLeftOverLine() {
+    void produceAdditionalPageSplitByLineCountsWithLeftOverLine() {
         String concatenatedPages = joinByNewlines(List.of(PAGE2, PAGE3));
         List<Integer> linesPerPage = List.of(3, 1);
 

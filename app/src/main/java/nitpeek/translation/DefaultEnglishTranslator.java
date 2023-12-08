@@ -132,4 +132,19 @@ public class DefaultEnglishTranslator implements Translator {
     public String appliedRuleDescription(String ruleDescription) {
         return "(" + ruleDescription + ")";
     }
+
+    @Override
+    public String replaceLiteralFeatureName() {
+        return "Replace value";
+    }
+
+    @Override
+    public String replaceLiteralFeatureDescription() {
+        return "Replaces given values, each with a corresponding replacement value.";
+    }
+
+    @Override
+    public String replaceLiteralComponentDescription(String newValue) {
+        return "Replace with '" + newValue + "'";
+    }
 }

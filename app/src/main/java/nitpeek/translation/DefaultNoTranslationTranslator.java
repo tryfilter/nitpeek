@@ -135,6 +135,21 @@ public class DefaultNoTranslationTranslator implements Translator {
         return missingTranslation("appliedRuleDescription");
     }
 
+    @Override
+    public String replaceLiteralFeatureName() {
+        return missingTranslation("replaceLiteralFeatureName");
+    }
+
+    @Override
+    public String replaceLiteralFeatureDescription() {
+        return missingTranslation("replaceLiteralFeatureDescription");
+    }
+
+    @Override
+    public String replaceLiteralComponentDescription(String newValue) {
+        return missingTranslation("replaceLiteralComponentDescription");
+    }
+
     private String missingTranslation(String methodName) {
         return messagePrefix + "'" + methodName + "'" + messageBetweenMethodNameAndTranslatorName + translatorName + messageSuffix;
     }

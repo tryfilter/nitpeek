@@ -47,4 +47,10 @@ public interface Translator {
     String appliedRuleName(String ruleName);
 
     String appliedRuleDescription(String ruleDescription);
+
+    String replaceLiteralFeatureName();
+
+    String replaceLiteralFeatureDescription();
+
+    String replaceLiteralComponentDescription(String newValue);
 }

@@ -13,4 +13,16 @@ public record TextCoordinate(int page, int line, int character) {
         if (line < 0) throw new IllegalArgumentException("line must be >= 0, was " + line);
         if (character < 0) throw new IllegalArgumentException("character must be >= 0, was " + character);
     }
+
+    public TextSelection extendToSelection(int totalCharacters) {
+        return extendToSelection(1, totalCharacters);
+    }
+
+    public TextSelection extendToSelection(int totalLines, int totalCharacters) {
+        return extendToSelection(1, totalLines, totalCharacters);
+    }
+
+    public TextSelection extendToSelection(int totalPages, int totalLines, int totalCharacters) {
+        return new TextSelection(this, new TextCoordinate(page() + totalPages - 1, line() + totalLines - 1, character() + totalCharacters - 1));
+    }
 }

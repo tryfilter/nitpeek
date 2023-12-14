@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static java.lang.Math.max;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 final class LineJoinerShould {
 
@@ -17,13 +19,14 @@ final class LineJoinerShould {
     private static final TextPage pageTwo = new SimpleTextPage(List.of("Another lines that", "Goes over ", "multiple lines..."), 8);
     private static final TextPage pageThree = new SimpleTextPage(List.of("lkj sdlasoibnnnppap dw"), 5);
 
-    private static final String delimiter = "||~~~||";
+    private static String delimiter;
 
     private Transformer lineJoiner;
 
 
     @BeforeEach
     void setup() {
+        delimiter = "||~~~||";
         lineJoiner = new LineJoiner(delimiter);
     }
 
@@ -44,7 +47,42 @@ final class LineJoinerShould {
     }
 
     @Test
-    void transformTextCoordinatesFirstLine() {
+    void transformTextCoordinatesFullFirstLine() {
+
+        String searchTerm = "Line one.";
+        TextPage page = pageOne;
+
+        assertSingleFeature(inSingleLine(page.getPageNumber(), 0, searchTerm), page, searchTerm);
+    }
+
+    @Test
+    void transformTextCoordinatesFullMiddleLine() {
+
+        String searchTerm = "Line two.";
+        TextPage page = pageOne;
+
+        assertSingleFeature(new TextCoordinate(page.getPageNumber(), 1, 0).extendToSelection(searchTerm.length()), page, searchTerm);
+    }
+
+    @Test
+    void transformTextCoordinatesFullLastLine() {
+
+        String searchTerm = "line three";
+        TextPage page = pageOne;
+
+        assertSingleFeature(new TextCoordinate(page.getPageNumber(), 2, 0).extendToSelection(searchTerm.length()), page, searchTerm);
+    }
+
+    @Test
+    void transformTextCoordinatesFullLastTwoLines() {
+
+        String searchTerm = "Line two." + delimiter + "line three";
+        TextPage page = pageOne;
+
+        assertSingleFeature(new TextSelection(new TextCoordinate(page.getPageNumber(), 1, 0), new TextCoordinate(page.getPageNumber(), 2, 9)), page, searchTerm);
+    }
+    @Test
+    void transformTextCoordinatesInFirstLine() {
 
         String searchTerm = "one";
         TextPage page = pageOne;
@@ -53,7 +91,7 @@ final class LineJoinerShould {
     }
 
     @Test
-    void transformTextCoordinatesMiddleLine() {
+    void transformTextCoordinatesInMiddleLine() {
 
         String searchTerm = "wo";
         TextPage page = pageOne;
@@ -62,7 +100,7 @@ final class LineJoinerShould {
     }
 
     @Test
-    void transformTextCoordinatesLastLine() {
+    void transformTextCoordinatesInLastLine() {
 
         String searchTerm = "ne th";
         TextPage page = pageOne;
@@ -79,6 +117,56 @@ final class LineJoinerShould {
         var expectedSelection = new TextSelection(new TextCoordinate(page.getPageNumber(), 1, 7), new TextCoordinate(page.getPageNumber(), 2, 2));
 
         assertSingleFeature(expectedSelection, page, searchTerm);
+    }
+
+
+    /**
+     * Separate these test methods from the rest: they only apply for non-empty delimiters; the above test cases should work with any delimiter
+     */
+    @Test
+    void throwWhenTextCoordinateStartsInsideDelimiter() {
+        delimiter = "+";
+        lineJoiner = new LineJoiner(delimiter);
+
+        String searchTerm = delimiter.substring(delimiter.length() / 2) + "Lin";
+
+        assertThrowsOnFeatureInDelimiter(pageOne, searchTerm);
+    }
+
+    @Test
+    void throwWhenTextCoordinateStartsAtStartOfDelimiter() {
+        delimiter = "+";
+        lineJoiner = new LineJoiner(delimiter);
+
+        String searchTerm = delimiter + "Lin";
+
+        assertThrowsOnFeatureInDelimiter(pageOne, searchTerm);
+    }
+
+    @Test
+    void throwWhenTextCoordinateEndsInsideDelimiter() {
+        delimiter = "+";
+        lineJoiner = new LineJoiner(delimiter);
+
+        String searchTerm = "two." + delimiter.substring(0, max(delimiter.length() / 2, 1));
+
+        assertThrowsOnFeatureInDelimiter(pageOne, searchTerm);
+    }
+
+    @Test
+    void throwWhenTextCoordinateEndsAtEndOfDelimiter() {
+
+        delimiter = "+";
+        lineJoiner = new LineJoiner(delimiter);
+        String searchTerm = "two." + delimiter;
+        assertThrowsOnFeatureInDelimiter(pageOne, searchTerm);
+    }
+
+    private void assertThrowsOnFeatureInDelimiter(TextPage pageToTransform, String searchTerm) {
+        int indexInLine = joinedToSingleLine(pageToTransform).indexOf(searchTerm);
+        Feature fromSingleLinePage = syntheticFeature(inSingleLine(pageToTransform.getPageNumber(), indexInLine, searchTerm));
+        lineJoiner.transformPage(pageToTransform);
+        assertThrows(IllegalArgumentException.class, () -> lineJoiner.transformFeature(fromSingleLinePage));
     }
 
     private void assertSingleFeature(TextSelection expectedSelection, TextPage pageToTransform, String searchTerm) {

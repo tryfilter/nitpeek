@@ -23,10 +23,18 @@ public final class LineJoiner implements Transformer {
     private final FeatureTransformer transformer = FeatureCoordinatesTransformer.fromCoordinateTransform(this::transformCoordinate);
 
 
+    /**
+     * Creates a LineJoiner that uses the empty string as the delimiter between each pair of consecutive lines
+     */
     public LineJoiner() {
         this("");
     }
 
+    /**
+     * Creates a LineJoiner that uses {@code delimiter} as the delimiter between each pair of consecutive lines
+     *
+     * @param delimiter the string to insert between adjacent lines
+     */
     public LineJoiner(String delimiter) {
         this.delimiter = delimiter;
     }
@@ -39,7 +47,8 @@ public final class LineJoiner implements Transformer {
 
     /**
      * @throws IllegalArgumentException when {@code original} has any components with non-zero page or line dimensions in
-     *                                  their text coordinate
+     *                                  their text coordinate or when feature components begin or end inside the delimiter
+     *                                  instead of inside a line in the originally processed page
      * @throws IllegalStateException    when called before calling {@link #transformPage(TextPage)} with the appropriate page
      */
     @Override
@@ -62,9 +71,11 @@ public final class LineJoiner implements Transformer {
 
         int selectedLineNumber = 0;
         for (int i = 0; i < selectedPage.getLines().size(); i++) {
+            if (charactersRemaining < 0)
+                throw new IllegalArgumentException("Cannot transform features whose components fall inside the delimiter.");
             selectedLineNumber = i;
             int charactersInLine = selectedPage.getLines().get(i).length();
-            if (charactersRemaining > charactersInLine) charactersRemaining -= charactersInLine + delimiter.length();
+            if (charactersRemaining >= charactersInLine) charactersRemaining -= charactersInLine + delimiter.length();
             else break;
         }
 

@@ -150,6 +150,16 @@ public class DefaultNoTranslationTranslator implements Translator {
         return missingTranslation("replaceLiteralComponentDescription");
     }
 
+    @Override
+    public String debugFeatureName() {
+        return missingTranslation("debugFeatureName");
+    }
+
+    @Override
+    public String debugFeatureDescription() {
+        return missingTranslation("debugFeatureDescription");
+    }
+
     private String missingTranslation(String methodName) {
         return messagePrefix + "'" + methodName + "'" + messageBetweenMethodNameAndTranslatorName + translatorName + messageSuffix;
     }

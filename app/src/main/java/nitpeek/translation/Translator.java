@@ -53,4 +53,8 @@ public interface Translator {
     String replaceLiteralFeatureDescription();
 
     String replaceLiteralComponentDescription(String newValue);
+
+    String debugFeatureName();
+
+    String debugFeatureDescription();
 }

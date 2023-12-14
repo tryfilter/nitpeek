@@ -147,4 +147,14 @@ public class DefaultEnglishTranslator implements Translator {
     public String replaceLiteralComponentDescription(String newValue) {
         return "Replace with '" + newValue + "'";
     }
+
+    @Override
+    public String debugFeatureName() {
+        return "Debug Feature";
+    }
+
+    @Override
+    public String debugFeatureDescription() {
+        return "This is a place-holder Feature intended for testing purposes.";
+    }
 }

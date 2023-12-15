@@ -2,16 +2,14 @@ package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.analyze.transformer.LineJoiner;
-import nitpeek.core.api.analyze.transformer.Transformer;
 import nitpeek.core.api.common.Feature;
 
 import java.util.List;
 
 
-public class AnalyzeAcrossLines implements Analyzer {
+public final class AnalyzeAcrossLines implements Analyzer {
 
-    private final Analyzer analyzer;
-    private final Transformer lineJoiner = new LineJoiner();
+    private final Analyzer crossLineAnalyzer;
 
     /**
      * @param analyzer the analyzer to wrap: the wrapped analyzer will receive all pages passed to the wrapping analyzer
@@ -19,7 +17,7 @@ public class AnalyzeAcrossLines implements Analyzer {
      *                 being aware of this
      */
     public AnalyzeAcrossLines(Analyzer analyzer) {
-        this.analyzer = analyzer;
+        this.crossLineAnalyzer = new TransformingAnalyzer(analyzer, new LineJoiner());
     }
 
     /**
@@ -28,11 +26,11 @@ public class AnalyzeAcrossLines implements Analyzer {
      */
     @Override
     public List<Feature> findFeatures() {
-        return analyzer.findFeatures().stream().map(lineJoiner::transformFeature).toList();
+        return crossLineAnalyzer.findFeatures();
     }
 
     @Override
     public void processPage(TextPage page) {
-        analyzer.processPage(lineJoiner.transformPage(page));
+        crossLineAnalyzer.processPage(page);
     }
 }

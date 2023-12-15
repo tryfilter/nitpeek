@@ -1,7 +1,5 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.analyzer.MissingPagesAnalyzer;
-import nitpeek.core.api.analyze.analyzer.ObservableAnalyzer;
 import nitpeek.core.api.analyze.notify.ThreadsafeFeatureNotifier;
 import org.junit.jupiter.api.BeforeEach;
 

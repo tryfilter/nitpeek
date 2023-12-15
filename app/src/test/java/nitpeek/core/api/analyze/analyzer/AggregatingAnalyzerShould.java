@@ -1,5 +1,6 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.api.analyze.analyzer.MissingPagesAnalyzer;
 import nitpeek.core.api.analyze.analyzer.PageCounterAnalyzer;

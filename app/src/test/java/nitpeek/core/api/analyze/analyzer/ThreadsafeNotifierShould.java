@@ -1,4 +1,4 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.notify.FeatureNotifier;
 import nitpeek.core.api.analyze.notify.ThreadsafeFeatureNotifier;

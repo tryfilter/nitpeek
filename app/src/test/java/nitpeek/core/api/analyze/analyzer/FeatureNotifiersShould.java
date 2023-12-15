@@ -1,5 +1,6 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.api.analyze.DummyFeature;
 import nitpeek.core.api.analyze.notify.FeatureNotifier;
 import nitpeek.core.api.common.Feature;
 import org.junit.jupiter.api.Test;

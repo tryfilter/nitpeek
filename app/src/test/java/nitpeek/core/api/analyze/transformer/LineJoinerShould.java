@@ -125,8 +125,7 @@ final class LineJoinerShould {
      */
     @Test
     void throwWhenTextCoordinateStartsInsideDelimiter() {
-        delimiter = "+";
-        lineJoiner = new LineJoiner(delimiter);
+        setupForThrowTest();
 
         String searchTerm = delimiter.substring(delimiter.length() / 2) + "Lin";
 
@@ -135,8 +134,7 @@ final class LineJoinerShould {
 
     @Test
     void throwWhenTextCoordinateStartsAtStartOfDelimiter() {
-        delimiter = "+";
-        lineJoiner = new LineJoiner(delimiter);
+        setupForThrowTest();
 
         String searchTerm = delimiter + "Lin";
 
@@ -145,8 +143,7 @@ final class LineJoinerShould {
 
     @Test
     void throwWhenTextCoordinateEndsInsideDelimiter() {
-        delimiter = "+";
-        lineJoiner = new LineJoiner(delimiter);
+        setupForThrowTest();
 
         String searchTerm = "two." + delimiter.substring(0, max(delimiter.length() / 2, 1));
 
@@ -156,10 +153,14 @@ final class LineJoinerShould {
     @Test
     void throwWhenTextCoordinateEndsAtEndOfDelimiter() {
 
-        delimiter = "+";
-        lineJoiner = new LineJoiner(delimiter);
+        setupForThrowTest();
         String searchTerm = "two." + delimiter;
         assertThrowsOnFeatureInDelimiter(pageOne, searchTerm);
+    }
+
+    private void setupForThrowTest() {
+        delimiter = "+"; // non-empty delimiter for testing of coordinates falling inside the delimiter
+        lineJoiner = new LineJoiner(delimiter);
     }
 
     private void assertThrowsOnFeatureInDelimiter(TextPage pageToTransform, String searchTerm) {

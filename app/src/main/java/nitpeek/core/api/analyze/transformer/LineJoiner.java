@@ -60,30 +60,27 @@ public final class LineJoiner implements Transformer {
     private TextCoordinate transformCoordinate(TextCoordinate coordinateInSingleLinePage) {
 
         if (coordinateInSingleLinePage.line() != 0)
-            throw new IllegalArgumentException(errorNonZero("line"));
+            throw new IllegalArgumentException("Encountered non-zero line when converting feature passed to LineJoiner." +
+                    " LineJoiner expects all features it receives to have text coordinates with a line dimension of 0.");
 
         if (processedPages.isEmpty())
             throw new IllegalStateException("Cannot transform features when no pages have been processed.");
 
 
-        int charactersRemaining = coordinateInSingleLinePage.character();
+        int currentCharacter = coordinateInSingleLinePage.character();
         TextPage selectedPage = processedPages.get(coordinateInSingleLinePage.page());
 
         int selectedLineNumber = 0;
         for (int i = 0; i < selectedPage.getLines().size(); i++) {
-            if (charactersRemaining < 0)
+            if (currentCharacter < 0)
                 throw new IllegalArgumentException("Cannot transform features whose components fall inside the delimiter.");
             selectedLineNumber = i;
             int charactersInLine = selectedPage.getLines().get(i).length();
-            if (charactersRemaining >= charactersInLine) charactersRemaining -= charactersInLine + delimiter.length();
+            if (currentCharacter >= charactersInLine) currentCharacter -= charactersInLine + delimiter.length();
             else break;
         }
 
-        return new TextCoordinate(selectedPage.getPageNumber(), selectedLineNumber, charactersRemaining);
+        return new TextCoordinate(selectedPage.getPageNumber(), selectedLineNumber, currentCharacter);
     }
 
-    private static String errorNonZero(String nonZeroComponent) {
-        return "Encountered non-zero " + nonZeroComponent + " when converting feature passed to LineJoiner." +
-                " LineJoiner expects all features it receives to have text coordinates with 0 page and line dimensions.";
-    }
 }

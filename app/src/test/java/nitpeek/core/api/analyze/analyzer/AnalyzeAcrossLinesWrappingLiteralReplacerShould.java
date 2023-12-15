@@ -1,5 +1,7 @@
-package nitpeek.core.api.analyze;
+package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.api.analyze.SimpleTextPage;
+import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.analyze.analyzer.AnalyzeAcrossLines;
 import nitpeek.core.api.analyze.analyzer.Analyzer;
 import nitpeek.core.api.analyze.analyzer.LiteralReplacer;

@@ -13,7 +13,7 @@ public final class AnalyzeAcrossLines implements Analyzer {
 
     /**
      * @param analyzer the analyzer to wrap: the wrapped analyzer will receive all pages passed to the wrapping analyzer
-     *                 as single-line pages; this way, any analysis it performs disregards line separation, without the
+     *                 as single-line pages; this way, any analysis it performs disregards line separation, without it
      *                 being aware of this
      */
     public AnalyzeAcrossLines(Analyzer analyzer) {

@@ -28,15 +28,6 @@ public final class HyphenJoiner implements Transformer {
     private final FeatureTransformer transformer = FeatureCoordinatesTransformer.fromCoordinateTransform(this::transformCoordinate);
 
 
-    private TextCoordinate withTranslatedCharacterIndex(TextCoordinate textCoordinate) {
-        var linesToCharacterOffsets = characterOffsets.get(textCoordinate.page());
-        return new TextCoordinate(
-                textCoordinate.page(),
-                textCoordinate.line(),
-                textCoordinate.character() + linesToCharacterOffsets.valueForLine(textCoordinate.line()).orElse(0)
-        );
-    }
-
     private static final class LinesToValues {
 
         private final Map<Integer, Integer> lineToValue = new HashMap<>();
@@ -76,14 +67,15 @@ public final class HyphenJoiner implements Transformer {
         List<String> lines = original.getLines();
         var transformedLines = new ArrayList<String>(lines.size());
         for (int i = 0; i < lines.size(); i++) {
-            var transformedLine = transformLine(original, i);
+            var transformedLine = transformLineAndSaveReconstructionInfo(original, i);
             if (transformedLine != null) transformedLines.add(transformedLine);
         }
 
         return transformedLines;
     }
 
-    private String transformLine(TextPage page, int lineNumber) {
+
+    private String transformLineAndSaveReconstructionInfo(TextPage page, int lineNumber) {
 
         List<String> lines = page.getLines();
         String line = lines.get(lineNumber);
@@ -91,8 +83,7 @@ public final class HyphenJoiner implements Transformer {
         boolean previousLineWasHyphenated = lineNumber > 0 && isHyphenTerminated(lines.get(lineNumber - 1));
         int endOfHyphenContinuation = hyphenContinuationEnd(line, previousLineWasHyphenated);
 
-        saveLineLength(page, lineNumber);
-        saveCharacterOffset(page, lineNumber, endOfHyphenContinuation);
+        saveReconstructionInfo(page, lineNumber, endOfHyphenContinuation);
 
         if (endOfHyphenContinuation == line.length()) return null;
 
@@ -102,9 +93,14 @@ public final class HyphenJoiner implements Transformer {
         return appendFullLengthHyphenatedLines(lineNumber, trimmedLine, lines);
     }
 
-    private void saveCharacterOffset(TextPage page, int lineNumber, int offset) {
-        var linesToCharacterOffsets = characterOffsets.computeIfAbsent(page.getPageNumber(), p -> new LinesToValues());
-        if (offset > 0) linesToCharacterOffsets.putValueForLine(lineNumber, offset);
+    // Instead of saving the entire page and extracting reconstruction info (the information required for correctly
+    // translating features to the context of the original page) for each line on the fly, we save the info in the form
+    // most useful to reconstruction.
+    // This both saves memory and prevents duplicating the logic for extracting the info
+    // (as we need to extract it, at least in part, for page transformation anyway).
+    private void saveReconstructionInfo(TextPage page, int lineNumber, int offset) {
+        saveCharacterOffset(page, lineNumber, offset);
+        saveLineLength(page, lineNumber);
     }
 
     private void saveLineLength(TextPage page, int lineNumber) {
@@ -115,9 +111,18 @@ public final class HyphenJoiner implements Transformer {
         );
     }
 
+    private void saveCharacterOffset(TextPage page, int lineNumber, int offset) {
+        if (offset <= 0) return;
+
+        var linesToCharacterOffsets = characterOffsets.computeIfAbsent(page.getPageNumber(), p -> new LinesToValues());
+        linesToCharacterOffsets.putValueForLine(lineNumber, offset);
+    }
+
     private String appendFullLengthHyphenatedLines(int lineNumber, String startTrimmedLine, List<String> lines) {
-        int currentLineNumber = lineNumber + 1;
+
         var result = new StringBuilder(startTrimmedLine.substring(0, startTrimmedLine.length() - 1));
+
+        int currentLineNumber = lineNumber + 1;
         while (currentLineNumber < lines.size()) {
             String nextLine = lines.get(currentLineNumber);
             int hyphenContinuationEnd = hyphenContinuationEnd(nextLine, true);
@@ -126,7 +131,7 @@ public final class HyphenJoiner implements Transformer {
 
             // keep joining the next line as long as it ends in hyphen and contains only word-characters
             // this enables joining of multi-line hyphenated sections
-            if (hyphenContinuationEnd != nextLine.length() || !hyphenContinuation.endsWith(hyphenSymbol)) break;
+            if (hyphenContinuationEnd != nextLine.length() || !isHyphenTerminated(hyphenContinuation)) break;
 
             // remove any superfluous hyphens from the result
             result.delete(result.length() - hyphenSymbol.length(), result.length());
@@ -163,6 +168,15 @@ public final class HyphenJoiner implements Transformer {
         var adjustedCoordinate = withTranslatedCharacterIndex(textCoordinate);
 
         return adjustToOriginalLineLengths(adjustedCoordinate, linesToLineLengths);
+    }
+
+    private TextCoordinate withTranslatedCharacterIndex(TextCoordinate textCoordinate) {
+        var linesToCharacterOffsets = characterOffsets.get(textCoordinate.page());
+        return new TextCoordinate(
+                textCoordinate.page(),
+                textCoordinate.line(),
+                textCoordinate.character() + linesToCharacterOffsets.valueForLine(textCoordinate.line()).orElse(0)
+        );
     }
 
     private static TextCoordinate adjustToOriginalLineLengths(TextCoordinate adjustedCoordinate, LinesToValues linesToLineLengths) {

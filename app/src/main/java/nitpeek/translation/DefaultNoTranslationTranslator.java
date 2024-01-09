@@ -160,6 +160,16 @@ public class DefaultNoTranslationTranslator implements Translator {
         return missingTranslation("debugFeatureDescription");
     }
 
+    @Override
+    public String replaceRegexFeatureName() {
+        return missingTranslation("replaceRegexFeatureName");
+    }
+
+    @Override
+    public String replaceRegexFeatureDescription() {
+        return null;
+    }
+
     private String missingTranslation(String methodName) {
         return messagePrefix + "'" + methodName + "'" + messageBetweenMethodNameAndTranslatorName + translatorName + messageSuffix;
     }

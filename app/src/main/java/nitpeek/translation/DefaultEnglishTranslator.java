@@ -140,7 +140,7 @@ public class DefaultEnglishTranslator implements Translator {
 
     @Override
     public String replaceLiteralFeatureDescription() {
-        return "Replaces given values, each with a corresponding replacement value.";
+        return "Suggests replacing values equal to a given value with a corresponding replacement value.";
     }
 
     @Override
@@ -156,5 +156,15 @@ public class DefaultEnglishTranslator implements Translator {
     @Override
     public String debugFeatureDescription() {
         return "This is a place-holder Feature intended for testing purposes.";
+    }
+
+    @Override
+    public String replaceRegexFeatureName() {
+        return "Replace regular expression";
+    }
+
+    @Override
+    public String replaceRegexFeatureDescription() {
+        return "Suggests replacing values matching a particular regular expression, each with a corresponding replacement value.";
     }
 }

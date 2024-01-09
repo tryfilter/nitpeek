@@ -10,7 +10,8 @@ public enum StandardFeature {
     DEBUG_FEATURE(Translator::debugFeatureName, Translator::debugFeatureDescription, FeatureType.Classification.ERROR),
     MISSING_PAGES(Translator::missingPagesFeatureName, Translator::missingPagesFeatureDescription, FeatureType.Classification.WARNING),
     PROCESSED_PAGES(Translator::processedPagesFeatureName, Translator::processedPagesFeatureDescription, FeatureType.Classification.INFO),
-    REPLACE_LITERAL(Translator::replaceLiteralFeatureName, Translator::replaceLiteralFeatureDescription, FeatureType.Classification.ERROR);
+    REPLACE_LITERAL(Translator::replaceLiteralFeatureName, Translator::replaceLiteralFeatureDescription, FeatureType.Classification.ERROR),
+    REPLACE_REGEX(Translator::replaceRegexFeatureName, Translator::replaceRegexFeatureDescription, FeatureType.Classification.ERROR);
 
 
     private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();

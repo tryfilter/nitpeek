@@ -14,15 +14,21 @@ import nitpeek.core.api.common.TextSelection;
 public interface Translator {
 
     String missingPagesComponentDescription(int firstMissingPage, int lastMissingPage);
+
     String missingPagesFeatureName();
+
     String missingPagesFeatureDescription();
 
     String processedPagesFeatureName();
+
     String processedPagesFeatureDescription();
+
     String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage);
+
     String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage, int pageCount);
 
     String foundFeatureName(String featureName);
+
     String description(String featureName);
 
     String textMatch(String textMatch);
@@ -36,8 +42,11 @@ public interface Translator {
     String character();
 
     String axisCompound(String axisName, int value);
+
     String axisPinpoint(String axisName, int value);
+
     String axisStart(String axisName, int value);
+
     String axisEnd(String axisName, int value);
 
     String describePageProcessingInfoRuleName();
@@ -57,4 +66,8 @@ public interface Translator {
     String debugFeatureName();
 
     String debugFeatureDescription();
+
+    String replaceRegexFeatureName();
+
+    String replaceRegexFeatureDescription();
 }

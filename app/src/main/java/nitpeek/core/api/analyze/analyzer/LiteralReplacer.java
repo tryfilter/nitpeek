@@ -1,13 +1,13 @@
 package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.common.*;
-import nitpeek.core.internal.Confidence;
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.StandardFeature;
 import nitpeek.translation.DefaultEnglishTranslator;
 import nitpeek.translation.Translator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Reports literal values that should be replaced with some other value.<br>
@@ -19,13 +19,8 @@ import java.util.List;
  */
 public final class LiteralReplacer implements Analyzer {
 
-    private final boolean ignoreCase;
-    private final String oldValue;
-    private final String newValue;
 
-    private final List<Feature> features = new ArrayList<>();
-
-    private final Translator translator;
+    private final Analyzer regexReplacer;
 
     /**
      * Creates a LiteralReplacer that replaces each occurrence of {@code oldValue} with the value {@code newValue}. <br>
@@ -77,10 +72,14 @@ public final class LiteralReplacer implements Analyzer {
      * @param translator the translator to use when describing found features and their components
      */
     public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translator translator) {
-        this.ignoreCase = ignoreCase;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-        this.translator = translator;
+        Pattern pattern = Pattern.compile(oldValue, computePatternFlags(ignoreCase));
+        this.regexReplacer = new RegexReplacer(pattern, newValue, translator, StandardFeature.REPLACE_LITERAL.getType());
+    }
+
+    private int computePatternFlags(boolean ignoreCase) {
+        int flags = Pattern.LITERAL;
+        if (ignoreCase) flags = flags | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+        return flags;
     }
 
     /**
@@ -88,64 +87,11 @@ public final class LiteralReplacer implements Analyzer {
      */
     @Override
     public List<Feature> findFeatures() {
-        return List.copyOf(features);
+        return regexReplacer.findFeatures();
     }
 
     @Override
     public void processPage(TextPage page) {
-        processPageLineByLine(page);
-    }
-
-    private void processPageLineByLine(TextPage page) {
-        var lines = page.getLines();
-        for (int i = 0; i < lines.size(); i++) {
-            var line = lines.get(i);
-            addFeatures(line, page, i);
-        }
-    }
-
-    private void addFeatures(String textSection, TextPage page, int lineNumber) {
-        var replacementComponents = getReplacements(textSection, page, lineNumber);
-        var featuresStream = replacementComponents.stream().map(this::wrapComponent);
-        features.addAll(featuresStream.toList());
-    }
-
-    private Feature wrapComponent(FeatureComponent component) {
-        return new SimpleFeature(
-                StandardFeature.REPLACE_LITERAL.getType(translator),
-                List.of(component),
-                Confidence.HIGH.value()
-        );
-    }
-
-    private List<FeatureComponent> getReplacements(String textSection, TextPage page, int lineNumber) {
-        List<FeatureComponent> result = new ArrayList<>();
-        final int pageNumber = page.getPageNumber();
-        int currentIndex = 0;
-
-        var searchContext = ignoreCaseIfNeeded(textSection);
-        var searchTerm = ignoreCaseIfNeeded(oldValue);
-        while (true) {
-            currentIndex = searchContext.indexOf(searchTerm, currentIndex);
-            if (currentIndex < 0) break;
-            result.add(component(sameLine(pageNumber, lineNumber, currentIndex), textSection.substring(currentIndex, currentIndex + searchTerm.length())));
-            currentIndex += oldValue.length();
-        }
-        return result;
-    }
-
-    private String ignoreCaseIfNeeded(String value) {
-        if (ignoreCase)
-            return value.toUpperCase();
-        return value;
-    }
-
-    private TextSelection sameLine(int pageNumber, int lineNumber, int matchIndex) {
-        return new TextCoordinate(pageNumber, lineNumber, matchIndex).extendToSelection(oldValue.length());
-    }
-
-
-    private FeatureComponent component(TextSelection textSelection, String replacedValue) {
-        return new SimpleFeatureComponent(translator.replaceLiteralComponentDescription(newValue), textSelection, replacedValue);
+        regexReplacer.processPage(page);
     }
 }

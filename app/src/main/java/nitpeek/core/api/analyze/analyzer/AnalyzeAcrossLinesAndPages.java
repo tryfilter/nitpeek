@@ -6,7 +6,13 @@ import nitpeek.core.api.common.Feature;
 
 import java.util.List;
 
-public class AnalyzeAcrossLinesAndPages implements Analyzer {
+/**
+ * Wraps an existing analyzer, combining the functionality of joining pages with the functionality of joining lines within
+ * a page.
+ * This effectively turns the entirety of processed contents (all processed pages) into one single-line page to be parsed
+ * by the wrapped analyzer.
+ */
+public final class AnalyzeAcrossLinesAndPages implements Analyzer {
 
     private final Analyzer analyzer;
 

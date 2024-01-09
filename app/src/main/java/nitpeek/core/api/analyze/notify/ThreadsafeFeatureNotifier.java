@@ -5,7 +5,7 @@ import nitpeek.core.api.common.Feature;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class ThreadsafeFeatureNotifier implements FeatureNotifier {
+public final class ThreadsafeFeatureNotifier implements FeatureNotifier {
 
     private final Set<FeatureSubscriber> subscribers = new CopyOnWriteArraySet<>();
 

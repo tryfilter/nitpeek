@@ -7,7 +7,7 @@ import nitpeek.core.api.process.StringPageSource;
 import java.util.List;
 import java.util.Set;
 
-public class DemoStdOutProcessor {
+public final class DemoStdOutProcessor {
 
     public static void main(String[] args) {
         var simpleRules = new SimpleRuleSetProvider(Set.of(SampleRule.DESCRIBE_PAGE_PROCESSING_INFORMATION));

@@ -1,8 +1,6 @@
 package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.analyze.analyzer.Analyzer;
-import nitpeek.core.api.analyze.analyzer.LiteralReplacer;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.process.ListPageConsumer;
 import nitpeek.core.testutil.pagesource.HamletAct2ExcerptEdited;
@@ -66,7 +64,7 @@ final class LiteralReplacerShould {
         var textLocationDifferentCase = new TextCoordinate(1, 23, 0).extendToSelection(replace.length()); // "Farewell"
         var textLocationExactMatch = new TextCoordinate(2, 8, 34).extendToSelection(replace.length()); // "farewell"
 
-        var featureDifferentCase = replacerFeature(new SimpleFeatureComponent(NEW, textLocationDifferentCase, replace));
+        var featureDifferentCase = replacerFeature(new SimpleFeatureComponent(NEW, textLocationDifferentCase, "Farewell"));
         var featureExactMatch = replacerFeature(new SimpleFeatureComponent(NEW, textLocationExactMatch, replace));
 
         assertEquivalentFeatures(List.of(featureDifferentCase, featureExactMatch), replacerIgnoreCase);

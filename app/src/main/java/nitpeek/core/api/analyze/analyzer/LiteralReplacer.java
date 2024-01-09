@@ -128,7 +128,7 @@ public final class LiteralReplacer implements Analyzer {
         while (true) {
             currentIndex = searchContext.indexOf(searchTerm, currentIndex);
             if (currentIndex < 0) break;
-            result.add(component(sameLine(pageNumber, lineNumber, currentIndex)));
+            result.add(component(sameLine(pageNumber, lineNumber, currentIndex), textSection.substring(currentIndex, currentIndex + searchTerm.length())));
             currentIndex += oldValue.length();
         }
         return result;
@@ -145,7 +145,7 @@ public final class LiteralReplacer implements Analyzer {
     }
 
 
-    private FeatureComponent component(TextSelection textSelection) {
-        return new SimpleFeatureComponent(translator.replaceLiteralComponentDescription(newValue), textSelection, oldValue);
+    private FeatureComponent component(TextSelection textSelection, String replacedValue) {
+        return new SimpleFeatureComponent(translator.replaceLiteralComponentDescription(newValue), textSelection, replacedValue);
     }
 }

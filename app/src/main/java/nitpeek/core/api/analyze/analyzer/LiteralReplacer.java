@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Reports literal values that should be replaced with some other value.<br>
  * <br>
- * This analyzer is thread safe.<br>
+ * This analyzer is NOT thread safe.<br>
  * This analyzer is independent of page processing order.<br>
  * <br>
  * Note that this analyzer never detects literal values that cross page boundaries.
@@ -83,9 +83,12 @@ public final class LiteralReplacer implements Analyzer {
         this.translator = translator;
     }
 
+    /**
+     * @return an unmodifiable copy
+     */
     @Override
     public List<Feature> findFeatures() {
-        return features;
+        return List.copyOf(features);
     }
 
     @Override

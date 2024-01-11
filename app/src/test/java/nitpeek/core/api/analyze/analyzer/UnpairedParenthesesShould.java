@@ -148,6 +148,36 @@ final class UnpairedParenthesesShould {
         assertEquals(expected, unpairedParentheses.findFeatures());
     }
 
+    @Test
+    void findNoFeaturesForEvenNumberOfIdenticalParentheses() {
+        String open = "'";
+        String close = "'";
+        unpairedParentheses = new UnpairedParentheses(open, close);
+
+        var page = new SimpleTextPage(List.of("'test', 'open', 'something else', '' <- empty 'string'"), 0);
+        unpairedParentheses.processPage(page);
+
+        var expected = List.of();
+
+        assertEquals(expected, unpairedParentheses.findFeatures());
+    }
+
+    @Test
+    void findLastParenthesisForOddNumberOfIdenticalParentheses() {
+        String open = "'";
+        String close = "'";
+        unpairedParentheses = new UnpairedParentheses(open, close);
+
+        var page = new SimpleTextPage(List.of("'test', 'open', 'something else', '' <- empty 'string', let's go"), 0);
+        unpairedParentheses.processPage(page);
+
+        var loneApostrophe = openParenthesisAt(59, close);
+
+        var expected = List.of(loneApostrophe);
+
+        assertEquivalentFeatures(expected, unpairedParentheses);
+    }
+
     private Feature openParenthesisAt(int character) {
         return openParenthesisAt(character, OPEN);
     }

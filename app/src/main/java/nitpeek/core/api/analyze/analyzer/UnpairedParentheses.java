@@ -11,12 +11,14 @@ import java.util.stream.Stream;
 
 
 /**
- * Reports parentheses that are opened but not closed.
- * The context within which parentheses are matched is a single line.<br>
- * <br>
+ * Reports parentheses that are opened but not closed, or closed but not opened.<br>
+ * Note that this analyzer does not detect missing parentheses across line boundaries.<br>
  * Note that for identical opening and closing parentheses it is not possible to determine if any particular instance is
  * of the opening or the closing kind. Thus, in such configurations only the last instance is reported, and only if the
- * total number of instances is odd.
+ * total number of instances is odd.<br>
+ * <br>
+ * This analyzer is NOT thread safe.<br>
+ * This Analyzer is strongly processing-order independent.
  */
 public final class UnpairedParentheses implements Analyzer {
 

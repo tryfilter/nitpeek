@@ -13,11 +13,10 @@ import java.util.regex.Pattern;
 
 /**
  * Reports values matching a regular expression that should be replaced with some other value.<br>
+ * Note that this analyzer does not detect values that cross line boundaries.
  * <br>
  * This analyzer is NOT thread safe.<br>
- * This analyzer is independent of page processing order.<br>
- * <br>
- * Note that this analyzer does not detect values that cross line or page boundaries.
+ * This analyzer is strongly processing-order independent.
  */
 public final class RegexReplacer implements Analyzer {
 

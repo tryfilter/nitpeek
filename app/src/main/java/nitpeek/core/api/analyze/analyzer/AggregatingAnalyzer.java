@@ -8,6 +8,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Aggregates features from one or more wrapped analyzers.<br>
+ * <br>
+ * This Analyzer is NOT thread safe.<br>
+ * Order dependence and repeat processing tolerance of this analyzer depend on the characteristics of the wrapped analyzers.<br>
+ * <br>
+ * This is a decorator.
+ */
 public final class AggregatingAnalyzer implements Analyzer {
 
     private final Set<Analyzer> analyzers;

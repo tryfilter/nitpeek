@@ -16,8 +16,7 @@ import static nitpeek.core.api.common.TextSelection.emptyPages;
  * Reports how many pages were processed and which ones.<br>
  * <br>
  * This analyzer is thread safe.<br>
- * This analyzer is independent of page processing order, however if {@link #findFeatures()} is called
- * before all pages were processed, pages will be missing from the report.
+ * This analyzer is strongly processing-order independent.
  */
 public final class PageCounter implements Analyzer {
 

@@ -12,13 +12,18 @@ import java.util.*;
 
 
 /**
+ * Transparently allows a wrapped analyzer that normally only works inside single pages to cross page boundaries.<br>
+ * <br>
  * Wraps an analyzer, passing it a single page to process, corresponding to one or more pages processed by the wrapping
- * analyzer. Note that the constructors of this class receive an AnalyzerFactory rather than simply an Analyzer.
+ * analyzer.<br>
+ * Note that the constructors of this class receive an AnalyzerFactory rather than simply an Analyzer.
  * This is because every time {@link #findFeatures()} is called on the wrapping analyzer, a new wrapped analyzer should
  * be created to avoid the wrapped analyzer processing a page with the same page number ({@code 0}) but potentially multiple
  * different variations of content (lines).<br>
- * The provided factory should only return the same Analyzer instance on repeated calls if such an instance is capable of
- * adequately processing the same page with different content.
+ * <br>
+ * This Analyzer is NOT thread safe.<br>
+ * This Analyzer is NOT processing-order independent.<br>
+ * This is a decorator.
  */
 public final class CrossPageAnalyzer implements Analyzer {
 
@@ -75,8 +80,8 @@ public final class CrossPageAnalyzer implements Analyzer {
 
     private TextCoordinate transformCoordinate(TextCoordinate textCoordinate) {
         if (textCoordinate.page() != 0)
-            throw new IllegalArgumentException("Encountered non-zero page when converting feature passed to PageJoiner." +
-                    " PageJoiner expects all features it receives to have text coordinates with a page dimension of 0.");
+            throw new IllegalArgumentException("Encountered non-zero page when converting feature passed to CrossPageAnalyzer." +
+                    " CrossPageAnalyzer expects all features it receives to have text coordinates with a page dimension of 0.");
         if (processedPages.isEmpty())
             throw new IllegalStateException("Cannot transform features when no pages have been processed.");
 

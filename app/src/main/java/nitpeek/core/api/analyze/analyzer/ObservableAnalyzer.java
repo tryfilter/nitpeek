@@ -12,7 +12,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A convenience decorator for adding notification capabilities to existing analyzers.
+ * A convenience analyzer for adding notification capabilities to existing analyzers.<br>
+ * <br>
+ * This Analyzer is NOT thread safe.<br>
+ * This Analyzer is NOT processing-order independent.<br>
+ * This is a decorator.
  */
 public final class ObservableAnalyzer implements NotifyingAnalyzer {
 

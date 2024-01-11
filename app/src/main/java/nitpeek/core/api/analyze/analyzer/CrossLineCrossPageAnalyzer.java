@@ -10,7 +10,11 @@ import java.util.List;
  * Wraps an existing analyzer, combining the functionality of joining pages with the functionality of joining lines within
  * a page.
  * This effectively turns the entirety of processed contents (all processed pages) into one single-line page to be parsed
- * by the wrapped analyzer.
+ * by the wrapped analyzer.<br>
+ * <br>
+ * This Analyzer is NOT thread safe.<br>
+ * This Analyzer is NOT processing-order independent.<br>
+ * This is a decorator.
  */
 public final class CrossLineCrossPageAnalyzer implements Analyzer {
 

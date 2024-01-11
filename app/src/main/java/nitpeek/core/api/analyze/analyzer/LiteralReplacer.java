@@ -11,11 +11,10 @@ import java.util.regex.Pattern;
 
 /**
  * Reports literal values that should be replaced with some other value.<br>
+ * Note that this analyzer does not detect literal values that cross line boundaries.<br>
  * <br>
  * This analyzer is NOT thread safe.<br>
- * This analyzer is independent of page processing order.<br>
- * <br>
- * Note that this analyzer never detects literal values that cross page boundaries.
+ * This Analyzer is strongly processing-order independent.
  */
 public final class LiteralReplacer implements Analyzer {
 
@@ -40,10 +39,10 @@ public final class LiteralReplacer implements Analyzer {
      * The search does <i>not</i> cross line boundaries. <br>
      * This is equivalent to calling {@code LiteralReplacer(oldValue, newValue, true, i18n)}.
      *
-     * @param oldValue   the literal value to be replaced; if this contains any new line character sequences,
-     *                   no matches will be found
-     * @param newValue   the value to insert in place of the replaced literal
-     * @param i18n the translator to use when describing found features and their components
+     * @param oldValue the literal value to be replaced; if this contains any new line character sequences,
+     *                 no matches will be found
+     * @param newValue the value to insert in place of the replaced literal
+     * @param i18n     the translator to use when describing found features and their components
      */
     public LiteralReplacer(String oldValue, String newValue, Translator i18n) {
         this(oldValue, newValue, true, i18n);
@@ -69,7 +68,7 @@ public final class LiteralReplacer implements Analyzer {
      * @param newValue   the value to insert in place of the replaced literal
      * @param ignoreCase if this flag is true, this analyzer will find instances of {@code oldValue} in the text even when
      *                   their case doesn't match that of {@code oldValue}
-     * @param i18n the translator to use when describing found features and their components
+     * @param i18n       the translator to use when describing found features and their components
      */
     public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translator i18n) {
         Pattern pattern = Pattern.compile(oldValue, computePatternFlags(ignoreCase));

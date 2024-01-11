@@ -26,12 +26,6 @@ interface CrossPageAnalyzersShould {
 
 
     Analyzer setupPageJoiner(String searchTerm);
-    /*{
-        pageJoiner = new PageJoiner(
-                () -> new AnalyzeAcrossLines(new LiteralReplacer(searchTerm, "new")),
-                separatorLines
-        );
-    }*/
 
     List<String> getSeparatorLines();
 

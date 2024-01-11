@@ -8,7 +8,28 @@ import java.util.List;
 /**
  * The core functionality interface. Instances of this type can be used to implement complex validation rules.
  * It is intentionally simple and declares few constraints on its contract. Concrete implementations may enforce
- * particular characteristics e.g. thread safety, state freezing etc.
+ * particular characteristics such as:<br>
+ * <ul>
+ *  <li>Thread safety</li>
+ *  <li>Repeat processing tolerance: an analyzer is tolerant of repeat processing if the features it produces are not
+ *  affected by processing the same page more than once. Analyzers that break this assumption shall document this fact.
+ *  </li>
+ *  <li>Order independence, which can be one of 3 degrees</li>
+ *  <ol>
+ *      <li>
+ *          Order Dependent: what features are produced by the analyzer depends on the order in which pages are processed.
+ *          Generally, such analyzers should be fed pages in numerical ascending order of their page number unless specified
+ *          otherwise.
+ *      </li>
+ *      <li>
+ *          Weakly Order Independent: features are independent of page processing order as long as {@link #findFeatures()} is
+ *          only called after all pages were processed. Otherwise, the analyzer may produce faulty features.
+ *      </li>
+ *      <li>
+ *          Strongly Order Independent: features are independent of page processing order
+ *      </li>
+ *  </ol>
+ * </ul>
  */
 public interface Analyzer {
     /**

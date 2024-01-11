@@ -14,7 +14,7 @@ import static java.util.Collections.emptyList;
 import static nitpeek.core.testutil.TestUtil.emptyPage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-interface MissingPagesAnalyzerShould {
+interface MissingPagesShould {
 
     double COMPARE_DOUBLE_DELTA = 0.0000001;
 

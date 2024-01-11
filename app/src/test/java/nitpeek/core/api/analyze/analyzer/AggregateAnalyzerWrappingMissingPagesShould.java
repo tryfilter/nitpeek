@@ -4,13 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Set;
 
-final class AggregateAnalyzerWrappingMissingPagesAnalyzerShould implements MissingPagesAnalyzerShould {
+final class AggregateAnalyzerWrappingMissingPagesShould implements MissingPagesShould {
 
     private Analyzer simpleAggregate;
 
     @BeforeEach
     void setup() {
-        simpleAggregate = new AggregatingAnalyzer(Set.of(new MissingPagesAnalyzer()));
+        simpleAggregate = new AggregatingAnalyzer(Set.of(new MissingPages()));
     }
 
     @Override

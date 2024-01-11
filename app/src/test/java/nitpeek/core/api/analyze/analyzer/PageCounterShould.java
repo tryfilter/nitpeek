@@ -1,6 +1,5 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.analyzer.PageCounterAnalyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
@@ -13,13 +12,13 @@ import java.util.List;
 
 import static nitpeek.core.testutil.TestUtil.emptyPage;
 
-final class PageCounterAnalyzerShould {
+final class PageCounterShould {
 
-    private PageCounterAnalyzer analyzer;
+    private PageCounter analyzer;
 
     @BeforeEach
     void setup() {
-        analyzer = new PageCounterAnalyzer();
+        analyzer = new PageCounter();
     }
 
     @Test

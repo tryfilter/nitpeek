@@ -8,7 +8,7 @@ import java.util.List;
 
 import static nitpeek.core.testutil.TestUtil.emptyPage;
 
-interface ObservableAnalyzerMissingPagesShould extends NotifyingAnalyzersShould, MissingPagesAnalyzerShould {
+interface ObservableAnalyzerMissingPagesShould extends NotifyingAnalyzersShould, MissingPagesShould {
 
     ObservableAnalyzer getObservableAnalyzer();
 

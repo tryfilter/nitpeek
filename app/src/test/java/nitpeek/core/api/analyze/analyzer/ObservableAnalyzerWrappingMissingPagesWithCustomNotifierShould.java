@@ -8,7 +8,7 @@ final class ObservableAnalyzerWrappingMissingPagesWithCustomNotifierShould imple
 
     @BeforeEach
     void setup() {
-        analyzer = new ObservableAnalyzer(new MissingPagesAnalyzer(), new ThreadsafeFeatureNotifier());
+        analyzer = new ObservableAnalyzer(new MissingPages(), new ThreadsafeFeatureNotifier());
     }
 
 

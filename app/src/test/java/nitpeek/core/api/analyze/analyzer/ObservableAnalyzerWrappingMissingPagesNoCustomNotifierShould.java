@@ -7,7 +7,7 @@ final class ObservableAnalyzerWrappingMissingPagesNoCustomNotifierShould impleme
 
     @BeforeEach
     void setup() {
-        analyzer = new ObservableAnalyzer(new MissingPagesAnalyzer());
+        analyzer = new ObservableAnalyzer(new MissingPages());
     }
 
 

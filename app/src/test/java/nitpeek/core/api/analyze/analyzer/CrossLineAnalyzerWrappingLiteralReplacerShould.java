@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Set;
 
-final class AnalyzeAcrossLinesWrappingLiteralReplacerShould {
+final class CrossLineAnalyzerWrappingLiteralReplacerShould {
 
     @Test
     void findLiteralsWithinAndAcrossLines() {
         String searchTerm = "replace-this";
-        Analyzer crossLineLiteralReplacer = new AnalyzeAcrossLines(new LiteralReplacer(searchTerm, "with-this"));
+        Analyzer crossLineLiteralReplacer = new CrossLineAnalyzer(new LiteralReplacer(searchTerm, "with-this"));
         TextPage page = new SimpleTextPage(List.of(
                 "Nothing in this line",
                 "replace-this",

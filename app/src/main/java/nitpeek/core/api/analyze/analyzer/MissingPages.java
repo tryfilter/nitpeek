@@ -20,7 +20,7 @@ import java.util.*;
  * are processed out of order, the observable wrapper may send notifications classifying as missing pages that are
  * yet to be processed.
  */
-public final class MissingPagesAnalyzer implements Analyzer {
+public final class MissingPages implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();
     private final Translator i18n;
@@ -28,11 +28,11 @@ public final class MissingPagesAnalyzer implements Analyzer {
     /**
      * Uses the default english translator for user-facing text
      */
-    public MissingPagesAnalyzer() {
+    public MissingPages() {
         this(new DefaultEnglishTranslator());
     }
 
-    public MissingPagesAnalyzer(Translator i18n) {
+    public MissingPages(Translator i18n) {
         this.i18n = i18n;
     }
 

@@ -2,14 +2,14 @@ package nitpeek.core.api.analyze.analyzer;
 
 import org.junit.jupiter.api.BeforeEach;
 
-final class MissingPagesAnalyzerPlainShould implements MissingPagesAnalyzerShould {
+final class MissingPagesPlainShould implements MissingPagesShould {
 
 
     private Analyzer analyzer;
 
     @BeforeEach
     void setup() {
-        analyzer = new MissingPagesAnalyzer();
+        analyzer = new MissingPages();
     }
 
 

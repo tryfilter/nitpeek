@@ -7,7 +7,7 @@ import nitpeek.core.api.common.Feature;
 import java.util.List;
 
 
-public final class AnalyzeAcrossLines implements Analyzer {
+public final class CrossLineAnalyzer implements Analyzer {
 
     private final Analyzer crossLineAnalyzer;
 
@@ -16,7 +16,7 @@ public final class AnalyzeAcrossLines implements Analyzer {
      *                 as single-line pages; this way, any analysis it performs disregards line separation, without it
      *                 being aware of this
      */
-    public AnalyzeAcrossLines(Analyzer analyzer) {
+    public CrossLineAnalyzer(Analyzer analyzer) {
         this.crossLineAnalyzer = new TransformingAnalyzer(analyzer, new LineJoiner());
     }
 

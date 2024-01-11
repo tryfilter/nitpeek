@@ -20,7 +20,7 @@ import java.util.*;
  * The provided factory should only return the same Analyzer instance on repeated calls if such an instance is capable of
  * adequately processing the same page with different content.
  */
-public final class PageJoiner implements Analyzer {
+public final class CrossPageAnalyzer implements Analyzer {
 
     private final FeatureTransformer coordinateTransformer = FeatureCoordinatesTransformer.fromCoordinateTransform(this::transformCoordinate);
 
@@ -32,11 +32,11 @@ public final class PageJoiner implements Analyzer {
     private final List<String> delimiterLines;
 
 
-    public PageJoiner(AnalyzerFactory analyzerFactory) {
+    public CrossPageAnalyzer(AnalyzerFactory analyzerFactory) {
         this(analyzerFactory, List.of());
     }
 
-    public PageJoiner(AnalyzerFactory analyzerFactory, List<String> delimiterLines) {
+    public CrossPageAnalyzer(AnalyzerFactory analyzerFactory, List<String> delimiterLines) {
         this.analyzerFactory = analyzerFactory;
         this.delimiterLines = delimiterLines;
     }

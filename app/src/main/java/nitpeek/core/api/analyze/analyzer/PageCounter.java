@@ -19,16 +19,16 @@ import static nitpeek.core.api.common.TextSelection.emptyPages;
  * This analyzer is independent of page processing order, however if {@link #findFeatures()} is called
  * before all pages were processed, pages will be missing from the report.
  */
-public final class PageCounterAnalyzer implements Analyzer {
+public final class PageCounter implements Analyzer {
 
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
     private final Translator i18n;
 
-    public PageCounterAnalyzer() {
+    public PageCounter() {
         this(new DefaultEnglishTranslator());
     }
 
-    public PageCounterAnalyzer(Translator i18n) {
+    public PageCounter(Translator i18n) {
         this.i18n = i18n;
     }
 

@@ -1,9 +1,6 @@
 package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.analyze.analyzer.AggregatingAnalyzer;
-import nitpeek.core.api.analyze.analyzer.MissingPagesAnalyzer;
-import nitpeek.core.api.analyze.analyzer.PageCounterAnalyzer;
 import nitpeek.core.api.common.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,10 +22,10 @@ final class AggregatingAnalyzerShould {
 
     @Test
     void aggregateResults() {
-        var pageCounter = new PageCounterAnalyzer();
-        var missingPages = new MissingPagesAnalyzer();
+        var pageCounter = new PageCounter();
+        var missingPages = new MissingPages();
 
-        var aggregate = new AggregatingAnalyzer(Set.of(new PageCounterAnalyzer(), new MissingPagesAnalyzer()));
+        var aggregate = new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages()));
 
         for (var page : pages) {
             pageCounter.processPage(page);

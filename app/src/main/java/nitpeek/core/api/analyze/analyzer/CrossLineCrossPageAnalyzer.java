@@ -12,7 +12,7 @@ import java.util.List;
  * This effectively turns the entirety of processed contents (all processed pages) into one single-line page to be parsed
  * by the wrapped analyzer.
  */
-public final class AnalyzeAcrossLinesAndPages implements Analyzer {
+public final class CrossLineCrossPageAnalyzer implements Analyzer {
 
     private final Analyzer analyzer;
 
@@ -23,8 +23,8 @@ public final class AnalyzeAcrossLinesAndPages implements Analyzer {
      * @param analyzerFactory factory to produce the analyzer to be wrapped, which will see all contents passed to this wrapping analyzer as one
      *                        continuous string, treating it as one single-line page
      */
-    public AnalyzeAcrossLinesAndPages(AnalyzerFactory analyzerFactory) {
-        this.analyzer = new PageJoiner(() -> new AnalyzeAcrossLines(analyzerFactory.createAnalyzer()));
+    public CrossLineCrossPageAnalyzer(AnalyzerFactory analyzerFactory) {
+        this.analyzer = new CrossPageAnalyzer(() -> new CrossLineAnalyzer(analyzerFactory.createAnalyzer()));
     }
 
     /**
@@ -35,8 +35,8 @@ public final class AnalyzeAcrossLinesAndPages implements Analyzer {
      * @param analyzer an analyzer to be wrapped, which will see all contents passed to this wrapping analyzer as one
      *                 continuous string, treating it as one single-line page
      */
-    public AnalyzeAcrossLinesAndPages(Analyzer analyzer) {
-        this.analyzer = new PageJoiner(() -> new AnalyzeAcrossLines(analyzer));
+    public CrossLineCrossPageAnalyzer(Analyzer analyzer) {
+        this.analyzer = new CrossPageAnalyzer(() -> new CrossLineAnalyzer(analyzer));
     }
 
     @Override

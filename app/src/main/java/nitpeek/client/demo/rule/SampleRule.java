@@ -4,8 +4,8 @@ import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.analyze.RuleType;
 import nitpeek.core.api.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.api.analyze.analyzer.Analyzer;
-import nitpeek.core.api.analyze.analyzer.MissingPagesAnalyzer;
-import nitpeek.core.api.analyze.analyzer.PageCounterAnalyzer;
+import nitpeek.core.api.analyze.analyzer.MissingPages;
+import nitpeek.core.api.analyze.analyzer.PageCounter;
 import nitpeek.translation.DefaultEnglishTranslator;
 import nitpeek.translation.Translator;
 
@@ -17,7 +17,7 @@ public enum SampleRule implements Rule {
     DESCRIBE_PAGE_PROCESSING_INFORMATION(
             Translator::describePageProcessingInfoRuleName,
             Translator::describePageProcessingInfoRuleDescription,
-            new AggregatingAnalyzer(Set.of(new PageCounterAnalyzer(), new MissingPagesAnalyzer())));
+            new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
     private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();
     private final Function<Translator, String> nameSupplier;
     private final Function<Translator, String> descriptionSupplier;

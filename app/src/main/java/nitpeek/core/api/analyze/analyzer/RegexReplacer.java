@@ -23,7 +23,7 @@ public final class RegexReplacer implements Analyzer {
 
     private final Pattern pattern;
     private final String replacement;
-    private final Translator translator;
+    private final Translator i18n;
 
     private final FeatureType reportedFeatureType;
 
@@ -37,14 +37,14 @@ public final class RegexReplacer implements Analyzer {
         this(pattern, replacement, new DefaultEnglishTranslator(), reportedFeatureType);
     }
 
-    public RegexReplacer(Pattern pattern, String replacement, Translator translator) {
-        this(pattern, replacement, translator, StandardFeature.REPLACE_REGEX.getType(translator));
+    public RegexReplacer(Pattern pattern, String replacement, Translator i18n) {
+        this(pattern, replacement, i18n, StandardFeature.REPLACE_REGEX.getType(i18n));
     }
 
-    public RegexReplacer(Pattern pattern, String replacement, Translator translator, FeatureType reportedFeatureType) {
+    public RegexReplacer(Pattern pattern, String replacement, Translator i18n, FeatureType reportedFeatureType) {
         this.pattern = pattern;
         this.replacement = replacement;
-        this.translator = translator;
+        this.i18n = i18n;
         this.reportedFeatureType = reportedFeatureType;
     }
 
@@ -110,6 +110,6 @@ public final class RegexReplacer implements Analyzer {
 
 
     private FeatureComponent component(TextSelection textSelection, String newValue, String oldValue) {
-        return new SimpleFeatureComponent(translator.replaceLiteralComponentDescription(newValue), textSelection, oldValue);
+        return new SimpleFeatureComponent(i18n.replaceLiteralComponentDescription(newValue), textSelection, oldValue);
     }
 }

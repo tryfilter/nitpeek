@@ -15,13 +15,13 @@ public final class IndentingFeatureComponentFormatter implements FeatureComponen
         this(new DefaultEnglishTranslator());
     }
 
-    public IndentingFeatureComponentFormatter(Translator translator) {
-        this(translator, Indent.DEFAULT());
+    public IndentingFeatureComponentFormatter(Translator i18n) {
+        this(i18n, Indent.DEFAULT());
     }
 
-    public IndentingFeatureComponentFormatter(Translator translator, Indent indent) {
+    public IndentingFeatureComponentFormatter(Translator i18n, Indent indent) {
         this.indent = indent;
-        this.i18n = translator;
+        this.i18n = i18n;
     }
 
     @Override

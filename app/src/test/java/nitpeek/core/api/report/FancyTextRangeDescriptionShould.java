@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class FancyTextRangeDescriptionShould {
 
-    private static final Translator translator = new DefaultEnglishTranslator();
+    private static final Translator i18n = new DefaultEnglishTranslator();
     private TextRangeDescription description;
 
     private static final int BASE_PAGE = 3;
@@ -35,7 +35,7 @@ final class FancyTextRangeDescriptionShould {
 
     @BeforeEach
     void setup() {
-        description = new FancyTextRangeDescription(translator);
+        description = new FancyTextRangeDescription(i18n);
     }
 
 

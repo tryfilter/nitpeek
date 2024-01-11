@@ -37,10 +37,10 @@ public enum StandardFeature {
     }
 
     /**
-     * @param translator the translator to use as a source for the feature name and feature description
+     * @param i18n the translator to use as a source for the feature name and feature description
      * @return the FeatureType of this standard feature, with its name and description translated by the provided translator
      */
-    public FeatureType getType(Translator translator) {
-        return new FeatureType("nitpeek.core.feature." + this.name(), nameSupplier.apply(translator), classification, descriptionSupplier.apply(translator));
+    public FeatureType getType(Translator i18n) {
+        return new FeatureType("nitpeek.core.feature." + this.name(), nameSupplier.apply(i18n), classification, descriptionSupplier.apply(i18n));
     }
 }

@@ -10,8 +10,8 @@ public final class FancyTextRangeDescription implements TextRangeDescription {
 
     private final Translator i18n;
 
-    public FancyTextRangeDescription(Translator translator) {
-        this.i18n = translator;
+    public FancyTextRangeDescription(Translator i18n) {
+        this.i18n = i18n;
     }
 
     @Override

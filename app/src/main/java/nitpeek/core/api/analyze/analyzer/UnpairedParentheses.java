@@ -22,7 +22,7 @@ public final class UnpairedParentheses implements Analyzer {
 
     private final String openParenthesis;
     private final String closeParenthesis;
-    private final Translator translator;
+    private final Translator i18n;
 
 
     private final List<Feature> features = new ArrayList<>();
@@ -32,10 +32,10 @@ public final class UnpairedParentheses implements Analyzer {
         this(openParenthesis, closeParenthesis, new DefaultEnglishTranslator());
     }
 
-    public UnpairedParentheses(String openParenthesis, String closeParenthesis, Translator translator) {
+    public UnpairedParentheses(String openParenthesis, String closeParenthesis, Translator i18n) {
         this.openParenthesis = openParenthesis;
         this.closeParenthesis = closeParenthesis;
-        this.translator = translator;
+        this.i18n = i18n;
     }
 
     /**
@@ -114,7 +114,7 @@ public final class UnpairedParentheses implements Analyzer {
     private FeatureComponent component(Parenthesis parenthesis, TextPage page, int lineIndex) {
         ParenthesisType missingParenthesisType = parenthesis.type.other();
         return new SimpleFeatureComponent(
-                translator.unpairedParenthesisComponentDescription(parenthesisOfType(missingParenthesisType), missingParenthesisType),
+                i18n.unpairedParenthesisComponentDescription(parenthesisOfType(missingParenthesisType), missingParenthesisType),
                 new TextCoordinate(page.getPageNumber(), lineIndex, parenthesis.index).extendToSelection(parenthesisLength(parenthesis)),
                 parenthesisOfType(parenthesis.type)
         );

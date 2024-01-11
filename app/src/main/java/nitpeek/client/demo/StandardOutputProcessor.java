@@ -17,7 +17,7 @@ public final class StandardOutputProcessor implements Processor {
     private final ReportingTarget reportingTarget = new WriterReportingTarget(new PrintWriter(System.out));
     private final RuleSetProvider ruleSetProvider;
     private final Reporter featureReporter;
-    private final Translator translator;
+    private final Translator i18n;
 
     private final PageConsumer innerConsumer = new Consumer();
 
@@ -25,14 +25,14 @@ public final class StandardOutputProcessor implements Processor {
         this(ruleSetProvider, new DefaultEnglishTranslator());
     }
 
-    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator translator) {
-        this(ruleSetProvider, translator, new IndentingFeatureFormatter(translator));
+    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator i18n) {
+        this(ruleSetProvider, i18n, new IndentingFeatureFormatter(i18n));
     }
 
-    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator translator, FeatureFormatter featureFormatter) {
+    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator i18n, FeatureFormatter featureFormatter) {
         this.ruleSetProvider = ruleSetProvider;
         this.featureReporter = new SeparatorReporter("\n", reportingTarget, featureFormatter);
-        this.translator = translator;
+        this.i18n = i18n;
     }
 
     @Override
@@ -63,9 +63,9 @@ public final class StandardOutputProcessor implements Processor {
 
         private void reportRule(Rule rule) throws ReportingException {
             var type = rule.getType();
-            reportingTarget.report(translator.appliedRuleName(type.name()));
+            reportingTarget.report(i18n.appliedRuleName(type.name()));
             reportingTarget.report("\n");
-            reportingTarget.report(translator.appliedRuleDescription(type.description()));
+            reportingTarget.report(i18n.appliedRuleDescription(type.description()));
             reportingTarget.report("\n");
             featureReporter.reportFeatures(rule.getAnalyzer().findFeatures());
             reportingTarget.report("\n");

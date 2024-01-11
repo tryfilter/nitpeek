@@ -26,7 +26,7 @@ public final class MissingPages implements Analyzer {
     private final Translator i18n;
 
     /**
-     * Uses the default english translator for user-facing text
+     * Uses the default english translator internationalization
      */
     public MissingPages() {
         this(new DefaultEnglishTranslator());

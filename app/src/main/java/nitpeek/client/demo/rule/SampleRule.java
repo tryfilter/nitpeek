@@ -42,10 +42,10 @@ public enum SampleRule implements Rule {
     }
 
     /**
-     * @param translator the translator to use as a source for the rule name and rule description
+     * @param i18n the translator to use as a source for the rule name and rule description
      * @return the RuleType of this sample rule, with its name and description translated by the provided translator
      */
-    public RuleType getType(Translator translator) {
-        return new RuleType("nitpeek.demo.rule." + this.name(), nameSupplier.apply(translator), descriptionSupplier.apply(translator));
+    public RuleType getType(Translator i18n) {
+        return new RuleType("nitpeek.demo.rule." + this.name(), nameSupplier.apply(i18n), descriptionSupplier.apply(i18n));
     }
 }

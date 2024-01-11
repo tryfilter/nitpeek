@@ -17,18 +17,18 @@ public final class IndentingFeatureFormatter implements FeatureFormatter {
     }
 
 
-    public IndentingFeatureFormatter(Translator translator) {
-        this(translator, Indent.DEFAULT());
+    public IndentingFeatureFormatter(Translator i18n) {
+        this(i18n, Indent.DEFAULT());
     }
 
 
-    public IndentingFeatureFormatter(Translator translator, Indent indent) {
-        this(translator, indent, new IndentingFeatureComponentFormatter(translator, indent));
+    public IndentingFeatureFormatter(Translator i18n, Indent indent) {
+        this(i18n, indent, new IndentingFeatureComponentFormatter(i18n, indent));
     }
 
-    public IndentingFeatureFormatter(Translator translator, Indent indent, FeatureComponentFormatter componentFormatter) {
+    public IndentingFeatureFormatter(Translator i18n, Indent indent, FeatureComponentFormatter componentFormatter) {
         this.componentFormatter = componentFormatter;
-        this.i18n = translator;
+        this.i18n = i18n;
         this.indent = indent;
     }
 

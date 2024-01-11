@@ -38,15 +38,15 @@ public final class LiteralReplacer implements Analyzer {
     /**
      * Creates a LiteralReplacer that replaces each occurrence of {@code oldValue} with the value {@code newValue}. <br>
      * The search does <i>not</i> cross line boundaries. <br>
-     * This is equivalent to calling {@code LiteralReplacer(oldValue, newValue, true, translator)}.
+     * This is equivalent to calling {@code LiteralReplacer(oldValue, newValue, true, i18n)}.
      *
      * @param oldValue   the literal value to be replaced; if this contains any new line character sequences,
      *                   no matches will be found
      * @param newValue   the value to insert in place of the replaced literal
-     * @param translator the translator to use when describing found features and their components
+     * @param i18n the translator to use when describing found features and their components
      */
-    public LiteralReplacer(String oldValue, String newValue, Translator translator) {
-        this(oldValue, newValue, true, translator);
+    public LiteralReplacer(String oldValue, String newValue, Translator i18n) {
+        this(oldValue, newValue, true, i18n);
     }
 
     /**
@@ -69,11 +69,11 @@ public final class LiteralReplacer implements Analyzer {
      * @param newValue   the value to insert in place of the replaced literal
      * @param ignoreCase if this flag is true, this analyzer will find instances of {@code oldValue} in the text even when
      *                   their case doesn't match that of {@code oldValue}
-     * @param translator the translator to use when describing found features and their components
+     * @param i18n the translator to use when describing found features and their components
      */
-    public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translator translator) {
+    public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translator i18n) {
         Pattern pattern = Pattern.compile(oldValue, computePatternFlags(ignoreCase));
-        this.regexReplacer = new RegexReplacer(pattern, newValue, translator, StandardFeature.REPLACE_LITERAL.getType());
+        this.regexReplacer = new RegexReplacer(pattern, newValue, i18n, StandardFeature.REPLACE_LITERAL.getType());
     }
 
     private int computePatternFlags(boolean ignoreCase) {

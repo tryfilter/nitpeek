@@ -1,5 +1,6 @@
 package nitpeek.translation;
 
+import nitpeek.core.api.analyze.analyzer.UnpairedParentheses;
 import nitpeek.core.api.common.TextSelection;
 
 /**
@@ -70,4 +71,10 @@ public interface Translator {
     String replaceRegexFeatureName();
 
     String replaceRegexFeatureDescription();
+
+    String unpairedParenthesesFeatureName();
+
+    String unpairedParenthesesFeatureDescription();
+
+    String unpairedParenthesisComponentDescription(String missingParenthesis, UnpairedParentheses.ParenthesisType missingParenthesisType);
 }

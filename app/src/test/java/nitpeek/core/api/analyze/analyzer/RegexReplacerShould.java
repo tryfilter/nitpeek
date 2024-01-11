@@ -3,6 +3,7 @@ package nitpeek.core.api.analyze.analyzer;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.process.ListPageConsumer;
+import nitpeek.core.testutil.TestUtil;
 import nitpeek.core.testutil.pagesource.HamletAct2ExcerptEdited;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -188,6 +189,6 @@ final class RegexReplacerShould {
 
 
     private Feature replacerFeature(FeatureComponent... components) {
-        return new SimpleFeature(StandardFeature.REPLACE_REGEX.getType(), Arrays.asList(components), 0);
+        return TestUtil.featureFromComponents(StandardFeature.REPLACE_REGEX.getType(), components);
     }
 }

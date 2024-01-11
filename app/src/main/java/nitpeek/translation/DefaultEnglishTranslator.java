@@ -1,5 +1,6 @@
 package nitpeek.translation;
 
+import nitpeek.core.api.analyze.analyzer.UnpairedParentheses;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.report.FancyTextRangeDescription;
 import nitpeek.core.api.report.TextRangeDescription;
@@ -166,5 +167,23 @@ public class DefaultEnglishTranslator implements Translator {
     @Override
     public String replaceRegexFeatureDescription() {
         return "Suggests replacing values matching a particular regular expression, each with a corresponding replacement value.";
+    }
+
+    @Override
+    public String unpairedParenthesesFeatureName() {
+        return "Unpaired Parentheses";
+    }
+
+    @Override
+    public String unpairedParenthesesFeatureDescription() {
+        return "Marks parentheses that are missing their parenthesis pair " +
+                "(opening parenthesis without corresponding closing parenthesis, " +
+                "or closing parenthesis without corresponding opening parenthesis)";
+    }
+
+    @Override
+    public String unpairedParenthesisComponentDescription(String missingParenthesis, UnpairedParentheses.ParenthesisType missingParenthesisType) {
+        String type = missingParenthesisType == UnpairedParentheses.ParenthesisType.OPEN ? "open" : "closing";
+        return "Missing " + type + " parenthesis " + missingParenthesis;
     }
 }

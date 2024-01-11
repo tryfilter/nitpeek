@@ -11,7 +11,8 @@ public enum StandardFeature {
     MISSING_PAGES(Translator::missingPagesFeatureName, Translator::missingPagesFeatureDescription, FeatureType.Classification.WARNING),
     PROCESSED_PAGES(Translator::processedPagesFeatureName, Translator::processedPagesFeatureDescription, FeatureType.Classification.INFO),
     REPLACE_LITERAL(Translator::replaceLiteralFeatureName, Translator::replaceLiteralFeatureDescription, FeatureType.Classification.ERROR),
-    REPLACE_REGEX(Translator::replaceRegexFeatureName, Translator::replaceRegexFeatureDescription, FeatureType.Classification.ERROR);
+    REPLACE_REGEX(Translator::replaceRegexFeatureName, Translator::replaceRegexFeatureDescription, FeatureType.Classification.ERROR),
+    UNPAIRED_PARENTHESES(Translator::unpairedParenthesesFeatureName, Translator::unpairedParenthesesFeatureDescription, FeatureType.Classification.ERROR);
 
 
     private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();

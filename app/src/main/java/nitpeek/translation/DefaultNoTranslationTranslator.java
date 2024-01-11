@@ -1,5 +1,6 @@
 package nitpeek.translation;
 
+import nitpeek.core.api.analyze.analyzer.UnpairedParentheses;
 import nitpeek.core.api.common.TextSelection;
 
 /**
@@ -167,7 +168,22 @@ public class DefaultNoTranslationTranslator implements Translator {
 
     @Override
     public String replaceRegexFeatureDescription() {
-        return null;
+        return missingTranslation("replaceRegexFeatureDescription");
+    }
+
+    @Override
+    public String unpairedParenthesesFeatureName() {
+        return missingTranslation("unpairedParenthesesFeatureName");
+    }
+
+    @Override
+    public String unpairedParenthesesFeatureDescription() {
+        return missingTranslation("unpairedParenthesesFeatureDescription");
+    }
+
+    @Override
+    public String unpairedParenthesisComponentDescription(String missingParenthesis, UnpairedParentheses.ParenthesisType missingParenthesisType) {
+        return missingTranslation("unpairedParenthesisComponentDescription");
     }
 
     private String missingTranslation(String methodName) {

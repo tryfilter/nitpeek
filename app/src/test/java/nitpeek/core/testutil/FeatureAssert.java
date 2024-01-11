@@ -49,7 +49,7 @@ public final class FeatureAssert {
         Assertions.assertAll(
                 () -> assertEquals(expected.getCoordinates(), actual.getCoordinates()),
                 () -> assertEquals(expected.getRelevantTextPortion(), actual.getRelevantTextPortion()),
-                // we just want the newValue to be mentioned somehow, we don't care exactly in what manner
+                // we just want the expected value to be contained somehow, it doesn't have to be identical to the entire description
                 () -> assertTrue(actual.getDescription().contains(expected.getDescription()))
         );
 

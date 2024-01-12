@@ -1,7 +1,6 @@
 package nitpeek.core.api.analyze.analyzer;
 
 import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.analyze.analyzer.Analyzer;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
 import nitpeek.core.internal.Confidence;

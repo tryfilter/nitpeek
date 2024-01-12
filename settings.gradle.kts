@@ -8,3 +8,5 @@
 
 rootProject.name = "nitpeek"
 include("app")
+include("lib-core")
+

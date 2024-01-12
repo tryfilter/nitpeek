@@ -18,8 +18,9 @@ repositories {
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
-
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation(project(":lib-core"))
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -31,7 +32,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("nitpeek.App")
+    mainClass.set("nitpeek.client.demo.DemoStdOutProcessor")
 }
 
 tasks.named<Test>("test") {

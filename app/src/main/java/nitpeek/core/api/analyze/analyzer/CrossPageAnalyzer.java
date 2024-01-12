@@ -20,6 +20,7 @@ import java.util.*;
  * This is because every time {@link #findFeatures()} is called on the wrapping analyzer, a new wrapped analyzer should
  * be created to avoid the wrapped analyzer processing a page with the same page number ({@code 0}) but potentially multiple
  * different variations of content (lines).<br>
+ * Note that all processed pages are joined together, even if they do not have adjacent page numbers.
  * <br>
  * This Analyzer is NOT thread safe.<br>
  * This Analyzer is NOT processing-order independent.<br>

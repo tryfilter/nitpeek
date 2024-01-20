@@ -49,8 +49,8 @@ public final class FeatureAssert {
         Assertions.assertAll(
                 () -> assertEquals(expected.getCoordinates(), actual.getCoordinates()),
                 () -> assertEquals(expected.getRelevantTextPortion(), actual.getRelevantTextPortion()),
-                // we just want the expected value to be contained somehow, it doesn't have to be identical to the entire description
-                () -> assertTrue(actual.getDescription().contains(expected.getDescription()))
+                // we just want the expected value to be contained somehow, it doesn't have to be identical to the entire descriptionTranslationKey
+                () -> assertTrue(actual.getDescription(null).contains(expected.getDescription(null)))
         );
 
     }

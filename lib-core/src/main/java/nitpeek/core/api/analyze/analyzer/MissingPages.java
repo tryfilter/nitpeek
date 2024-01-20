@@ -4,10 +4,12 @@ import nitpeek.core.internal.Confidence;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 
 import java.util.*;
+
+import static nitpeek.translation.InternalTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
 
 /**
  * Reports sections of pages that were expected to be processed but weren't.<br>
@@ -18,16 +20,16 @@ import java.util.*;
 public final class MissingPages implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();
-    private final Translator i18n;
+    private final Translation i18n;
 
     /**
      * Uses the default english translator internationalization
      */
     public MissingPages() {
-        this(new DefaultEnglishTranslator());
+        this(new SimpleDefaultEnglishTranslation());
     }
 
-    public MissingPages(Translator i18n) {
+    public MissingPages(Translation i18n) {
         this.i18n = i18n;
     }
 
@@ -79,7 +81,7 @@ public final class MissingPages implements Analyzer {
     }
 
     private FeatureComponent problemComponent(TextSelection missingPages) {
-        return new SimpleFeatureComponent(i18n.missingPagesComponentDescription(missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
+        return new SimpleFeatureComponent(i18n.translate(MISSING_PAGES_COMPONENT_DESCRIPTION.key(), missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
     }
 
     private List<PageRange> getMissingSections(NavigableSet<Integer> sortedPageNumbers) {

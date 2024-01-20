@@ -5,6 +5,7 @@ import nitpeek.core.api.process.SimpleRuleSetProvider;
 import nitpeek.core.api.process.StringPageSource;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public final class DemoStdOutProcessor {
@@ -21,5 +22,11 @@ public final class DemoStdOutProcessor {
         ));
 
         processor.startProcessing(pageSource);
+
+
+        for (var language : Locale.getISOLanguages())
+            System.out.println(language);
+
+        System.out.println(Locale.getDefault().getLanguage());
     }
 }

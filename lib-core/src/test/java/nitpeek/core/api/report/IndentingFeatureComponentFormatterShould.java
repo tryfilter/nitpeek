@@ -3,7 +3,8 @@ package nitpeek.core.api.report;
 import nitpeek.core.api.common.SimpleFeatureComponent;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.translation.DefaultEnglishTranslator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,10 +28,16 @@ final class IndentingFeatureComponentFormatterShould {
         assertEquals(expected, actual);
     }
 
-    private static class DummyTranslator extends DefaultEnglishTranslator {
+    private static class DummyTranslator implements Translation {
+        private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
 
         @Override
-        public String foundFeatureComponentCoordinates(TextSelection coordinates) {
+        public String translate(String translationKey, Object... arguments) {
+            return defaultTranslation.translate(translationKey, arguments);
+        }
+
+        @Override
+        public String translate(TextSelection textSelection) {
             return "COORDS";
         }
     }

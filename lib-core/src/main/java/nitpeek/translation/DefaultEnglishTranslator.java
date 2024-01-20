@@ -15,7 +15,7 @@ public class DefaultEnglishTranslator implements Translator {
     private final TextRangeDescription description;
 
     public DefaultEnglishTranslator() {
-        description = new FancyTextRangeDescription(this);
+        description = new FancyTextRangeDescription(new SimpleDefaultEnglishTranslation());
     }
 
     DefaultEnglishTranslator(TextRangeDescription description) {
@@ -48,9 +48,13 @@ public class DefaultEnglishTranslator implements Translator {
     }
 
     @Override
-    public String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage) {
-        if (firstProcessedPage == lastProcessedPage) return "page " + firstProcessedPage;
-        else return "pages " + firstProcessedPage + "-" + lastProcessedPage;
+    public String processedPagesComponentDescriptionChunk(int firstProcessedPage, int lastProcessedPage) {
+        return "pages " + firstProcessedPage + "-" + lastProcessedPage;
+    }
+
+    @Override
+    public String processedSinglePageComponentDescription(int processedPage) {
+        return "page " + processedPage;
     }
 
     @Override
@@ -182,8 +186,12 @@ public class DefaultEnglishTranslator implements Translator {
     }
 
     @Override
-    public String unpairedParenthesisComponentDescription(String missingParenthesis, UnpairedParentheses.ParenthesisType missingParenthesisType) {
-        String type = missingParenthesisType == UnpairedParentheses.ParenthesisType.OPEN ? "open" : "closing";
-        return "Missing " + type + " parenthesis " + missingParenthesis;
+    public String unpairedOpenParenthesisComponentDescription(String missingParenthesis) {
+        return "Missing open parenthesis " + missingParenthesis;
+    }
+
+    @Override
+    public String unpairedClosingParenthesisComponentDescription(String missingParenthesis) {
+        return "Missing closing parenthesis " + missingParenthesis;
     }
 }

@@ -3,13 +3,15 @@ package nitpeek.core.api.analyze.analyzer;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.internal.Confidence;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
+
+import static nitpeek.translation.InternalTranslationKeys.REPLACE_LITERAL_COMPONENT_DESCRIPTION;
 
 /**
  * Reports values matching a regular expression that should be replaced with some other value.<br>
@@ -22,29 +24,29 @@ public final class RegexReplacer implements Analyzer {
 
     private final Pattern pattern;
     private final String replacement;
-    private final Translator i18n;
+    private final Translation i18n;
 
-    private final FeatureType reportedFeatureType;
+    private final SimpleFeatureType reportedSimpleFeatureType;
 
     private final List<Feature> features = new ArrayList<>();
 
     public RegexReplacer(Pattern pattern, String replacement) {
-        this(pattern, replacement, new DefaultEnglishTranslator(), StandardFeature.REPLACE_REGEX.getType());
+        this(pattern, replacement, new SimpleDefaultEnglishTranslation(), StandardFeature.REPLACE_REGEX.getType());
     }
 
-    public RegexReplacer(Pattern pattern, String replacement, FeatureType reportedFeatureType) {
-        this(pattern, replacement, new DefaultEnglishTranslator(), reportedFeatureType);
+    public RegexReplacer(Pattern pattern, String replacement, SimpleFeatureType reportedSimpleFeatureType) {
+        this(pattern, replacement, new SimpleDefaultEnglishTranslation(), reportedSimpleFeatureType);
     }
 
-    public RegexReplacer(Pattern pattern, String replacement, Translator i18n) {
-        this(pattern, replacement, i18n, StandardFeature.REPLACE_REGEX.getType(i18n));
+    public RegexReplacer(Pattern pattern, String replacement, Translation i18n) {
+        this(pattern, replacement, i18n, StandardFeature.REPLACE_REGEX.getType());
     }
 
-    public RegexReplacer(Pattern pattern, String replacement, Translator i18n, FeatureType reportedFeatureType) {
+    public RegexReplacer(Pattern pattern, String replacement, Translation i18n, SimpleFeatureType reportedSimpleFeatureType) {
         this.pattern = pattern;
         this.replacement = replacement;
         this.i18n = i18n;
-        this.reportedFeatureType = reportedFeatureType;
+        this.reportedSimpleFeatureType = reportedSimpleFeatureType;
     }
 
     /**
@@ -76,7 +78,7 @@ public final class RegexReplacer implements Analyzer {
 
     private Feature wrapComponent(FeatureComponent component) {
         return new SimpleFeature(
-                reportedFeatureType,
+                reportedSimpleFeatureType,
                 List.of(component),
                 Confidence.HIGH.value()
         );
@@ -109,6 +111,6 @@ public final class RegexReplacer implements Analyzer {
 
 
     private FeatureComponent component(TextSelection textSelection, String newValue, String oldValue) {
-        return new SimpleFeatureComponent(i18n.replaceLiteralComponentDescription(newValue), textSelection, oldValue);
+        return new SimpleFeatureComponent(i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION.key(), newValue), textSelection, oldValue);
     }
 }

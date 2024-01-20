@@ -1,11 +1,13 @@
 package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.*;
-import nitpeek.translation.DefaultEnglishTranslator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static nitpeek.translation.InternalTranslationKeys.FOUND_FEATURE_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class IndentingFeatureFormatterShould {
@@ -38,10 +40,11 @@ final class IndentingFeatureFormatterShould {
     }
 
     private static class DummyComponentFormatter implements FeatureComponentFormatter {
+        private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
 
         @Override
         public String format(FeatureComponent featureComponent) {
-            return featureComponent.getDescription();
+            return featureComponent.getDescription(defaultTranslation);
         }
     }
 
@@ -54,7 +57,7 @@ final class IndentingFeatureFormatterShould {
 
         @Override
         public FeatureType getType() {
-            return new FeatureType("0", "FEATURE_NAME", FeatureType.Classification.INFO, "DESCRIPTION");
+            return new DummyFeatureType("0", "FEATURE_NAME", SimpleFeatureType.Classification.INFO, "DESCRIPTION");
         }
 
         @Override
@@ -63,11 +66,12 @@ final class IndentingFeatureFormatterShould {
         }
     }
 
-    private static class DummyTranslator extends DefaultEnglishTranslator {
+    private static class DummyTranslator extends SimpleDefaultEnglishTranslation {
 
         @Override
-        public String foundFeatureName(String name) {
-            return "Feature: " + name;
+        public String translate(String translationKey, Object... arguments) {
+            if (FOUND_FEATURE_NAME.key().equals(translationKey)) return "Feature: " + arguments[0];
+            return super.translate(translationKey, arguments);
         }
     }
 }

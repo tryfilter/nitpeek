@@ -1,32 +1,34 @@
 package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.Feature;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.*;
+
+import static nitpeek.translation.InternalTranslationKeys.DESCRIPTION;
+import static nitpeek.translation.InternalTranslationKeys.FOUND_FEATURE_NAME;
 
 public final class IndentingFeatureFormatter implements FeatureFormatter {
 
 
     private final FeatureComponentFormatter componentFormatter;
     private final Indent indent;
-    private final Translator i18n;
+    private final Translation i18n;
 
 
     public IndentingFeatureFormatter() {
-        this(new DefaultEnglishTranslator());
+        this(new SimpleDefaultEnglishTranslation());
     }
 
 
-    public IndentingFeatureFormatter(Translator i18n) {
+    public IndentingFeatureFormatter(Translation i18n) {
         this(i18n, Indent.DEFAULT());
     }
 
 
-    public IndentingFeatureFormatter(Translator i18n, Indent indent) {
+    public IndentingFeatureFormatter(Translation i18n, Indent indent) {
         this(i18n, indent, new IndentingFeatureComponentFormatter(i18n, indent));
     }
 
-    public IndentingFeatureFormatter(Translator i18n, Indent indent, FeatureComponentFormatter componentFormatter) {
+    public IndentingFeatureFormatter(Translation i18n, Indent indent, FeatureComponentFormatter componentFormatter) {
         this.componentFormatter = componentFormatter;
         this.i18n = i18n;
         this.indent = indent;
@@ -35,8 +37,8 @@ public final class IndentingFeatureFormatter implements FeatureFormatter {
     @Override
     public String format(Feature feature) {
 
-        return i18n.foundFeatureName(feature.getType().name()) + '\n' +
-                indent.indentContainedLines(i18n.description(feature.getType().description())) + '\n' +
+        return i18n.translate(FOUND_FEATURE_NAME.key(), feature.getType().getFeatureId().getName(i18n)) + '\n' +
+                indent.indentContainedLines(i18n.translate(DESCRIPTION.key(), feature.getType().getFeatureId().getDescription(i18n))) + '\n' +
                 '\n' +
                 formatComponents(feature);
     }

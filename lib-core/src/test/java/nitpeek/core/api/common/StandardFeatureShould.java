@@ -1,28 +1,23 @@
 package nitpeek.core.api.common;
 
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.DefaultNoTranslationTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.DefaultNoTranslationTranslation;
+import nitpeek.translation.Translation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static nitpeek.translation.InternalTranslationKeys.MISSING_PAGES_FEATURE_DESCRIPTION;
+import static nitpeek.translation.InternalTranslationKeys.MISSING_PAGES_FEATURE_NAME;
+
 final class StandardFeatureShould {
 
-    @Test
-    void translateUsingDefaultEnglishTranslatorIfNoneProvided() {
-        StandardFeature feature = StandardFeature.MISSING_PAGES;
-
-        Assertions.assertEquals(new DefaultEnglishTranslator().missingPagesFeatureName(), feature.getType().name());
-        Assertions.assertEquals(new DefaultEnglishTranslator().missingPagesFeatureDescription(), feature.getType().description());
-    }
 
     @Test
     void translateUsingProvidedCustomTranslator() {
         StandardFeature feature = StandardFeature.MISSING_PAGES;
 
-        Translator customTranslator = new DefaultNoTranslationTranslator("dummy");
+        Translation customTranslation = new DefaultNoTranslationTranslation("dummy");
 
-        Assertions.assertEquals(customTranslator.missingPagesFeatureName(), feature.getType(customTranslator).name());
-        Assertions.assertEquals(customTranslator.missingPagesFeatureDescription(), feature.getType(customTranslator).description());
+        Assertions.assertEquals(customTranslation.translate(MISSING_PAGES_FEATURE_NAME.key()), feature.getType().getFeatureId().getName(customTranslation));
+        Assertions.assertEquals(customTranslation.translate(MISSING_PAGES_FEATURE_DESCRIPTION.key()), feature.getType().getFeatureId().getDescription(customTranslation));
     }
 }

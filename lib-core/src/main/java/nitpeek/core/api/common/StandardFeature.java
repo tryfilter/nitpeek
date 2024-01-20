@@ -1,46 +1,34 @@
 package nitpeek.core.api.common;
 
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.core.api.common.FeatureType.Classification;
+import nitpeek.translation.InternalTranslationKeys;
 
-import java.util.function.Function;
+import static nitpeek.core.api.common.FeatureType.Classification.*;
+import static nitpeek.translation.InternalTranslationKeys.*;
 
 public enum StandardFeature {
 
-    DEBUG_FEATURE(Translator::debugFeatureName, Translator::debugFeatureDescription, FeatureType.Classification.ERROR),
-    MISSING_PAGES(Translator::missingPagesFeatureName, Translator::missingPagesFeatureDescription, FeatureType.Classification.WARNING),
-    PROCESSED_PAGES(Translator::processedPagesFeatureName, Translator::processedPagesFeatureDescription, FeatureType.Classification.INFO),
-    REPLACE_LITERAL(Translator::replaceLiteralFeatureName, Translator::replaceLiteralFeatureDescription, FeatureType.Classification.ERROR),
-    REPLACE_REGEX(Translator::replaceRegexFeatureName, Translator::replaceRegexFeatureDescription, FeatureType.Classification.ERROR),
-    UNPAIRED_PARENTHESES(Translator::unpairedParenthesesFeatureName, Translator::unpairedParenthesesFeatureDescription, FeatureType.Classification.ERROR);
+    DEBUG_FEATURE(DEBUG_FEATURE_NAME, DEBUG_FEATURE_DESCRIPTION, ERROR),
+    MISSING_PAGES(MISSING_PAGES_FEATURE_NAME, MISSING_PAGES_FEATURE_DESCRIPTION, WARNING),
+    PROCESSED_PAGES(PROCESSED_PAGES_FEATURE_NAME, PROCESSED_PAGES_FEATURE_DESCRIPTION, INFO),
+    REPLACE_LITERAL(REPLACE_LITERAL_FEATURE_NAME, REPLACE_LITERAL_FEATURE_DESCRIPTION, ERROR),
+    REPLACE_REGEX(REPLACE_REGEX_FEATURE_NAME, REPLACE_REGEX_FEATURE_DESCRIPTION, ERROR),
+    UNPAIRED_PARENTHESES(UNPAIRED_PARENTHESES_FEATURE_NAME, UNPAIRED_PARENTHESES_FEATURE_DESCRIPTION, ERROR);
 
 
-    private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();
+    private final String nameTranslationKey;
+    private final String descriptionTranslationKey;
 
-    private final Function<Translator, String> nameSupplier;
-    private final Function<Translator, String> descriptionSupplier;
-
-    private final FeatureType.Classification classification;
+    private final Classification classification;
 
 
-    StandardFeature(Function<Translator, String> nameSupplier, Function<Translator, String> descriptionSupplier, FeatureType.Classification classification) {
-        this.nameSupplier = nameSupplier;
+    StandardFeature(InternalTranslationKeys nameTranslationKey, InternalTranslationKeys descriptionTranslationKey, Classification classification) {
+        this.nameTranslationKey = nameTranslationKey.key();
+        this.descriptionTranslationKey = descriptionTranslationKey.key();
         this.classification = classification;
-        this.descriptionSupplier = descriptionSupplier;
     }
 
-    /**
-     * @return the FeatureType of this standard feature, with its name and description translated by the standard english translator
-     */
-    public FeatureType getType() {
-        return getType(defaultEnglishTranslator);
-    }
-
-    /**
-     * @param i18n the translator to use as a source for the feature name and feature description
-     * @return the FeatureType of this standard feature, with its name and description translated by the provided translator
-     */
-    public FeatureType getType(Translator i18n) {
-        return new FeatureType("nitpeek.core.feature." + this.name(), nameSupplier.apply(i18n), classification, descriptionSupplier.apply(i18n));
+    public SimpleFeatureType getType() {
+        return new SimpleFeatureType("nitpeek.core.feature." + this.name(), nameTranslationKey, classification, descriptionTranslationKey);
     }
 }

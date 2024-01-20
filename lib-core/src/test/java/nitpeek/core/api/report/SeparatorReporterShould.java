@@ -2,6 +2,8 @@ package nitpeek.core.api.report;
 
 import nitpeek.core.api.analyze.DummyFeature;
 import nitpeek.core.api.common.Feature;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
@@ -77,9 +79,10 @@ final class SeparatorReporterShould {
     }
 
     private record DummyFormatter() implements FeatureFormatter {
+        private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
         @Override
         public String format(Feature feature) {
-            return feature.getType().name();
+            return feature.getType().getFeatureId().getName(defaultTranslation);
         }
     }
 }

@@ -7,29 +7,32 @@ import nitpeek.core.api.process.PageSource;
 import nitpeek.core.api.process.Processor;
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.*;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 
 import java.io.PrintWriter;
+
+import static nitpeek.translation.InternalTranslationKeys.APPLIED_RULE_DESCRIPTION;
+import static nitpeek.translation.InternalTranslationKeys.APPLIED_RULE_NAME;
 
 public final class StandardOutputProcessor implements Processor {
 
     private final ReportingTarget reportingTarget = new WriterReportingTarget(new PrintWriter(System.out));
     private final RuleSetProvider ruleSetProvider;
     private final Reporter featureReporter;
-    private final Translator i18n;
+    private final Translation i18n;
 
     private final PageConsumer innerConsumer = new Consumer();
 
     public StandardOutputProcessor(RuleSetProvider ruleSetProvider) {
-        this(ruleSetProvider, new DefaultEnglishTranslator());
+        this(ruleSetProvider, new SimpleDefaultEnglishTranslation());
     }
 
-    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator i18n) {
+    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translation i18n) {
         this(ruleSetProvider, i18n, new IndentingFeatureFormatter(i18n));
     }
 
-    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translator i18n, FeatureFormatter featureFormatter) {
+    public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translation i18n, FeatureFormatter featureFormatter) {
         this.ruleSetProvider = ruleSetProvider;
         this.featureReporter = new SeparatorReporter("\n", reportingTarget, featureFormatter);
         this.i18n = i18n;
@@ -63,9 +66,9 @@ public final class StandardOutputProcessor implements Processor {
 
         private void reportRule(Rule rule) throws ReportingException {
             var type = rule.getType();
-            reportingTarget.report(i18n.appliedRuleName(type.name()));
+            reportingTarget.report(i18n.translate(APPLIED_RULE_NAME.key(), type.getRuleId().getName(i18n)));
             reportingTarget.report("\n");
-            reportingTarget.report(i18n.appliedRuleDescription(type.description()));
+            reportingTarget.report(i18n.translate(APPLIED_RULE_DESCRIPTION.key(), type.getRuleId().getDescription(i18n)));
             reportingTarget.report("\n");
             featureReporter.reportFeatures(rule.getAnalyzer().findFeatures());
             reportingTarget.report("\n");

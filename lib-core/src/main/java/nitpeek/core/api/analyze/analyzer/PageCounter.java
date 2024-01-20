@@ -4,13 +4,14 @@ import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.api.common.util.PageRange;
 import nitpeek.core.internal.Confidence;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static nitpeek.core.api.common.TextSelection.emptyPages;
+import static nitpeek.translation.InternalTranslationKeys.*;
 
 /**
  * Reports how many pages were processed and which ones.<br>
@@ -21,13 +22,13 @@ import static nitpeek.core.api.common.TextSelection.emptyPages;
 public final class PageCounter implements Analyzer {
 
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
-    private final Translator i18n;
+    private final Translation i18n;
 
     public PageCounter() {
-        this(new DefaultEnglishTranslator());
+        this(new SimpleDefaultEnglishTranslation());
     }
 
-    public PageCounter(Translator i18n) {
+    public PageCounter(Translation i18n) {
         this.i18n = i18n;
     }
 
@@ -41,9 +42,9 @@ public final class PageCounter implements Analyzer {
      */
     @Override
     public List<Feature> findFeatures() {
-        FeatureType featureType = StandardFeature.PROCESSED_PAGES.getType(i18n);
+        SimpleFeatureType simpleFeatureType = StandardFeature.PROCESSED_PAGES.getType();
 
-        return List.of(new SimpleFeature(featureType, calculateComponents(), Confidence.MAX.value()));
+        return List.of(new SimpleFeature(simpleFeatureType, calculateComponents(), Confidence.MAX.value()));
     }
 
     private List<FeatureComponent> calculateComponents() {
@@ -59,7 +60,7 @@ public final class PageCounter implements Analyzer {
         int last = processedPageNumbers.isEmpty() ? 0 : processedPageNumbers.last();
 
         return new SimpleFeatureComponent(
-                i18n.processedPagesComponentDescription(first, last, processedPageNumbers.size()),
+                i18n.translate(PROCESSED_PAGES_COMPONENT_DESCRIPTION.key(), first, last, processedPageNumbers.size()),
                 emptyPages(new PageRange(first, last))
         );
     }
@@ -72,12 +73,19 @@ public final class PageCounter implements Analyzer {
 
         for (var range : contiguousRanges()) {
             result.add(new SimpleFeatureComponent(
-                    i18n.processedPagesComponentDescription(range.firstPage(), range.lastPage()),
+                            translatePageRange(range.firstPage(), range.lastPage()),
                     emptyPages(range)
             ));
         }
 
         return result;
+    }
+
+    private String translatePageRange(int firstPage, int lastPage) {
+        if (firstPage == lastPage)
+            return i18n.translate(PROCESSED_SINGLE_PAGE_COMPONENT_DESCRIPTION_CHUNK.key(), firstPage);
+
+        return i18n.translate(PROCESSED_PAGES_COMPONENT_DESCRIPTION_CHUNK.key(), firstPage, lastPage);
     }
 
     private List<PageRange> contiguousRanges() {

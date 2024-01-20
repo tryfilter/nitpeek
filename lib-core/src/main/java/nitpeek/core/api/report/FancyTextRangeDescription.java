@@ -2,15 +2,17 @@ package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.translation.Translator;
+import nitpeek.translation.Translation;
 
 import java.util.List;
 
+import static nitpeek.translation.InternalTranslationKeys.*;
+
 public final class FancyTextRangeDescription implements TextRangeDescription {
 
-    private final Translator i18n;
+    private final Translation i18n;
 
-    public FancyTextRangeDescription(Translator i18n) {
+    public FancyTextRangeDescription(Translation i18n) {
         this.i18n = i18n;
     }
 
@@ -19,9 +21,9 @@ public final class FancyTextRangeDescription implements TextRangeDescription {
         TextCoordinate from = textSelection.fromInclusive();
         TextCoordinate to = textSelection.toInclusive();
 
-        List<String> pageElements = describeRange(from.page(), to.page(), i18n.page(), false);
-        List<String> lineElements = describeRange(from.line(), to.line(), i18n.line(), !pageElements.get(1).isBlank());
-        List<String> characterElements = describeRange(from.character(), to.character(), i18n.character(), !lineElements.get(1).isBlank());
+        List<String> pageElements = describeRange(from.page(), to.page(), i18n.translate(PAGE.key()), false);
+        List<String> lineElements = describeRange(from.line(), to.line(), i18n.translate(LINE.key()), !pageElements.get(1).isBlank());
+        List<String> characterElements = describeRange(from.character(), to.character(), i18n.translate(CHARACTER.key()), !lineElements.get(1).isBlank());
 
 
         return pageElements.get(0) + prePad(lineElements.get(0)) + prePad(characterElements.get(0)) +
@@ -34,13 +36,13 @@ public final class FancyTextRangeDescription implements TextRangeDescription {
     }
 
     private List<String> describeRange(int fromInclusive, int toInclusive, String axisName, boolean parentIsRange) {
-        if (parentIsRange) return List.of(i18n.axisCompound(axisName, fromInclusive), i18n.axisCompound(axisName, toInclusive));
+        if (parentIsRange) return List.of(i18n.translate(AXIS_COMPOUND.key(), axisName, fromInclusive), i18n.translate(AXIS_COMPOUND.key(), axisName, toInclusive));
 
         if (fromInclusive == toInclusive) {
-            return List.of(i18n.axisPinpoint(axisName, fromInclusive), "");
+            return List.of(i18n.translate(AXIS_PINPOINT.key(), axisName, fromInclusive), "");
         } else {
-            String start = i18n.axisStart(axisName, fromInclusive);
-            String end = i18n.axisEnd(axisName, toInclusive);
+            String start = i18n.translate(AXIS_START.key(), axisName, fromInclusive);
+            String end = i18n.translate(AXIS_END.key(), axisName, toInclusive);
             return List.of(start, end);
         }
     }

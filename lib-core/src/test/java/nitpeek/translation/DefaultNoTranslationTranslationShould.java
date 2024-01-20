@@ -3,16 +3,18 @@ package nitpeek.translation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-final class DefaultNoTranslationTranslatorShould {
+import static nitpeek.translation.InternalTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
+
+final class DefaultNoTranslationTranslationShould {
 
 
     @Test
     void doTranslationWithDefaultMessageWhenMissingFromSubclass() {
         final String name = "Placeholder";
-        Translator dummy = new DummyTranslatorUsingNoTranslation(name);
+        Translation dummy = new DummyTranslatorUsingNoTranslationTranslation(name);
 
         String expected = "[missing translation of 'missingPagesComponentDescription' for translator Placeholder]";
-        String actual = dummy.missingPagesComponentDescription(0, 0);
+        String actual = dummy.translate("missingPagesComponentDescription", 0, 0);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -24,10 +26,10 @@ final class DefaultNoTranslationTranslatorShould {
         final String messageBetweenMethodNameAndTranslatorName = " is not an available translation when translating with the ";
         final String suffix = " translator }";
 
-        Translator dummy = new DummyTranslatorUsingNoTranslation(name, prefix, messageBetweenMethodNameAndTranslatorName, suffix);
+        Translation dummy = new DummyTranslatorUsingNoTranslationTranslation(name, prefix, messageBetweenMethodNameAndTranslatorName, suffix);
 
-        String expected = "{ a prefix, where 'missingPagesComponentDescription' is not an available translation when translating with the Placeholder translator }";
-        String actual = dummy.missingPagesComponentDescription(0, 0);
+        String expected = "{ a prefix, where 'nitpeek.core.MISSING_PAGES_COMPONENT_DESCRIPTION' is not an available translation when translating with the Placeholder translator }";
+        String actual = dummy.translate(MISSING_PAGES_COMPONENT_DESCRIPTION.key(), 0, 0);
 
         Assertions.assertEquals(expected, actual);
     }

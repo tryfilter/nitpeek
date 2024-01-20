@@ -3,11 +3,13 @@ package nitpeek.core.api.analyze.analyzer;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.*;
 import nitpeek.core.internal.Confidence;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.translation.*;
 
 import java.util.*;
 import java.util.stream.Stream;
+
+import static nitpeek.translation.InternalTranslationKeys.UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION;
+import static nitpeek.translation.InternalTranslationKeys.UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION;
 
 
 /**
@@ -24,17 +26,17 @@ public final class UnpairedParentheses implements Analyzer {
 
     private final String openParenthesis;
     private final String closeParenthesis;
-    private final Translator i18n;
+    private final Translation i18n;
 
 
     private final List<Feature> features = new ArrayList<>();
 
 
     public UnpairedParentheses(String openParenthesis, String closeParenthesis) {
-        this(openParenthesis, closeParenthesis, new DefaultEnglishTranslator());
+        this(openParenthesis, closeParenthesis, new SimpleDefaultEnglishTranslation());
     }
 
-    public UnpairedParentheses(String openParenthesis, String closeParenthesis, Translator i18n) {
+    public UnpairedParentheses(String openParenthesis, String closeParenthesis, Translation i18n) {
         this.openParenthesis = openParenthesis;
         this.closeParenthesis = closeParenthesis;
         this.i18n = i18n;
@@ -116,10 +118,17 @@ public final class UnpairedParentheses implements Analyzer {
     private FeatureComponent component(Parenthesis parenthesis, TextPage page, int lineIndex) {
         ParenthesisType missingParenthesisType = parenthesis.type.other();
         return new SimpleFeatureComponent(
-                i18n.unpairedParenthesisComponentDescription(parenthesisOfType(missingParenthesisType), missingParenthesisType),
+                getTranslation(parenthesisOfType(missingParenthesisType), missingParenthesisType),
                 new TextCoordinate(page.getPageNumber(), lineIndex, parenthesis.index).extendToSelection(parenthesisLength(parenthesis)),
                 parenthesisOfType(parenthesis.type)
         );
+    }
+
+    private String getTranslation(String missingParenthesis, ParenthesisType missingParenthesisType) {
+        if (missingParenthesisType == ParenthesisType.OPEN)
+            return i18n.translate(UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
+        else
+            return i18n.translate(UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
     }
 
     private int parenthesisLength(Parenthesis parenthesis) {

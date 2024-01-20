@@ -1,7 +1,7 @@
 package nitpeek.client.demo.rule;
 
 import nitpeek.core.api.analyze.Rule;
-import nitpeek.core.api.analyze.RuleType;
+import nitpeek.core.api.analyze.SimpleRuleType;
 import nitpeek.core.api.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.api.analyze.analyzer.Analyzer;
 import nitpeek.core.api.analyze.analyzer.MissingPages;
@@ -30,9 +30,9 @@ public enum SampleRule implements Rule {
     }
 
     /**
-     * @return the RuleType of this sample rule, with its name and description translated by the standard english translator
+     * @return the SimpleRuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the standard english translator
      */
-    public RuleType getType() {
+    public SimpleRuleType getType() {
         return getType(defaultEnglishTranslator);
     }
 
@@ -42,10 +42,10 @@ public enum SampleRule implements Rule {
     }
 
     /**
-     * @param i18n the translator to use as a source for the rule name and rule description
-     * @return the RuleType of this sample rule, with its name and description translated by the provided translator
+     * @param i18n the translator to use as a source for the rule nameTranslationKey and rule descriptionTranslationKey
+     * @return the SimpleRuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the provided translator
      */
-    public RuleType getType(Translator i18n) {
-        return new RuleType("nitpeek.demo.rule." + this.name(), nameSupplier.apply(i18n), descriptionSupplier.apply(i18n));
+    public SimpleRuleType getType(Translator i18n) {
+        return new SimpleRuleType("nitpeek.demo.rule." + this.name(), nameSupplier.apply(i18n), descriptionSupplier.apply(i18n));
     }
 }

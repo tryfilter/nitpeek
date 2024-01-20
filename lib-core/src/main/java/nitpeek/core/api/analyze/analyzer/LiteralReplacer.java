@@ -3,7 +3,8 @@ package nitpeek.core.api.analyze.analyzer;
 import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.StandardFeature;
-import nitpeek.translation.DefaultEnglishTranslator;
+import nitpeek.translation.SimpleDefaultEnglishTranslation;
+import nitpeek.translation.Translation;
 import nitpeek.translation.Translator;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public final class LiteralReplacer implements Analyzer {
      * @param newValue the value to insert in place of the replaced literal
      * @param i18n     the translator to use when describing found features and their components
      */
-    public LiteralReplacer(String oldValue, String newValue, Translator i18n) {
+    public LiteralReplacer(String oldValue, String newValue, Translation i18n) {
         this(oldValue, newValue, true, i18n);
     }
 
@@ -58,7 +59,7 @@ public final class LiteralReplacer implements Analyzer {
      *                   their case doesn't match that of {@code oldValue}
      */
     public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase) {
-        this(oldValue, newValue, ignoreCase, new DefaultEnglishTranslator());
+        this(oldValue, newValue, ignoreCase, new SimpleDefaultEnglishTranslation());
     }
 
     /**
@@ -70,7 +71,7 @@ public final class LiteralReplacer implements Analyzer {
      *                   their case doesn't match that of {@code oldValue}
      * @param i18n       the translator to use when describing found features and their components
      */
-    public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translator i18n) {
+    public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translation i18n) {
         Pattern pattern = Pattern.compile(oldValue, computePatternFlags(ignoreCase));
         this.regexReplacer = new RegexReplacer(pattern, newValue, i18n, StandardFeature.REPLACE_LITERAL.getType());
     }

@@ -15,7 +15,7 @@ public final class TestUtil {
         return new SimpleTextPage(List.of(), pageNumber);
     }
 
-    public static Feature featureFromComponents(FeatureType type, FeatureComponent... components) {
+    public static Feature featureFromComponents(SimpleFeatureType type, FeatureComponent... components) {
         return new SimpleFeature(type, Arrays.asList(components), 0);
     }
 }

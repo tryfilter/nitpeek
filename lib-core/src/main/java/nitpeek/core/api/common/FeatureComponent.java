@@ -1,5 +1,7 @@
 package nitpeek.core.api.common;
 
+import nitpeek.translation.Translation;
+
 import java.util.Optional;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Optional;
  */
 public interface FeatureComponent {
 
-    String getDescription();
+    String getDescription(Translation translation);
 
     TextSelection getCoordinates();
 

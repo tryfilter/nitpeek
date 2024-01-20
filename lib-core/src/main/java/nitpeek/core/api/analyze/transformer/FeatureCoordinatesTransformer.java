@@ -21,6 +21,6 @@ public final class FeatureCoordinatesTransformer implements FeatureTransformer {
     }
 
     private FeatureComponent transformComponent(FeatureComponent component) {
-        return new SimpleFeatureComponent(component.getDescription(), selectionTransform.apply(component.getCoordinates()), component.getRelevantTextPortion().orElse(""));
+        return new SimpleFeatureComponent(component::getDescription, selectionTransform.apply(component.getCoordinates()), component.getRelevantTextPortion().orElse(""));
     }
 }

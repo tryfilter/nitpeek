@@ -1,17 +1,18 @@
 package nitpeek.client.demo;
 
 import nitpeek.client.demo.rule.SampleRule;
+import nitpeek.core.api.common.SimpleIdentifier;
 import nitpeek.core.api.process.SimpleRuleSetProvider;
 import nitpeek.core.api.process.StringPageSource;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 public final class DemoStdOutProcessor {
 
     public static void main(String[] args) {
-        var simpleRules = new SimpleRuleSetProvider(Set.of(SampleRule.DESCRIBE_PAGE_PROCESSING_INFORMATION));
+        var simpleRules = new SimpleRuleSetProvider(Set.of(SampleRule.DESCRIBE_PAGE_PROCESSING_INFORMATION),
+                new SimpleIdentifier("nitpeek.example.PAGE_PROCESSING", "non-existent key: Example RuleSet", "non-existent key: Simple set of rules for remonstration purposes"));
         var processor = new StandardOutputProcessor(simpleRules);
 
         var pageSource = new StringPageSource(List.of(
@@ -22,11 +23,5 @@ public final class DemoStdOutProcessor {
         ));
 
         processor.startProcessing(pageSource);
-
-
-        for (var language : Locale.getISOLanguages())
-            System.out.println(language);
-
-        System.out.println(Locale.getDefault().getLanguage());
     }
 }

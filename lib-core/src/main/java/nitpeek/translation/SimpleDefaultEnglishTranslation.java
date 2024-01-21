@@ -3,6 +3,9 @@ package nitpeek.translation;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.report.FancyTextRangeDescription;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 public class SimpleDefaultEnglishTranslation implements Translation {
 
     private final Translator i18n = new DefaultEnglishTranslator(new FancyTextRangeDescription(this));
@@ -12,10 +15,13 @@ public class SimpleDefaultEnglishTranslation implements Translation {
     public String translate(String translationKey, Object... arguments) {
 
         var key = InternalTranslationKeys.getForKey(translationKey);
+        var fallbackTranslation = Translation.untranslatable(translationKey);
+        if (key == null) return fallbackTranslation;
 
         return switch (key) {
-            case MISSING_PAGES_COMPONENT_DESCRIPTION ->
-                    i18n.missingPagesComponentDescription((Integer) arguments[0], (Integer) arguments[1]);
+            case MISSING_PAGES_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.missingPagesComponentDescription((Integer) args[0], (Integer) args[1]), arguments);
+
 
             case MISSING_PAGES_FEATURE_NAME -> i18n.missingPagesFeatureName();
 
@@ -25,20 +31,23 @@ public class SimpleDefaultEnglishTranslation implements Translation {
 
             case PROCESSED_PAGES_FEATURE_DESCRIPTION -> i18n.processedPagesFeatureDescription();
 
-            case PROCESSED_PAGES_COMPONENT_DESCRIPTION_CHUNK ->
-                    i18n.processedPagesComponentDescriptionChunk((Integer) arguments[0], (Integer) arguments[1]);
+            case PROCESSED_PAGES_COMPONENT_DESCRIPTION_CHUNK -> safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.processedPagesComponentDescriptionChunk((Integer) args[0], (Integer) args[1]), arguments);
 
-            case PROCESSED_PAGES_COMPONENT_DESCRIPTION ->
-                    i18n.processedPagesComponentDescription((Integer) arguments[0], (Integer) arguments[1], (Integer) arguments[2]);
+            case PROCESSED_PAGES_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 3, args ->
+                    i18n.processedPagesComponentDescription((Integer) args[0], (Integer) args[1], (Integer) args[2]), arguments);
 
-            case PROCESSED_SINGLE_PAGE_COMPONENT_DESCRIPTION_CHUNK ->
-                    i18n.processedSinglePageComponentDescription((Integer) arguments[0]);
+            case PROCESSED_SINGLE_PAGE_COMPONENT_DESCRIPTION_CHUNK -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.processedSinglePageComponentDescription((Integer) args[0]), arguments);
 
-            case FOUND_FEATURE_NAME -> i18n.foundFeatureName((String) arguments[0]);
+            case FOUND_FEATURE_NAME -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.foundFeatureName(args[0].toString()), arguments);
 
-            case DESCRIPTION -> i18n.description((String) arguments[0]);
+            case DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.description(args[0].toString()), arguments);
 
-            case TEXT_MATCH -> i18n.textMatch((String) arguments[0]);
+            case TEXT_MATCH -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.textMatch(args[0].toString()), arguments);
 
             case PAGE -> i18n.page();
 
@@ -46,28 +55,34 @@ public class SimpleDefaultEnglishTranslation implements Translation {
 
             case CHARACTER -> i18n.character();
 
-            case AXIS_COMPOUND -> i18n.axisCompound((String) arguments[0], (Integer) arguments[1]);
+            case AXIS_COMPOUND -> safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.axisCompound(args[0].toString(), (Integer) args[1]), arguments);
 
-            case AXIS_PINPOINT -> i18n.axisPinpoint((String) arguments[0], (Integer) arguments[1]);
+            case AXIS_PINPOINT -> safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.axisPinpoint(args[0].toString(), (Integer) args[1]), arguments);
 
-            case AXIS_START -> i18n.axisStart((String) arguments[0], (Integer) arguments[1]);
+            case AXIS_START -> safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.axisStart(args[0].toString(), (Integer) args[1]), arguments);
 
-            case AXIS_END -> i18n.axisEnd((String) arguments[0], (Integer) arguments[1]);
+            case AXIS_END ->safeTranslate(fallbackTranslation, 2, args ->
+                    i18n.axisEnd(args[0].toString(), (Integer) args[1]), arguments);
 
             case DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME -> i18n.describePageProcessingInfoRuleName();
 
             case DESCRIBE_PAGE_PROCESSING_INFO_RULE_DESCRIPTION -> i18n.describePageProcessingInfoRuleDescription();
 
-            case APPLIED_RULE_NAME -> i18n.appliedRuleName((String) arguments[0]);
+            case APPLIED_RULE_NAME -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.appliedRuleName(args[0].toString()), arguments);
 
-            case APPLIED_RULE_DESCRIPTION -> i18n.appliedRuleDescription((String) arguments[0]);
+            case APPLIED_RULE_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.appliedRuleDescription(args[0].toString()), arguments);
 
             case REPLACE_LITERAL_FEATURE_NAME -> i18n.replaceLiteralFeatureName();
 
             case REPLACE_LITERAL_FEATURE_DESCRIPTION -> i18n.replaceLiteralFeatureDescription();
 
-            case REPLACE_LITERAL_COMPONENT_DESCRIPTION ->
-                    i18n.replaceLiteralComponentDescription((String) arguments[0]);
+            case REPLACE_LITERAL_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.replaceLiteralComponentDescription(args[0].toString()), arguments);
 
             case DEBUG_FEATURE_NAME -> i18n.debugFeatureName();
 
@@ -81,12 +96,19 @@ public class SimpleDefaultEnglishTranslation implements Translation {
 
             case UNPAIRED_PARENTHESES_FEATURE_DESCRIPTION -> i18n.unpairedParenthesesFeatureDescription();
 
-            case UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION ->
-                    i18n.unpairedOpenParenthesisComponentDescription((String) arguments[0]);
+            case UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.unpairedOpenParenthesisComponentDescription(args[0].toString()), arguments);
 
-            case UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION ->
-                    i18n.unpairedClosingParenthesisComponentDescription((String) arguments[0]);
+            case UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.unpairedClosingParenthesisComponentDescription(args[0].toString()), arguments);
         };
+    }
+
+
+    private String safeTranslate(String fallback, int minArgumentCount, Function<Object[], String> mapper, Object[] arguments) {
+        if (minArgumentCount > arguments.length) return fallback;
+
+        return mapper.apply(arguments);
     }
 
 

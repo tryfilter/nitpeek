@@ -3,7 +3,6 @@ package nitpeek.translation;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.report.FancyTextRangeDescription;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class SimpleDefaultEnglishTranslation implements Translation {
@@ -15,7 +14,7 @@ public class SimpleDefaultEnglishTranslation implements Translation {
     public String translate(String translationKey, Object... arguments) {
 
         var key = InternalTranslationKeys.getForKey(translationKey);
-        var fallbackTranslation = Translation.untranslatable(translationKey);
+        var fallbackTranslation = untranslatable(translationKey);
         if (key == null) return fallbackTranslation;
 
         return switch (key) {
@@ -102,6 +101,10 @@ public class SimpleDefaultEnglishTranslation implements Translation {
             case UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
                     i18n.unpairedClosingParenthesisComponentDescription(args[0].toString()), arguments);
         };
+    }
+
+    private static String untranslatable(String translationKey) {
+        return "i18n N/A: '" + translationKey + "'";
     }
 
 

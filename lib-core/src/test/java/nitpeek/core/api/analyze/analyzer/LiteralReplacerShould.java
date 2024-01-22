@@ -1,5 +1,8 @@
 package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
+import nitpeek.core.api.analyze.Analyzer;
+
 final class LiteralReplacerShould implements LiteralReplacersShould {
 
     private Analyzer replacerCaseSensitive;

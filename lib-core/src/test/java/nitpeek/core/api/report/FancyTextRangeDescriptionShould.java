@@ -2,10 +2,9 @@ package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.SimpleDefaultEnglishTranslation;
-import nitpeek.translation.Translation;
-import nitpeek.translation.Translator;
+import nitpeek.core.impl.report.FancyTextRangeDescription;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

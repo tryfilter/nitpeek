@@ -1,9 +1,9 @@
 package nitpeek.client.demo;
 
 import nitpeek.client.demo.rule.SampleRule;
-import nitpeek.core.api.common.SimpleIdentifier;
-import nitpeek.core.api.process.SimpleRuleSetProvider;
-import nitpeek.core.api.process.StringPageSource;
+import nitpeek.core.impl.common.SimpleIdentifier;
+import nitpeek.core.impl.process.SimpleRuleSetProvider;
+import nitpeek.core.impl.process.StringPageSource;
 
 import java.util.List;
 import java.util.Set;

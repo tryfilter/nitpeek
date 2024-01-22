@@ -1,9 +1,10 @@
 package nitpeek.translation;
 
+import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static nitpeek.translation.InternalTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
 
 final class DefaultNoTranslationTranslationShould {
 

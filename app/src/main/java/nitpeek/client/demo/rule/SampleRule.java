@@ -1,13 +1,13 @@
 package nitpeek.client.demo.rule;
 
 import nitpeek.core.api.analyze.Rule;
-import nitpeek.core.api.analyze.SimpleRuleType;
-import nitpeek.core.api.analyze.analyzer.AggregatingAnalyzer;
-import nitpeek.core.api.analyze.analyzer.Analyzer;
-import nitpeek.core.api.analyze.analyzer.MissingPages;
-import nitpeek.core.api.analyze.analyzer.PageCounter;
-import nitpeek.translation.DefaultEnglishTranslator;
-import nitpeek.translation.Translator;
+import nitpeek.core.impl.analyze.SimpleRuleType;
+import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.impl.analyze.analyzer.MissingPages;
+import nitpeek.core.impl.analyze.analyzer.PageCounter;
+import nitpeek.core.impl.translate.helper.DefaultEnglishTranslator;
+import nitpeek.core.impl.translate.helper.Translator;
 
 import java.util.Set;
 import java.util.function.Function;

@@ -1,8 +1,11 @@
 package nitpeek.core.testutil;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.common.*;
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.FeatureComponent;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.api.common.TextPage;
+import nitpeek.core.impl.common.SimpleFeature;
+import nitpeek.core.impl.common.SimpleFeatureType;
 
 import java.util.Arrays;
 import java.util.List;

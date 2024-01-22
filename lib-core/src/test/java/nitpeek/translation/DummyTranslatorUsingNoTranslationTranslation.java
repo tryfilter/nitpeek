@@ -1,5 +1,7 @@
 package nitpeek.translation;
 
+import nitpeek.core.impl.translate.helper.DefaultNoTranslationTranslation;
+
 final class DummyTranslatorUsingNoTranslationTranslation extends DefaultNoTranslationTranslation {
     public DummyTranslatorUsingNoTranslationTranslation(String translatorName) {
         super(translatorName);

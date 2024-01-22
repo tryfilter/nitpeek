@@ -1,7 +1,9 @@
 package nitpeek.core.api.process;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.analyze.TextPage;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.api.common.TextPage;
+import nitpeek.core.impl.process.ListPageConsumer;
+import nitpeek.core.impl.process.StringPageSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

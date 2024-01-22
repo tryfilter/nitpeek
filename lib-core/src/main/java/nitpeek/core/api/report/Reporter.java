@@ -1,6 +1,7 @@
 package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.report.ReportingException;
 
 import java.util.List;
 

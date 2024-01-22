@@ -1,7 +1,10 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.analyze.TextPage;
+import nitpeek.core.impl.analyze.analyzer.CrossLineAnalyzer;
+import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.testutil.FeatureAssert;

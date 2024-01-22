@@ -1,10 +1,12 @@
 package nitpeek.core.api.report;
 
-import nitpeek.core.api.common.SimpleFeatureComponent;
+import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.translation.SimpleDefaultEnglishTranslation;
-import nitpeek.translation.Translation;
+import nitpeek.core.impl.report.Indent;
+import nitpeek.core.impl.report.IndentingFeatureComponentFormatter;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

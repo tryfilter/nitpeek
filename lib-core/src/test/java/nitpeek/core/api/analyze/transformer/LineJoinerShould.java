@@ -1,8 +1,15 @@
 package nitpeek.core.api.analyze.transformer;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.common.*;
+import nitpeek.core.impl.analyze.transformer.LineJoiner;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.TextCoordinate;
+import nitpeek.core.api.common.TextPage;
+import nitpeek.core.api.common.TextSelection;
+import nitpeek.core.api.util.Transformer;
+import nitpeek.core.impl.common.SimpleFeature;
+import nitpeek.core.impl.common.SimpleFeatureComponent;
+import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

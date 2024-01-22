@@ -1,6 +1,8 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.common.StandardFeature;
+import nitpeek.core.impl.analyze.analyzer.RegexReplacer;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.impl.common.StandardFeature;
 
 import java.util.regex.Pattern;
 

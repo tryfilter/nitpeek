@@ -1,13 +1,17 @@
 package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.*;
-import nitpeek.translation.SimpleDefaultEnglishTranslation;
-import nitpeek.translation.Translation;
+import nitpeek.core.impl.common.SimpleFeatureComponent;
+import nitpeek.core.impl.common.SimpleFeatureType;
+import nitpeek.core.impl.report.Indent;
+import nitpeek.core.impl.report.IndentingFeatureFormatter;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static nitpeek.translation.InternalTranslationKeys.FOUND_FEATURE_NAME;
+import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.FOUND_FEATURE_NAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class IndentingFeatureFormatterShould {

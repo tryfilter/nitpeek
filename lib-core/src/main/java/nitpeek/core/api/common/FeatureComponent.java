@@ -1,6 +1,6 @@
 package nitpeek.core.api.common;
 
-import nitpeek.translation.Translation;
+import nitpeek.core.api.translate.Translation;
 
 import java.util.Optional;
 

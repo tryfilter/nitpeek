@@ -5,22 +5,22 @@ package nitpeek.core.api.report;
  */
 public final class ReportingException extends Exception {
 
-    ReportingException() {
+    public ReportingException() {
     }
 
-    ReportingException(String message) {
+    public ReportingException(String message) {
         super(message);
     }
 
-    ReportingException(String message, Throwable cause) {
+    public ReportingException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    ReportingException(Throwable cause) {
+    public ReportingException(Throwable cause) {
         super(cause);
     }
 
-    ReportingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ReportingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

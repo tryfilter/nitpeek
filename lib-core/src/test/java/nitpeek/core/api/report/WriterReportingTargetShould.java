@@ -1,5 +1,6 @@
 package nitpeek.core.api.report;
 
+import nitpeek.core.impl.report.WriterReportingTarget;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;

@@ -1,6 +1,6 @@
 package nitpeek.core.api.common;
 
-import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.api.util.PageRange;
 
 public record TextSelection(TextCoordinate fromInclusive, TextCoordinate toInclusive) {
     public TextSelection {

@@ -1,6 +1,9 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.TextPage;
+import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
+import nitpeek.core.impl.analyze.analyzer.MissingPages;
+import nitpeek.core.impl.analyze.analyzer.PageCounter;
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.common.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

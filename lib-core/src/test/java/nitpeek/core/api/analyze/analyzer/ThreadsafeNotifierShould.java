@@ -1,7 +1,7 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.notify.FeatureNotifier;
-import nitpeek.core.api.analyze.notify.ThreadsafeFeatureNotifier;
+import nitpeek.core.api.analyze.FeatureNotifier;
+import nitpeek.core.impl.analyze.notify.ThreadsafeFeatureNotifier;
 
 final class ThreadsafeNotifierShould implements FeatureNotifiersShould {
 

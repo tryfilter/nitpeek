@@ -1,5 +1,6 @@
 package nitpeek.translation;
 
+import nitpeek.core.impl.translate.helper.Translator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

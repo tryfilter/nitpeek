@@ -1,19 +1,22 @@
 package nitpeek.client.demo;
 
-import nitpeek.core.api.analyze.Rule;
-import nitpeek.core.api.analyze.TextPage;
 import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
 import nitpeek.core.api.process.Processor;
 import nitpeek.core.api.process.RuleSetProvider;
+import nitpeek.core.api.analyze.Rule;
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.report.*;
-import nitpeek.translation.SimpleDefaultEnglishTranslation;
-import nitpeek.translation.Translation;
+import nitpeek.core.impl.report.IndentingFeatureFormatter;
+import nitpeek.core.impl.report.SeparatorReporter;
+import nitpeek.core.impl.report.WriterReportingTarget;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.api.translate.Translation;
 
 import java.io.PrintWriter;
 
-import static nitpeek.translation.InternalTranslationKeys.APPLIED_RULE_DESCRIPTION;
-import static nitpeek.translation.InternalTranslationKeys.APPLIED_RULE_NAME;
+import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.APPLIED_RULE_DESCRIPTION;
+import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.APPLIED_RULE_NAME;
 
 public final class StandardOutputProcessor implements Processor {
 

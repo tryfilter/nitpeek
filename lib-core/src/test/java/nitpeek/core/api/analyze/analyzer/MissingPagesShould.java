@@ -1,8 +1,9 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.TextPage;
+import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.*;
-import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.api.util.PageRange;
+import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
 import org.junit.jupiter.api.Test;
 

@@ -2,7 +2,7 @@ package nitpeek.core.testutil.pagesource;
 
 import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
-import nitpeek.core.api.process.StringPageSource;
+import nitpeek.core.impl.process.StringPageSource;
 import java.util.List;
 public final class HamletAct2ExcerptEdited implements PageSource {
     private final PageSource source = new StringPageSource(List.of(

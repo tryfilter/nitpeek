@@ -2,7 +2,7 @@ package nitpeek.core.api.report;
 
 import nitpeek.core.api.common.FeatureType;
 import nitpeek.core.api.common.Identifier;
-import nitpeek.translation.Translation;
+import nitpeek.core.api.translate.Translation;
 
 public record DummyFeatureType(String id, String featureName, FeatureType.Classification classification,
                         String featureDescription) implements FeatureType {

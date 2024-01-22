@@ -3,7 +3,7 @@ package nitpeek.core.api.analyze;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.FeatureType;
-import nitpeek.core.api.common.SimpleFeatureType;
+import nitpeek.core.impl.common.SimpleFeatureType;
 import nitpeek.core.api.report.DummyFeatureType;
 
 import java.util.List;

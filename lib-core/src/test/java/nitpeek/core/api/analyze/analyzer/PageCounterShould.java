@@ -1,9 +1,10 @@
 package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.impl.analyze.analyzer.PageCounter;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.api.util.PageRange;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

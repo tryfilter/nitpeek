@@ -1,7 +1,10 @@
 package nitpeek.translation;
 
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.core.api.common.util.PageRange;
+import nitpeek.core.api.translate.Translation;
+import nitpeek.core.api.util.PageRange;
+import nitpeek.core.impl.translate.helper.InternalTranslationKeys;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

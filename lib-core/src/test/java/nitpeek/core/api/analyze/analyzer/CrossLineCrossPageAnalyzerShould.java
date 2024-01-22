@@ -1,5 +1,9 @@
 package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.impl.analyze.analyzer.CrossLineCrossPageAnalyzer;
+import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
+import nitpeek.core.api.analyze.Analyzer;
+
 import java.util.List;
 
 final class CrossLineCrossPageAnalyzerShould implements CrossPageAnalyzersShould {

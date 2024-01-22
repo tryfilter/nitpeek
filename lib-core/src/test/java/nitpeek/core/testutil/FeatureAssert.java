@@ -1,6 +1,6 @@
 package nitpeek.core.testutil;
 
-import nitpeek.core.api.analyze.analyzer.Analyzer;
+import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;

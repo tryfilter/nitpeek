@@ -1,5 +1,8 @@
 package nitpeek.core.api.analyze.analyzer;
 
+import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
+import nitpeek.core.impl.analyze.analyzer.MissingPages;
+import nitpeek.core.api.analyze.Analyzer;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Set;

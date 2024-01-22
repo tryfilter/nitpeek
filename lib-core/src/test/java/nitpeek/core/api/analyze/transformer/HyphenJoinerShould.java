@@ -1,9 +1,11 @@
 package nitpeek.core.api.analyze.transformer;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.analyze.analyzer.Analyzer;
-import nitpeek.core.api.analyze.analyzer.LiteralReplacer;
-import nitpeek.core.api.analyze.analyzer.TransformingAnalyzer;
+import nitpeek.core.impl.analyze.transformer.HyphenJoiner;
+import nitpeek.core.api.util.Transformer;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
+import nitpeek.core.impl.analyze.analyzer.TransformingAnalyzer;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.testutil.FeatureAssert;

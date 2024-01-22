@@ -1,5 +1,6 @@
 package nitpeek.core.api.report;
 
+import nitpeek.core.impl.report.Indent;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

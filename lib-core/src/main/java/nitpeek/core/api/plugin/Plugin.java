@@ -2,7 +2,7 @@ package nitpeek.core.api.plugin;
 
 import nitpeek.core.api.common.Identifier;
 import nitpeek.core.api.process.RuleSetProvider;
-import nitpeek.translation.TranslationProvider;
+import nitpeek.core.api.translate.TranslationProvider;
 
 import java.util.Set;
 

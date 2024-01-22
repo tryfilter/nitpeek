@@ -1,8 +1,14 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.TextPage;
-import nitpeek.core.api.common.*;
-import nitpeek.core.api.process.ListPageConsumer;
+import nitpeek.core.impl.analyze.analyzer.RegexReplacer;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.FeatureComponent;
+import nitpeek.core.api.common.TextCoordinate;
+import nitpeek.core.api.common.TextPage;
+import nitpeek.core.impl.common.SimpleFeatureComponent;
+import nitpeek.core.impl.common.StandardFeature;
+import nitpeek.core.impl.process.ListPageConsumer;
 import nitpeek.core.testutil.TestUtil;
 import nitpeek.core.testutil.pagesource.HamletAct2ExcerptEdited;
 import org.junit.jupiter.api.Assertions;

@@ -1,7 +1,13 @@
 package nitpeek.core.api.analyze.analyzer;
 
-import nitpeek.core.api.analyze.SimpleTextPage;
-import nitpeek.core.api.common.*;
+import nitpeek.core.impl.analyze.analyzer.UnpairedParentheses;
+import nitpeek.core.api.analyze.Analyzer;
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.TextCoordinate;
+import nitpeek.core.api.common.TextSelection;
+import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.impl.common.SimpleFeatureComponent;
+import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

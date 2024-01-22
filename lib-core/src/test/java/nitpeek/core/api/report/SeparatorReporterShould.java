@@ -2,8 +2,10 @@ package nitpeek.core.api.report;
 
 import nitpeek.core.api.analyze.DummyFeature;
 import nitpeek.core.api.common.Feature;
-import nitpeek.translation.SimpleDefaultEnglishTranslation;
-import nitpeek.translation.Translation;
+import nitpeek.core.impl.report.SeparatorReporter;
+import nitpeek.core.impl.report.WriterReportingTarget;
+import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;

@@ -3,6 +3,7 @@ package nitpeek.core.impl.translate.helper;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.impl.report.FancyTextRangeDescription;
 import nitpeek.core.api.report.TextRangeDescription;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 
 /**
  * This class may be extended to create partially implemented translators or to create custom translators that are
@@ -17,7 +18,7 @@ public class DefaultEnglishTranslator implements Translator {
         description = new FancyTextRangeDescription(new SimpleDefaultEnglishTranslation());
     }
 
-    DefaultEnglishTranslator(TextRangeDescription description) {
+    public DefaultEnglishTranslator(TextRangeDescription description) {
         this.description = description;
     }
 

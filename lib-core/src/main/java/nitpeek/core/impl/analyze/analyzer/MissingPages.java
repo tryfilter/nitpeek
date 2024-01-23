@@ -10,12 +10,12 @@ import nitpeek.core.impl.common.SimpleFeature;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.*;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.MISSING_PAGES_COMPONENT_DESCRIPTION;
 
 /**
  * Reports sections of pages that were expected to be processed but weren't.<br>

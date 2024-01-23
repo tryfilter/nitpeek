@@ -4,10 +4,10 @@ import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.report.FeatureComponentFormatter;
 import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.DESCRIPTION;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.FOUND_FEATURE_NAME;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.FOUND_FEATURE_NAME;
 
 public final class IndentingFeatureFormatter implements FeatureFormatter {
 

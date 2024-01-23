@@ -1,31 +1,31 @@
 package nitpeek.client.demo.rule;
 
 import nitpeek.core.api.analyze.Rule;
+import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.analyze.SimpleRuleType;
 import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.impl.analyze.analyzer.MissingPages;
 import nitpeek.core.impl.analyze.analyzer.PageCounter;
-import nitpeek.core.impl.translate.helper.DefaultEnglishTranslator;
-import nitpeek.core.impl.translate.helper.Translator;
+import nitpeek.core.impl.translate.CoreTranslationKeys;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 
 import java.util.Set;
-import java.util.function.Function;
 
 public enum SampleRule implements Rule {
 
     DESCRIBE_PAGE_PROCESSING_INFORMATION(
-            Translator::describePageProcessingInfoRuleName,
-            Translator::describePageProcessingInfoRuleDescription,
+            CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME.key(),
+            CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_DESCRIPTION.key(),
             new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
-    private final Translator defaultEnglishTranslator = new DefaultEnglishTranslator();
-    private final Function<Translator, String> nameSupplier;
-    private final Function<Translator, String> descriptionSupplier;
+    private final Translation defaultEnglishTranslation = new SimpleDefaultEnglishTranslation();
+    private final String nameTranslationKey;
+    private final String descriptionTranslationKey;
     private final Analyzer analyzer;
 
-    SampleRule(Function<Translator, String> nameSupplier, Function<Translator, String> descriptionSupplier, Analyzer analyzer) {
-        this.nameSupplier = nameSupplier;
-        this.descriptionSupplier = descriptionSupplier;
+    SampleRule(String nameTranslationKey, String descriptionTranslationKey, Analyzer analyzer) {
+        this.nameTranslationKey = nameTranslationKey;
+        this.descriptionTranslationKey = descriptionTranslationKey;
         this.analyzer = analyzer;
     }
 
@@ -33,7 +33,7 @@ public enum SampleRule implements Rule {
      * @return the SimpleRuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the standard english translator
      */
     public SimpleRuleType getType() {
-        return getType(defaultEnglishTranslator);
+        return getType(defaultEnglishTranslation);
     }
 
     @Override
@@ -45,7 +45,7 @@ public enum SampleRule implements Rule {
      * @param i18n the translator to use as a source for the rule nameTranslationKey and rule descriptionTranslationKey
      * @return the SimpleRuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the provided translator
      */
-    public SimpleRuleType getType(Translator i18n) {
-        return new SimpleRuleType("nitpeek.demo.rule." + this.name(), nameSupplier.apply(i18n), descriptionSupplier.apply(i18n));
+    public SimpleRuleType getType(Translation i18n) {
+        return new SimpleRuleType("nitpeek.demo.rule." + this.name(), i18n.translate(nameTranslationKey), i18n.translate(descriptionTranslationKey));
     }
 }

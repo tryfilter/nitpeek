@@ -7,7 +7,7 @@ import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.SimpleFeatureType;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.REPLACE_LITERAL_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.REPLACE_LITERAL_COMPONENT_DESCRIPTION;
 
 /**
  * Reports values matching a regular expression that should be replaced with some other value.<br>

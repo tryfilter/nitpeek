@@ -1,10 +1,10 @@
 package nitpeek.core.impl.common;
 
 import nitpeek.core.api.common.FeatureType.Classification;
-import nitpeek.core.impl.translate.helper.InternalTranslationKeys;
+import nitpeek.core.impl.translate.CoreTranslationKeys;
 
 import static nitpeek.core.api.common.FeatureType.Classification.*;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.*;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.*;
 
 public enum StandardFeature {
 
@@ -22,7 +22,7 @@ public enum StandardFeature {
     private final Classification classification;
 
 
-    StandardFeature(InternalTranslationKeys nameTranslationKey, InternalTranslationKeys descriptionTranslationKey, Classification classification) {
+    StandardFeature(CoreTranslationKeys nameTranslationKey, CoreTranslationKeys descriptionTranslationKey, Classification classification) {
         this.nameTranslationKey = nameTranslationKey.key();
         this.descriptionTranslationKey = descriptionTranslationKey.key();
         this.classification = classification;

@@ -7,7 +7,7 @@ import nitpeek.core.api.translate.Translation;
 
 import java.util.List;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.*;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.*;
 
 public final class FancyTextRangeDescription implements TextRangeDescription {
 

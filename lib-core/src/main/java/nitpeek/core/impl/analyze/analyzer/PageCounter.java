@@ -10,7 +10,7 @@ import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.SimpleFeatureType;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.NavigableSet;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import static nitpeek.core.api.common.TextSelection.emptyPages;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.*;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.*;
 
 /**
  * Reports how many pages were processed and which ones.<br>

@@ -6,8 +6,8 @@ import nitpeek.core.api.translate.Translation;
 
 import java.util.Optional;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.DESCRIPTION;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.TEXT_MATCH;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.TEXT_MATCH;
 
 public final class IndentingFeatureComponentFormatter implements FeatureComponentFormatter {
 

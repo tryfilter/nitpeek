@@ -8,7 +8,7 @@ import nitpeek.core.api.translate.Translation;
  * resilient against new additions to the Translator interface: instead of a compilation/runtime error, yet not-implemented
  * methods will defer to this default placeholder message.
  */
-public class DefaultNoTranslationTranslation implements Translation {
+public final class DefaultNoTranslationTranslation implements Translation {
 
     private final String translatorName;
     private final String messagePrefix;

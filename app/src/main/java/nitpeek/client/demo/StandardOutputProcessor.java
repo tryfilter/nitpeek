@@ -10,13 +10,13 @@ import nitpeek.core.api.report.*;
 import nitpeek.core.impl.report.IndentingFeatureFormatter;
 import nitpeek.core.impl.report.SeparatorReporter;
 import nitpeek.core.impl.report.WriterReportingTarget;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.io.PrintWriter;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.APPLIED_RULE_DESCRIPTION;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.APPLIED_RULE_NAME;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.APPLIED_RULE_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.APPLIED_RULE_NAME;
 
 public final class StandardOutputProcessor implements Processor {
 

@@ -8,7 +8,7 @@ import nitpeek.core.impl.process.StringPageSource;
 import java.util.List;
 import java.util.Set;
 
-public final class DemoStdOutProcessor {
+final class DemoStdOutProcessor {
 
     public static void main(String[] args) {
         var simpleRules = new SimpleRuleSetProvider(Set.of(SampleRule.DESCRIBE_PAGE_PROCESSING_INFORMATION),

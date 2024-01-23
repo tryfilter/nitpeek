@@ -9,14 +9,14 @@ import nitpeek.core.impl.common.SimpleFeature;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
-import nitpeek.core.impl.translate.helper.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION;
-import static nitpeek.core.impl.translate.helper.InternalTranslationKeys.UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION;
 
 
 /**

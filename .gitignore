@@ -171,7 +171,14 @@ gradle-app.setting
 
 # Ignore Gradle build output directory
 build
+# Ignore Idea and/or plugin files
 /.idea/modules/build-logic/build-logic.iml
 /.idea/modules/build-logic/java-plugins/build-logic.java-plugins.iml
 /.idea/modules/build-logic/java-plugins/build-logic.java-plugins.main.iml
 /.idea/modules/build-logic/java-plugins/build-logic.java-plugins.test.iml
+/.idea/modules/demo-plugin/
+/.idea/modules/lib-client-test/
+/.idea/modules/lib-client/
+/.idea/modules/demo/
+/.idea/modules.xml
+/lib-client.iml

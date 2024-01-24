@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":lib-core"))
+    implementation(project(":lib-client"))
 }
 
 

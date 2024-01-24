@@ -42,6 +42,21 @@ final class IndentingFeatureFormatterShould {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void produceOnlyNameAndDescriptionWhenNoComponentsPresent() {
+        String expected = """
+                Feature: FEATURE_NAME
+                +Description: DESCRIPTION""";
+        String actual = formatter.format(new DummyFeature() {
+            @Override
+            public List<FeatureComponent> getComponents() {
+                return List.of();
+            }
+        });
+
+        assertEquals(expected, actual);
+    }
+
     private static class DummyComponentFormatter implements FeatureComponentFormatter {
         private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
 

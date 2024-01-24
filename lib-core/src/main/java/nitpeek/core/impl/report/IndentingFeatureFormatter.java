@@ -41,13 +41,17 @@ public final class IndentingFeatureFormatter implements FeatureFormatter {
     public String format(Feature feature) {
 
         return i18n.translate(FOUND_FEATURE_NAME.key(), feature.getType().getFeatureId().getName(i18n)) + '\n' +
-                indent.indentContainedLines(i18n.translate(DESCRIPTION.key(), feature.getType().getFeatureId().getDescription(i18n))) + '\n' +
-                '\n' +
+                indent.indentContainedLines(i18n.translate(DESCRIPTION.key(), feature.getType().getFeatureId().getDescription(i18n))) +
                 formatComponents(feature);
     }
 
     private String formatComponents(Feature feature) {
         StringBuilder result = new StringBuilder();
+        var components = feature.getComponents();
+        if (components.isEmpty()) return result.toString();
+
+        result.append('\n').append('\n');
+
         for (var featureComponent : feature.getComponents()) {
             result.append(indent.indentContainedLines(componentFormatter.format(featureComponent))).append('\n');
             result.append('\n'); // insert empty line between components

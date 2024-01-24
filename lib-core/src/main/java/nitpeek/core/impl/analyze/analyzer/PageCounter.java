@@ -31,15 +31,6 @@ import static nitpeek.core.impl.translate.CoreTranslationKeys.*;
 public final class PageCounter implements Analyzer {
 
     private final NavigableSet<Integer> processedPageNumbers = new ConcurrentSkipListSet<>();
-    private final Translation i18n;
-
-    public PageCounter() {
-        this(new SimpleDefaultEnglishTranslation());
-    }
-
-    public PageCounter(Translation i18n) {
-        this.i18n = i18n;
-    }
 
     @Override
     public void processPage(TextPage page) {
@@ -69,7 +60,7 @@ public final class PageCounter implements Analyzer {
         int last = processedPageNumbers.isEmpty() ? 0 : processedPageNumbers.last();
 
         return new SimpleFeatureComponent(
-                i18n.translate(PROCESSED_PAGES_COMPONENT_DESCRIPTION.key(), first, last, processedPageNumbers.size()),
+                i18n -> i18n.translate(PROCESSED_PAGES_COMPONENT_DESCRIPTION.key(), first, last, processedPageNumbers.size()),
                 emptyPages(new PageRange(first, last))
         );
     }
@@ -82,7 +73,7 @@ public final class PageCounter implements Analyzer {
 
         for (var range : contiguousRanges()) {
             result.add(new SimpleFeatureComponent(
-                            translatePageRange(range.firstPage(), range.lastPage()),
+                            i18n -> translatePageRange(range.firstPage(), range.lastPage(), i18n),
                     emptyPages(range)
             ));
         }
@@ -90,7 +81,7 @@ public final class PageCounter implements Analyzer {
         return result;
     }
 
-    private String translatePageRange(int firstPage, int lastPage) {
+    private String translatePageRange(int firstPage, int lastPage, Translation i18n) {
         if (firstPage == lastPage)
             return i18n.translate(PROCESSED_SINGLE_PAGE_COMPONENT_DESCRIPTION_CHUNK.key(), firstPage);
 

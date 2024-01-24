@@ -33,20 +33,14 @@ public final class UnpairedParentheses implements Analyzer {
 
     private final String openParenthesis;
     private final String closeParenthesis;
-    private final Translation i18n;
 
 
     private final List<Feature> features = new ArrayList<>();
 
 
     public UnpairedParentheses(String openParenthesis, String closeParenthesis) {
-        this(openParenthesis, closeParenthesis, new SimpleDefaultEnglishTranslation());
-    }
-
-    public UnpairedParentheses(String openParenthesis, String closeParenthesis, Translation i18n) {
         this.openParenthesis = openParenthesis;
         this.closeParenthesis = closeParenthesis;
-        this.i18n = i18n;
     }
 
     /**
@@ -125,17 +119,17 @@ public final class UnpairedParentheses implements Analyzer {
     private FeatureComponent component(Parenthesis parenthesis, TextPage page, int lineIndex) {
         ParenthesisType missingParenthesisType = parenthesis.type.other();
         return new SimpleFeatureComponent(
-                getTranslation(parenthesisOfType(missingParenthesisType), missingParenthesisType),
+                i18n -> getTranslation(parenthesisOfType(missingParenthesisType), missingParenthesisType, i18n),
                 new TextCoordinate(page.getPageNumber(), lineIndex, parenthesis.index).extendToSelection(parenthesisLength(parenthesis)),
                 parenthesisOfType(parenthesis.type)
         );
     }
 
-    private String getTranslation(String missingParenthesis, ParenthesisType missingParenthesisType) {
+    private String getTranslation(String missingParenthesis, ParenthesisType missingParenthesisType, Translation translation) {
         if (missingParenthesisType == ParenthesisType.OPEN)
-            return i18n.translate(UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
+            return translation.translate(UNPAIRED_OPEN_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
         else
-            return i18n.translate(UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
+            return translation.translate(UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION.key(), missingParenthesis);
     }
 
     private int parenthesisLength(Parenthesis parenthesis) {

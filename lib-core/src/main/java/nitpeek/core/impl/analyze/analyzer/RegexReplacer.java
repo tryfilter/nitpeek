@@ -28,28 +28,18 @@ public final class RegexReplacer implements Analyzer {
 
     private final Pattern pattern;
     private final String replacement;
-    private final Translation i18n;
 
     private final SimpleFeatureType reportedSimpleFeatureType;
 
     private final List<Feature> features = new ArrayList<>();
 
     public RegexReplacer(Pattern pattern, String replacement) {
-        this(pattern, replacement, new SimpleDefaultEnglishTranslation(), StandardFeature.REPLACE_REGEX.getType());
+        this(pattern, replacement, StandardFeature.REPLACE_REGEX.getType());
     }
 
     public RegexReplacer(Pattern pattern, String replacement, SimpleFeatureType reportedSimpleFeatureType) {
-        this(pattern, replacement, new SimpleDefaultEnglishTranslation(), reportedSimpleFeatureType);
-    }
-
-    public RegexReplacer(Pattern pattern, String replacement, Translation i18n) {
-        this(pattern, replacement, i18n, StandardFeature.REPLACE_REGEX.getType());
-    }
-
-    public RegexReplacer(Pattern pattern, String replacement, Translation i18n, SimpleFeatureType reportedSimpleFeatureType) {
         this.pattern = pattern;
         this.replacement = replacement;
-        this.i18n = i18n;
         this.reportedSimpleFeatureType = reportedSimpleFeatureType;
     }
 
@@ -115,6 +105,10 @@ public final class RegexReplacer implements Analyzer {
 
 
     private FeatureComponent component(TextSelection textSelection, String newValue, String oldValue) {
-        return new SimpleFeatureComponent(i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION.key(), newValue), textSelection, oldValue);
+        return new SimpleFeatureComponent(
+                i18n -> i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION.key(), newValue),
+                textSelection,
+                oldValue
+        );
     }
 }

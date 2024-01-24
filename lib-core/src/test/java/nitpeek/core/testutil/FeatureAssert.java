@@ -4,6 +4,9 @@ import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
+import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.helper.NoOpTranslation;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.HashSet;
@@ -14,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class FeatureAssert {
+
+    private static Translation noop = new NoOpTranslation();
+    private static Translation defaultEnglish = new SimpleDefaultEnglishTranslation();
 
 
     public static void assertFeaturesHaveCombinedExactlyCoordinates(Set<TextSelection> expectedCoordinates, List<Feature> features) {
@@ -50,7 +56,8 @@ public final class FeatureAssert {
                 () -> assertEquals(expected.getCoordinates(), actual.getCoordinates()),
                 () -> assertEquals(expected.getRelevantTextPortion(), actual.getRelevantTextPortion()),
                 // we just want the expected value to be contained somehow, it doesn't have to be identical to the entire descriptionTranslationKey
-                () -> assertTrue(actual.getDescription(null).contains(expected.getDescription(null)))
+                // using different translations here is a bit suspect
+                () -> assertTrue(actual.getDescription(defaultEnglish).contains(expected.getDescription(noop)))
         );
 
     }

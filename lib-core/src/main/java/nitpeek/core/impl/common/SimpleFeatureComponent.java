@@ -17,14 +17,24 @@ public final class SimpleFeatureComponent implements FeatureComponent {
 
     private static final Translation identity = new NoOpTranslation();
 
+    /**
+     * This constructor bypasses internationalization: use with care.
+     */
     public SimpleFeatureComponent(String description, TextSelection coordinates) {
         this(description, coordinates, null);
     }
 
+    /**
+     * This constructor bypasses internationalization: use with care.
+     */
     public SimpleFeatureComponent(String description, TextSelection coordinates, String relevantTextPortion) {
         this.descriptionProvider = translation -> description;
         this.coordinates = coordinates;
         this.relevantTextPortion = relevantTextPortion;
+    }
+
+    public SimpleFeatureComponent(Function<Translation, String> descriptionProvider, TextSelection coordinates) {
+        this(descriptionProvider, coordinates, null);
     }
 
     public SimpleFeatureComponent(Function<Translation, String> descriptionProvider, TextSelection coordinates, String relevantTextPortion) {

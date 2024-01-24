@@ -37,21 +37,6 @@ public final class LiteralReplacer implements Analyzer {
 
     /**
      * Creates a LiteralReplacer that replaces each occurrence of {@code oldValue} with the value {@code newValue}. <br>
-     * The search does <i>not</i> cross line boundaries. <br>
-     * This is equivalent to calling {@code LiteralReplacer(oldValue, newValue, true, i18n)}.
-     *
-     * @param oldValue the literal value to be replaced; if this contains any new line character sequences,
-     *                 no matches will be found
-     * @param newValue the value to insert in place of the replaced literal
-     * @param i18n     the translator to use when describing found features and their components
-     */
-    public LiteralReplacer(String oldValue, String newValue, Translation i18n) {
-        this(oldValue, newValue, true, i18n);
-    }
-
-    /**
-     * Creates a LiteralReplacer that replaces each occurrence of {@code oldValue} with the value {@code newValue}. <br>
-     * Uses the DefaultEnglishTranslator for internationalization.
      *
      * @param oldValue   the literal value to be replaced
      * @param newValue   the value to insert in place of the replaced literal
@@ -59,21 +44,8 @@ public final class LiteralReplacer implements Analyzer {
      *                   their case doesn't match that of {@code oldValue}
      */
     public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase) {
-        this(oldValue, newValue, ignoreCase, new SimpleDefaultEnglishTranslation());
-    }
-
-    /**
-     * Creates a LiteralReplacer that replaces each occurrence of {@code oldValue} with the value {@code newValue}. <br>
-     *
-     * @param oldValue   the literal value to be replaced
-     * @param newValue   the value to insert in place of the replaced literal
-     * @param ignoreCase if this flag is true, this analyzer will find instances of {@code oldValue} in the text even when
-     *                   their case doesn't match that of {@code oldValue}
-     * @param i18n       the translator to use when describing found features and their components
-     */
-    public LiteralReplacer(String oldValue, String newValue, boolean ignoreCase, Translation i18n) {
         Pattern pattern = Pattern.compile(oldValue, computePatternFlags(ignoreCase));
-        this.regexReplacer = new RegexReplacer(pattern, newValue, i18n, StandardFeature.REPLACE_LITERAL.getType());
+        this.regexReplacer = new RegexReplacer(pattern, newValue, StandardFeature.REPLACE_LITERAL.getType());
     }
 
     private int computePatternFlags(boolean ignoreCase) {

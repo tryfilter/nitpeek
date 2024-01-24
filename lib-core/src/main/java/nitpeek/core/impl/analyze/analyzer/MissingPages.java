@@ -26,18 +26,7 @@ import static nitpeek.core.impl.translate.CoreTranslationKeys.MISSING_PAGES_COMP
 public final class MissingPages implements Analyzer {
 
     private final Set<Integer> processedPageNumbers = new HashSet<>();
-    private final Translation i18n;
 
-    /**
-     * Uses the default english translator internationalization
-     */
-    public MissingPages() {
-        this(new SimpleDefaultEnglishTranslation());
-    }
-
-    public MissingPages(Translation i18n) {
-        this.i18n = i18n;
-    }
 
     @Override
     public void processPage(TextPage page) {
@@ -87,7 +76,14 @@ public final class MissingPages implements Analyzer {
     }
 
     private FeatureComponent problemComponent(TextSelection missingPages) {
-        return new SimpleFeatureComponent(i18n.translate(MISSING_PAGES_COMPONENT_DESCRIPTION.key(), missingPages.fromInclusive().page(), missingPages.toInclusive().page()), missingPages);
+        return new SimpleFeatureComponent(
+                (Translation i18n) -> i18n.translate(
+                        MISSING_PAGES_COMPONENT_DESCRIPTION.key(),
+                        missingPages.fromInclusive().page(),
+                        missingPages.toInclusive().page()
+                ),
+                missingPages
+        );
     }
 
     private List<PageRange> getMissingSections(NavigableSet<Integer> sortedPageNumbers) {

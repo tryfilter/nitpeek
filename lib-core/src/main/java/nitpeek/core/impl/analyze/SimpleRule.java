@@ -4,12 +4,14 @@ import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.analyze.RuleType;
 
+import java.util.function.Supplier;
+
 public final class SimpleRule implements Rule {
 
     private final RuleType ruleType;
-    private final Analyzer analyzer;
+    private final Supplier<Analyzer> analyzer;
 
-    public SimpleRule(RuleType ruleType, Analyzer analyzer) {
+    public SimpleRule(RuleType ruleType, Supplier<Analyzer> analyzer) {
         this.ruleType = ruleType;
         this.analyzer = analyzer;
     }
@@ -21,6 +23,6 @@ public final class SimpleRule implements Rule {
 
     @Override
     public Analyzer getAnalyzer() {
-        return analyzer;
+        return analyzer.get();
     }
 }

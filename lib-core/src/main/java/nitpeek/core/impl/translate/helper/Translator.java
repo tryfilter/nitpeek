@@ -78,4 +78,7 @@ public interface Translator {
     String unpairedOpenParenthesisComponentDescription(String missingParenthesis);
     String unpairedClosingParenthesisComponentDescription(String missingParenthesis);
 
+    String pluginAllRulesIdName(String pluginId);
+    String pluginAllRulesIdDescription(String pluginId);
+
 }

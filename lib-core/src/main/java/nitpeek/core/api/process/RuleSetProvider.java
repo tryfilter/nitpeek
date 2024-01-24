@@ -8,8 +8,4 @@ import java.util.Set;
 public interface RuleSetProvider {
     Identifier getRuleSetId();
     Set<Rule> getRules();
-
-    static String allRulesId(String baseId) {
-        return baseId + ".EXPORTED_RULES";
-    }
 }

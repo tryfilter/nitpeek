@@ -194,4 +194,14 @@ public class DefaultEnglishTranslator implements Translator {
     public String unpairedClosingParenthesisComponentDescription(String missingParenthesis) {
         return "Missing closing parenthesis " + missingParenthesis;
     }
+
+    @Override
+    public String pluginAllRulesIdName(String pluginId) {
+        return "Rules Exported From " + pluginId;
+    }
+
+    @Override
+    public String pluginAllRulesIdDescription(String pluginId) {
+        return "This RuleSet contains all rules made available by the plugin " + pluginId;
+    }
 }

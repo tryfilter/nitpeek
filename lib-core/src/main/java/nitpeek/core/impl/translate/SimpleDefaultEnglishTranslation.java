@@ -66,7 +66,7 @@ public final class SimpleDefaultEnglishTranslation implements Translation {
             case AXIS_START -> safeTranslate(fallbackTranslation, 2, args ->
                     i18n.axisStart(args[0].toString(), (Integer) args[1]), arguments);
 
-            case AXIS_END ->safeTranslate(fallbackTranslation, 2, args ->
+            case AXIS_END -> safeTranslate(fallbackTranslation, 2, args ->
                     i18n.axisEnd(args[0].toString(), (Integer) args[1]), arguments);
 
             case DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME -> i18n.describePageProcessingInfoRuleName();
@@ -103,6 +103,10 @@ public final class SimpleDefaultEnglishTranslation implements Translation {
 
             case UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
                     i18n.unpairedClosingParenthesisComponentDescription(args[0].toString()), arguments);
+            case PLUGIN_ALL_RULES_ID_NAME -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.pluginAllRulesIdName(args[0].toString()), arguments);
+            case PLUGIN_ALL_RULES_ID_DESCRIPTION -> safeTranslate(fallbackTranslation, 1, args ->
+                    i18n.pluginAllRulesIdDescription(args[0].toString()), arguments);
         };
     }
 

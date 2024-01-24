@@ -22,7 +22,7 @@ public final class SimpleRule implements Rule {
     }
 
     @Override
-    public Analyzer getAnalyzer() {
+    public Analyzer createAnalyzer() {
         return analyzer.get();
     }
 }

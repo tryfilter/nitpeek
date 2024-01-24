@@ -12,6 +12,6 @@ public interface Plugin {
 
     TranslationProvider getTranslationProvider();
 
-    RuleSetProvider getRules();
+    RuleSetProvider getAllRules();
     Set<RuleSetProvider> getRuleSetProviders();
 }

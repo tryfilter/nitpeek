@@ -18,5 +18,5 @@ public interface Rule {
      * <br>
      * Note that one Analyzer may identify many different types of Feature.
      */
-    Analyzer getAnalyzer();
+    Analyzer createAnalyzer();
 }

@@ -1,6 +1,7 @@
 package nitpeek.client.demo.rule;
 
 import nitpeek.core.api.analyze.Rule;
+import nitpeek.core.api.analyze.RuleType;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.analyze.SimpleRuleType;
 import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
@@ -11,34 +12,35 @@ import nitpeek.core.impl.translate.CoreTranslationKeys;
 import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 public enum SampleRule implements Rule {
 
     DESCRIBE_PAGE_PROCESSING_INFORMATION(
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME.key(),
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_DESCRIPTION.key(),
-            new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
+            () -> new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
     private final Translation defaultEnglishTranslation = new SimpleDefaultEnglishTranslation();
     private final String nameTranslationKey;
     private final String descriptionTranslationKey;
-    private final Analyzer analyzer;
+    private final Supplier<Analyzer> analyzer;
 
-    SampleRule(String nameTranslationKey, String descriptionTranslationKey, Analyzer analyzer) {
+    SampleRule(String nameTranslationKey, String descriptionTranslationKey, Supplier<Analyzer> analyzer) {
         this.nameTranslationKey = nameTranslationKey;
         this.descriptionTranslationKey = descriptionTranslationKey;
         this.analyzer = analyzer;
     }
 
     /**
-     * @return the SimpleRuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the standard english translator
+     * @return the RuleType of this sample rule, with its nameTranslationKey and descriptionTranslationKey translated by the standard english translator
      */
-    public SimpleRuleType getType() {
+    public RuleType getType() {
         return getType(defaultEnglishTranslation);
     }
 
     @Override
-    public Analyzer getAnalyzer() {
-        return analyzer;
+    public Analyzer createAnalyzer() {
+        return analyzer.get();
     }
 
     /**

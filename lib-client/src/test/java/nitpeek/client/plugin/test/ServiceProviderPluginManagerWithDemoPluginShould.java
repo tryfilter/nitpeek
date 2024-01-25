@@ -54,6 +54,18 @@ final class ServiceProviderPluginManagerWithDemoPluginShould {
     }
 
     @Test
+    void enableGettingOtherLanguageTranslatedStrings() {
+
+        Locale.setDefault(Locale.GERMAN);
+        var translation = demoPlugin.getTranslationProvider().getTranslation(localeProvider);
+
+        String expected = "Dies ist Beispielsplugin Nummer eins. Es ist ausschließlich zur Darstellung der Plugin API nützlich.";
+        String actual = demoPlugin.getPluginId().getDescription(translation);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void getCustomRules() {
 
         var rules = demoPlugin.getAllRules().getRules();

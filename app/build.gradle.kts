@@ -10,5 +10,5 @@ dependencies {
 
 
 application {
-    mainClass.set("nitpeek.client.demo.DemoStdOutProcessor")
+    mainClass.set("nitpeek.client.console.Main")
 }

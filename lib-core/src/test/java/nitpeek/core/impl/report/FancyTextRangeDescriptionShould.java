@@ -3,9 +3,8 @@ package nitpeek.core.impl.report;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.report.TextRangeDescription;
-import nitpeek.core.impl.report.FancyTextRangeDescription;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class FancyTextRangeDescriptionShould {
 
-    private static final Translation i18n = new SimpleDefaultEnglishTranslation();
+    private static final Translation i18n = new DefaultFallbackEnglishTranslation();
     private TextRangeDescription description;
 
     private static final int BASE_PAGE = 3;

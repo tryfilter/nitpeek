@@ -4,7 +4,7 @@ import nitpeek.core.api.common.*;
 import nitpeek.core.api.report.FeatureComponentFormatter;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.SimpleFeatureType;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +58,7 @@ final class IndentingFeatureFormatterShould {
     }
 
     private static class DummyComponentFormatter implements FeatureComponentFormatter {
-        private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
+        private static final Translation defaultTranslation = new DefaultFallbackEnglishTranslation();
 
         @Override
         public String format(FeatureComponent featureComponent) {
@@ -86,7 +86,7 @@ final class IndentingFeatureFormatterShould {
 
     private static class DummyTranslator implements Translation {
 
-        private static final Translation englishTranslation = new SimpleDefaultEnglishTranslation();
+        private static final Translation englishTranslation = new DefaultFallbackEnglishTranslation();
 
         @Override
         public String translate(String translationKey, Object... arguments) {

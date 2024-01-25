@@ -5,7 +5,7 @@ import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.impl.translate.helper.NoOpTranslation;
 import org.junit.jupiter.api.Assertions;
 
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public final class FeatureAssert {
 
     private static Translation noop = new NoOpTranslation();
-    private static Translation defaultEnglish = new SimpleDefaultEnglishTranslation();
+    private static Translation defaultEnglish = new DefaultFallbackEnglishTranslation();
 
 
     public static void assertFeaturesHaveCombinedExactlyCoordinates(Set<TextSelection> expectedCoordinates, List<Feature> features) {

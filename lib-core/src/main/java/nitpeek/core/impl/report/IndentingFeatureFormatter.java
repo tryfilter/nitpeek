@@ -4,7 +4,7 @@ import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.report.FeatureComponentFormatter;
 import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 
 import static nitpeek.core.impl.translate.CoreTranslationKeys.DESCRIPTION;
 import static nitpeek.core.impl.translate.CoreTranslationKeys.FOUND_FEATURE_NAME;
@@ -18,7 +18,7 @@ public final class IndentingFeatureFormatter implements FeatureFormatter {
 
 
     public IndentingFeatureFormatter() {
-        this(new SimpleDefaultEnglishTranslation());
+        this(new DefaultFallbackEnglishTranslation());
     }
 
 

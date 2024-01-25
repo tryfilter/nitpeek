@@ -3,9 +3,7 @@ package nitpeek.core.impl.report;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.core.impl.report.Indent;
-import nitpeek.core.impl.report.IndentingFeatureComponentFormatter;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +29,7 @@ final class IndentingFeatureComponentFormatterShould {
     }
 
     private static class DummyTranslator implements Translation {
-        private static final Translation defaultTranslation = new SimpleDefaultEnglishTranslation();
+        private static final Translation defaultTranslation = new DefaultFallbackEnglishTranslation();
 
         @Override
         public String translate(String translationKey, Object... arguments) {

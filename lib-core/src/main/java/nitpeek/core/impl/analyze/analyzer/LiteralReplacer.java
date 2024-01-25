@@ -4,8 +4,6 @@ import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.impl.common.StandardFeature;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
-import nitpeek.core.api.translate.Translation;
 
 import java.util.List;
 import java.util.regex.Pattern;

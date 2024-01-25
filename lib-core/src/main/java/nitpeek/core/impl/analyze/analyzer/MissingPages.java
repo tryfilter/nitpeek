@@ -10,7 +10,6 @@ import nitpeek.core.impl.common.SimpleFeature;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.internal.Confidence;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.*;

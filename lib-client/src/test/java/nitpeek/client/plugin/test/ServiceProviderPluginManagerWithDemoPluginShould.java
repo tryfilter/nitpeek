@@ -6,13 +6,15 @@ import nitpeek.core.api.plugin.Plugin;
 import nitpeek.core.api.translate.LocaleProvider;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.core.impl.process.StringPageSource;
+import nitpeek.core.impl.translate.FallbackCoreTranslationProvider;
 import nitpeek.core.impl.translate.CurrentDefaultLocaleProvider;
+import nitpeek.core.impl.translate.WrappingTranslationProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * NOTE: Due to current limitations regarding IntelliJ and the module path, these tests only pass when run
@@ -51,6 +53,25 @@ final class ServiceProviderPluginManagerWithDemoPluginShould {
         String actual = demoPlugin.getPluginId().getName(translation);
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void enableGettingDefaultTranslatedFeatures() {
+
+        var translationProvider = new FallbackCoreTranslationProvider(demoPlugin.getTranslationProvider());
+
+        var translation = translationProvider.getTranslation(localeProvider);
+
+        var pages = new StringPageSource("42 41 42 40 Seven fourty niner 49");
+        // the 'MEANING_OF_LIFE' rule-set should produce a feature for each instance of '42' as well as each
+        // instance of '4X' with X in 0, 1, 3..9 (coming from 2 distinct rules), meaning 5 total features for the string given by pages
+
+        var processor = processorForRuleSetWithId("nitpeek.demo.plugin1.MEANING_OF_LIFE");
+        processor.startProcessing(pages);
+        var someComponent = processor.getFeatures().getFirst().getComponents().getFirst();
+        // the rules of the 'MEANING_OF_LIFE' rule-set use LiteralReplacer/RegexReplacer analyzers. These produce feature
+        // components which, using the default english translation, contain the phrase 'Replace' in their description
+        assertTrue(someComponent.getDescription(translation).contains("Replace"));
     }
 
     @Test

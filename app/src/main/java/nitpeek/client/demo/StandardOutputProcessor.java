@@ -14,7 +14,7 @@ import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.report.IndentingFeatureFormatter;
 import nitpeek.core.impl.report.SeparatorReporter;
 import nitpeek.core.impl.report.WriterReportingTarget;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 
 import java.io.PrintWriter;
 import java.util.Set;
@@ -31,7 +31,7 @@ public final class StandardOutputProcessor implements Processor {
     private final Translation i18n;
 
     public StandardOutputProcessor(RuleSetProvider ruleSetProvider) {
-        this(ruleSetProvider, new SimpleDefaultEnglishTranslation());
+        this(ruleSetProvider, new DefaultFallbackEnglishTranslation());
     }
 
     public StandardOutputProcessor(RuleSetProvider ruleSetProvider, Translation i18n) {

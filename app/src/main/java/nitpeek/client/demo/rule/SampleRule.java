@@ -9,7 +9,7 @@ import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.impl.analyze.analyzer.MissingPages;
 import nitpeek.core.impl.analyze.analyzer.PageCounter;
 import nitpeek.core.impl.translate.CoreTranslationKeys;
-import nitpeek.core.impl.translate.SimpleDefaultEnglishTranslation;
+import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -20,7 +20,7 @@ public enum SampleRule implements Rule {
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME.key(),
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_DESCRIPTION.key(),
             () -> new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
-    private final Translation defaultEnglishTranslation = new SimpleDefaultEnglishTranslation();
+    private final Translation defaultEnglishTranslation = new DefaultFallbackEnglishTranslation();
     private final String nameTranslationKey;
     private final String descriptionTranslationKey;
     private final Supplier<Analyzer> analyzer;

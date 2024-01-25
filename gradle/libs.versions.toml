@@ -1,8 +1,10 @@
 [versions]
 junit-jupiter = "5.10.1"
 java = "21"
+pdf-box = "3.0.1"
 
 
 [libraries]
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+apache-pdfbox = {module = "org.apache.pdfbox:pdfbox", version.ref = "pdf-box"}

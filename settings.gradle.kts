@@ -14,5 +14,4 @@ include("app")
 include("lib-core")
 include("lib-client")
 include("demo-plugin")
-
-
+include("lib-io")

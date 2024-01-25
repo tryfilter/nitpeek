@@ -1,8 +1,7 @@
 package nitpeek.core.impl.process;
 
-import nitpeek.core.impl.analyze.SimpleTextPage;
 import nitpeek.core.api.common.TextPage;
-import nitpeek.core.impl.process.ListPageConsumer;
+import nitpeek.core.impl.analyze.SimpleTextPage;
 import nitpeek.core.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,8 @@ final class ListPageConsumerShould {
     void throwWhenPagesConsumedAfterFinishing() {
         consumer.finish();
 
-        assertThrows(IllegalStateException.class, () -> consumer.consumePage(TestUtil.emptyPage(5)));
+        var page = TestUtil.emptyPage(5);
+        assertThrows(IllegalStateException.class, () -> consumer.consumePage(page));
     }
 
     @Test

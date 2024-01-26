@@ -35,8 +35,6 @@ class PdfPageSourceShould {
     }
 
     private List<TextPage> expectedPages() {
-        // The expected text is equivalent to the text that can be directly copied by selecting the text of each page
-        // using a PDF reading program (e.g. Acrobat).
         var pages = List.of(
                 """
                         HEADER Text
@@ -57,14 +55,24 @@ class PdfPageSourceShould {
                         Footer
                         Lines
                         3 total
-                        Page 1/2""",
+                        Page 1/3""",
                 """
                         HEADER Text
                         Single-Line Page
                         Footer
                         Lines
                         3 total
-                        Page 2/2"""
+                        Page 2/3""",
+                """
+                        HEADER Text
+                        Following this line there will be three more lines.
+                        Second line Different Font ending in a hyphen-
+                        ated word. Technically the third line contains part of it as well
+                        Special string: (marker)
+                        Footer
+                        Lines
+                        3 total
+                        Page 3/3"""
         );
 
         ListPageConsumer result = new ListPageConsumer(new StringPageSource(pages));

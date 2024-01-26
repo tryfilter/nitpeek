@@ -80,7 +80,7 @@ public final class StandardOutputProcessor implements Processor {
             reportingTarget.report("\n");
             reportingTarget.report(i18n.translate(APPLIED_RULE_DESCRIPTION.key(), type.getRuleId().getDescription(i18n)));
             reportingTarget.report("\n");
-            featureReporter.reportFeatures(rule.analyzer().findFeatures());
+            featureReporter.reportFeatures(rule.analyzer().findFeatures(), i18n);
             reportingTarget.report("\n");
             reportingTarget.report("\n");
             reportingTarget.report("\n");

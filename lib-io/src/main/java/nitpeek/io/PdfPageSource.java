@@ -13,13 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PdfPageSource implements PageSource {
+public final class PdfPageSource implements PageSource {
 
     private final PageSource memoryPageSource;
-
-    private PdfPageSource(PageSource memoryPageSource) {
-        this.memoryPageSource = memoryPageSource;
-    }
 
     @Override
     public void dischargeTo(PageConsumer consumer) {
@@ -27,7 +23,7 @@ public class PdfPageSource implements PageSource {
     }
 
     /**
-     * @param input representing a valid PDF file. This method will not close the stream.
+     * @param input representing a valid PDF file. The InputStream is not closed by this method.
      * @return a page source containing all pages of the provided PDF
      */
     public static PdfPageSource createFrom(InputStream input) throws IOException {
@@ -36,6 +32,14 @@ public class PdfPageSource implements PageSource {
 
             return new PdfPageSource(toMemoryPageSource(pdf));
         }
+    }
+
+    PdfPageSource(PDDocument pdf) throws IOException {
+        this.memoryPageSource = toMemoryPageSource(pdf);
+    }
+
+    PdfPageSource(PageSource pageSource) {
+        this.memoryPageSource = pageSource;
     }
 
     private static PageSource toMemoryPageSource(PDDocument pdf) throws IOException {

@@ -5,6 +5,7 @@ import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.report.Reporter;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.report.ReportingTarget;
+import nitpeek.core.api.translate.Translation;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public final class SeparatorReporter implements Reporter {
      * @throws ReportingException when the ReportingTarget provided at construction produced a {@link ReportingException}
      */
     @Override
-    public void reportFeatures(List<Feature> features) throws ReportingException {
+    public void reportFeatures(List<Feature> features, Translation i18n) throws ReportingException {
         if (features.isEmpty()) return;
 
         for (var feature : features.subList(0, features.size() - 1)) {

@@ -6,6 +6,7 @@ import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.report.Reporter;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.translate.helper.NoOpTranslation;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
@@ -15,6 +16,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class SeparatorReporterShould {
+
+    private final Translation i18nNoop = new NoOpTranslation();
 
     private static final List<Feature> features = List.of(
             new DummyFeature("Feature1"),
@@ -27,7 +30,7 @@ final class SeparatorReporterShould {
         Writer writer = new StringWriter();
 
         Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
-        reporter.reportFeatures(List.of());
+        reporter.reportFeatures(List.of(), i18nNoop);
 
         String expected = "";
         assertEquals(expected, writer.toString());
@@ -38,7 +41,7 @@ final class SeparatorReporterShould {
         Writer writer = new StringWriter();
 
         Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
-        reporter.reportFeatures(List.of(new DummyFeature("Feature1")));
+        reporter.reportFeatures(List.of(new DummyFeature("Feature1")), i18nNoop);
 
         String expected = "Feature1";
         assertEquals(expected, writer.toString());
@@ -48,7 +51,7 @@ final class SeparatorReporterShould {
         Writer writer = new StringWriter();
 
         Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
-        reporter.reportFeatures(features);
+        reporter.reportFeatures(features, i18nNoop);
 
         String expected = "Feature1~Feature2~Feature3";
         assertEquals(expected, writer.toString());
@@ -59,7 +62,7 @@ final class SeparatorReporterShould {
         Writer writer = new StringWriter();
 
         Reporter reporter = new SeparatorReporter("~", new WriterReportingTarget(writer), new DummyFormatter());
-        reporter.reportFeatures(features.subList(1, 3));
+        reporter.reportFeatures(features.subList(1, 3), i18nNoop);
 
         String expected = "Feature2~Feature3";
         assertEquals(expected, writer.toString());
@@ -71,7 +74,7 @@ final class SeparatorReporterShould {
 
 
         Reporter reporter = new SeparatorReporter("\n", new WriterReportingTarget(writer), new DummyFormatter());
-        reporter.reportFeatures(features);
+        reporter.reportFeatures(features, i18nNoop);
 
         String expected = """
                 Feature1

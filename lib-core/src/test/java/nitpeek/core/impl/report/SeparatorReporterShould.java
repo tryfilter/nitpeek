@@ -6,7 +6,7 @@ import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.report.Reporter;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.core.impl.translate.helper.NoOpTranslation;
+import nitpeek.core.impl.translate.NoOpTranslation;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;

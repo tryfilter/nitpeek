@@ -1,4 +1,4 @@
-package nitpeek.core.impl.translate.helper;
+package nitpeek.core.impl.translate;
 
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.translate.Translation;

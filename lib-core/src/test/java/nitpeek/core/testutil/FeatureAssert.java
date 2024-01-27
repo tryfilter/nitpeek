@@ -6,7 +6,7 @@ import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
-import nitpeek.core.impl.translate.helper.NoOpTranslation;
+import nitpeek.core.impl.translate.NoOpTranslation;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.HashSet;

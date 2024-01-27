@@ -2,7 +2,7 @@ package nitpeek.core.impl.common;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.core.impl.translate.helper.NoOpTranslation;
+import nitpeek.core.impl.translate.NoOpTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.Objects;

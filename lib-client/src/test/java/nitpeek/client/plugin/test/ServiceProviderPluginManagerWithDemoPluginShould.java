@@ -6,15 +6,15 @@ import nitpeek.core.api.plugin.Plugin;
 import nitpeek.core.api.translate.LocaleProvider;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.core.impl.process.StringPageSource;
-import nitpeek.core.impl.translate.FallbackCoreTranslationProvider;
 import nitpeek.core.impl.translate.CurrentDefaultLocaleProvider;
-import nitpeek.core.impl.translate.WrappingTranslationProvider;
+import nitpeek.core.impl.translate.FallbackCoreTranslationProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * NOTE: Due to current limitations regarding IntelliJ and the module path, these tests only pass when run

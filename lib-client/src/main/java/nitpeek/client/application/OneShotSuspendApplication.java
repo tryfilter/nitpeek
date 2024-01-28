@@ -19,8 +19,8 @@ public final class OneShotSuspendApplication implements Application {
     public void run() throws Exception {
         oneShotAction.run();
 
-        var translation = translationProvider.getTranslation(localeProvider);
-        System.out.println(translation.translate("nitpeek.application.message.PRESS_KEY"));
+        var i18n = translationProvider.getTranslation(localeProvider);
+        System.out.println(i18n.translate("nitpeek.application.message.PRESS_KEY"));
         System.in.read();
     }
 }

@@ -3,7 +3,7 @@ package nitpeek.io.internal;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
-import nitpeek.core.impl.translate.NoOpTranslation;
+import nitpeek.core.impl.translate.IdentityTranslation;
 import nitpeek.io.internal.SectionExtractor.ComponentWithSections;
 import nitpeek.io.internal.SectionExtractor.Section;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class AnnotationInserter {
 
-    private final Translation i18nNoop = new NoOpTranslation();
+    private final Translation i18nNoop = new IdentityTranslation();
     private final PDDocument pdf;
     private final AnnotationCreator annotationCreator = new AnnotationCreator();
 

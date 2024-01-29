@@ -2,7 +2,7 @@ package nitpeek.core.impl.common;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.core.impl.translate.NoOpTranslation;
+import nitpeek.core.impl.translate.IdentityTranslation;
 import nitpeek.core.api.translate.Translation;
 
 import java.util.Objects;
@@ -15,7 +15,7 @@ public final class SimpleFeatureComponent implements FeatureComponent {
     private final TextSelection coordinates;
     private final String relevantTextPortion;
 
-    private static final Translation identity = new NoOpTranslation();
+    private static final Translation identity = new IdentityTranslation();
 
     /**
      * This constructor bypasses internationalization: use with care.

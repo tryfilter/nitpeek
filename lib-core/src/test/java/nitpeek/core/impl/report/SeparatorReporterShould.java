@@ -6,7 +6,7 @@ import nitpeek.core.api.report.FeatureFormatter;
 import nitpeek.core.api.report.Reporter;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.core.impl.translate.NoOpTranslation;
+import nitpeek.core.impl.translate.IdentityTranslation;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class SeparatorReporterShould {
 
-    private final Translation i18nNoop = new NoOpTranslation();
+    private final Translation i18nNoop = new IdentityTranslation();
 
     private static final List<Feature> features = List.of(
             new DummyFeature("Feature1"),

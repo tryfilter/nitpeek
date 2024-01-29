@@ -2,9 +2,12 @@
 junit-jupiter = "5.10.1"
 java = "21"
 pdf-box = "3.0.1"
+mockito = "5.10.0"
 
 
 [libraries]
 junit-platform = { module = "org.junit.platform:junit-platform-launcher" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
-apache-pdfbox = {module = "org.apache.pdfbox:pdfbox", version.ref = "pdf-box"}
+apache-pdfbox = { module = "org.apache.pdfbox:pdfbox", version.ref = "pdf-box" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-junit = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }

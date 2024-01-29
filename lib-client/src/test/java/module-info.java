@@ -4,5 +4,7 @@ module nitpeek.lib.client.test {
 
     // enable tests
     requires org.junit.jupiter.api;
+    requires org.mockito;
+    requires org.mockito.junit.jupiter;
     opens nitpeek.client.plugin.test to org.junit.platform.commons;
 }

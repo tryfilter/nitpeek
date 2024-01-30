@@ -1,4 +1,4 @@
-package nitpeek.io;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
@@ -114,7 +114,7 @@ final class PdfCommentReporterShould {
             var reporter = new PdfCommentReporter(pdfToAnnotate, output);
             reporter.reportFeatures(features, new DefaultFallbackEnglishTranslation());
         } catch (IOException | ReportingException e) {
-            Assertions.fail("Exception thrown during annotation insertion");
+            Assertions.fail("Exception thrown during annotation insertion", e);
         }
     }
 

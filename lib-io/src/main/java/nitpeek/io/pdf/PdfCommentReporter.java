@@ -1,4 +1,4 @@
-package nitpeek.io;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.report.Reporter;

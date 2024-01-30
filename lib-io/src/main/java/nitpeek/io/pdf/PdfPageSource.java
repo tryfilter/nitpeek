@@ -1,4 +1,4 @@
-package nitpeek.io;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
@@ -54,6 +54,7 @@ public final class PdfPageSource implements PageSource {
     }
 
     private static String extractPage(int pageNumber, PDDocument pdf) throws IOException {
+
         PDFTextStripper textStripper = new PDFTextStripper();
         textStripper.setSortByPosition(true);
 

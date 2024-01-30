@@ -1,16 +1,23 @@
-package nitpeek.io;
+package nitpeek.io.pdf;
 
+import com.google.common.jimfs.Jimfs;
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.process.ListPageConsumer;
 import nitpeek.core.impl.process.StringPageSource;
+import nitpeek.io.pdf.testutil.PdfCreator;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 final class PdfPageSourceShould {
+
 
     @Test
     void throwForInvalidFile() {
@@ -23,18 +30,44 @@ final class PdfPageSourceShould {
 
     @Test
     void extractTextFromPages() throws IOException {
-        try (var input = PdfPageSourceShould.class.getResourceAsStream("TestFile.pdf")) {
-            var pdfSource = PdfPageSource.createFrom(input);
-            var consumer = new ListPageConsumer(pdfSource);
 
-            var expected = expectedPages();
-            var actual = consumer.getPages();
+        var fileSystem = Jimfs.newFileSystem();
+        var pdf = testFile(fileSystem, "testFile.pdf");
+        createPdf(pdf);
 
-            assertEquals(expected, actual);
-        }
+        var pdfSource = PdfPageSource.createFrom(Files.newInputStream(pdf));
+        var consumer = new ListPageConsumer(pdfSource);
+
+        var expected = expectedPages();
+        var actual = consumer.getPages();
+
+        assertEquals(expected, actual);
     }
 
-    private List<TextPage> expectedPages() {
+
+    private void createPdf(Path pdfLocation) throws IOException {
+        var pages = createPages();
+        new PdfCreator(new StringPageSource(pages)).createPdf(pdfLocation);
+    }
+
+    private static List<String> createPages() {
+        return expectedPages().stream()
+                .map(TextPage::getLines)
+                .map(lines -> String.join("\n", lines))
+                .toList();
+    }
+
+    private static Path testFile(FileSystem fileSystem, String filename) throws IOException {
+        var testDir = testDir(fileSystem);
+        Files.createDirectory(testDir);
+        return testDir.resolve(filename);
+    }
+
+    private static Path testDir(FileSystem fileSystem) {
+        return fileSystem.getPath("test");
+    }
+
+    private static List<TextPage> expectedPages() {
         var pages = List.of(
                 """
                         HEADER Text

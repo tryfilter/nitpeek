@@ -19,8 +19,11 @@ java {
 dependencies {
     testImplementation(libs.junit.api)
     testRuntimeOnly(libs.junit.platform)
+
     testImplementation(libs.mockito)
     testImplementation(libs.mockito.junit)
+
+    testImplementation(libs.google.jimfs)
 }
 
 tasks.named<Test>("test") {

@@ -4,4 +4,5 @@ module nitpeek.lib.io {
     requires org.apache.pdfbox.io;
 
     exports nitpeek.io.pdf;
+    exports nitpeek.io.pdf.convenience;
 }

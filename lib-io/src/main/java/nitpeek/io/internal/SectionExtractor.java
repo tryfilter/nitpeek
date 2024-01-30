@@ -11,10 +11,7 @@ import org.apache.pdfbox.text.TextPosition;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,6 +31,8 @@ public final class SectionExtractor extends PDFTextStripper {
 
     private TextPosition previousEndTextPosition = null;
     private TextPosition currentStartTextPosition = null;
+
+    private final Set<Integer> pagesWithTextColumns = new HashSet<>();
 
     public record LocalTextPosition(TextPosition position, int page, int line) {
     }
@@ -59,6 +58,13 @@ public final class SectionExtractor extends PDFTextStripper {
         var outputSink = new OutputStreamWriter(OutputStream.nullOutputStream());
         // we don't care about the output, we just need to process the entire PDF
         writeText(pdf, outputSink);
+        if (!pagesWithTextColumns.isEmpty()) {
+            throw new IllegalStateException("(Pages " + pagesWithTextColumns.stream().sorted().toList() + ") Encountered " +
+                    "unusual line segments, which is likely caused by text columns. Text columns are currently not " +
+                    "supported. Please remove offending pages and attempt again. " +
+                    "While no other pages caused errors, it is possible that more pages exist which contain text columns." +
+                    "Please note that any such pages are not covered by this tool and must be manually checked.");
+        }
 
         return result.entrySet().stream().map(featureComponentListEntry -> {
             var featureComponent = featureComponentListEntry.getKey();
@@ -95,10 +101,14 @@ public final class SectionExtractor extends PDFTextStripper {
 
     private void updateSections(List<TextPosition> textPositions) {
 
-        closeAndSaveOpenSectionsFromPreviousLine();
-        closeAndSaveSectionsEndingInCurrentWord(textPositions);
-        addOpenSectionsForCurrentWord(textPositions);
-        closeAndSaveSectionsEndingInCurrentWord(textPositions);
+        try {
+            closeAndSaveOpenSectionsFromPreviousLine();
+            closeAndSaveSectionsEndingInCurrentWord(textPositions);
+            addOpenSectionsForCurrentWord(textPositions);
+            closeAndSaveSectionsEndingInCurrentWord(textPositions);
+        } catch (IndexOutOfBoundsException e) {
+            pagesWithTextColumns.add(getCurrentPageNo());
+        }
     }
 
     private void closeAndSaveSectionsEndingInCurrentWord(List<TextPosition> textPositions) {

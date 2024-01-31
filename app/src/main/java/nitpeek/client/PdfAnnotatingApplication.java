@@ -9,6 +9,8 @@ import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.LocaleProvider;
 import nitpeek.core.api.translate.TranslationProvider;
 import nitpeek.io.pdf.convenience.PdfAnnotator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,7 @@ public final class PdfAnnotatingApplication implements Application {
     private final LocaleProvider localeProvider;
     private final Path inputFolder;
     private final Path outputFolder;
+    private final Logger log = LoggerFactory.getLogger(PdfAnnotatingApplication.class);
 
     private static final PathMatcher PDF_EXTENSION = FileSystems.getDefault().getPathMatcher("glob:*.pdf");
 
@@ -54,7 +57,7 @@ public final class PdfAnnotatingApplication implements Application {
     }
 
     private void printMessage(String message) {
-        System.out.println(message);
+        log.atInfo().log(message);
     }
 
     private List<Path> getPdfFilesInInputFolder() {

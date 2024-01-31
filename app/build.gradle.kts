@@ -7,6 +7,9 @@ dependencies {
     implementation(project(":lib-core"))
     implementation(project(":lib-client"))
     implementation(project(":lib-io"))
+    implementation(libs.slf4j.api)
+    runtimeOnly(libs.log.impl)
+    runtimeOnly(libs.log4j.bridge.slf4j)
 }
 
 
@@ -22,7 +25,20 @@ tasks.startScripts {
         // Hack to add the plugins folder to the module path
         injectPluginsFolderToScript(windowsScript, ";%APP_HOME%\\\\plugins")
         injectPluginsFolderToScript(unixScript, ":\\\$APP_HOME/plugins")
+
+        // Another hack: append log4j2 config location to DEFAULT_JVM_OPTS
+        val log4jLocation = "log/log4j2.xml"
+        val log4jOption = "-Dlog4j2.configurationFile"
+        appendValueForParameter(windowsScript, "DEFAULT_JVM_OPTS", " $log4jOption=${pathRelativeToAppHomeWindows(log4jLocation)}")
+        appendValueForQuotedParameter(unixScript, "DEFAULT_JVM_OPTS", " $log4jOption=${pathRelativeToAppHomeUnix(log4jLocation)}")
     }
+}
+private fun pathRelativeToAppHomeWindows(relativePath: String): String {
+    return "%APP_HOME%\\\\${relativePath.split("/").joinToString(separator = "\\\\")}";
+}
+
+private fun pathRelativeToAppHomeUnix(relativePath: String): String {
+    return "\\\$APP_HOME/$relativePath";
 }
 
 private fun injectPluginsFolderToScript(scriptFile: File, pluginString: String) {

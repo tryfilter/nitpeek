@@ -5,8 +5,12 @@ import nitpeek.client.plugin.PluginManager;
 import nitpeek.client.plugin.ServiceProviderPluginManager;
 import nitpeek.core.api.translate.LocaleProvider;
 import nitpeek.core.api.translate.TranslationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PluginListingApplication implements Application {
+
+    private final Logger log = LoggerFactory.getLogger(PluginListingApplication.class);
 
     private final LocaleProvider localeProvider;
     private final TranslationProvider translationProvider = new ApplicationTranslationProvider();
@@ -19,9 +23,11 @@ public final class PluginListingApplication implements Application {
     public void run() {
         var i18n = translationProvider.getTranslation(localeProvider);
         PluginManager manager = new ServiceProviderPluginManager();
-        System.out.println(i18n.translate("nitpeek.application.message.LIST_PLUGINS"));
-        for (var plugin : manager.getPlugins()) {
-            System.out.println(i18n.translate("nitpeek.application.message.DETECTED_PLUGIN" , plugin.getPluginId().getId()));
+        log.atDebug().log(i18n.translate("nitpeek.application.message.LIST_PLUGINS"));
+        var plugins = manager.getPlugins();
+        if (plugins.isEmpty()) log.atWarn().log(i18n.translate("nitpeek.application.message.DETECTED_NO_PLUGINS"));
+        for (var plugin : plugins) {
+            log.atDebug().log(i18n.translate("nitpeek.application.message.DETECTED_PLUGIN" , plugin.getPluginId().getId()));
         }
     }
 }

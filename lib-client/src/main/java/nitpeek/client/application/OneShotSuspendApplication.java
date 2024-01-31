@@ -20,6 +20,7 @@ public final class OneShotSuspendApplication implements Application {
         oneShotAction.run();
 
         var i18n = translationProvider.getTranslation(localeProvider);
+        System.out.println();
         System.out.println(i18n.translate("nitpeek.application.message.PRESS_KEY"));
         System.in.read();
     }

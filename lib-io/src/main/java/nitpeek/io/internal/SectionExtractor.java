@@ -7,6 +7,8 @@ import nitpeek.core.api.common.TextPage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,6 +21,8 @@ import java.util.stream.Stream;
 import static java.lang.Math.round;
 
 public final class SectionExtractor extends PDFTextStripper {
+
+    private final Logger log = LoggerFactory.getLogger(SectionExtractor.class);
 
     private final Map<Integer, List<FeatureComponent>> pageToComponentStarts;
     private final Map<FeatureComponent, LocalTextPosition> openSections = new HashMap<>();
@@ -59,11 +63,9 @@ public final class SectionExtractor extends PDFTextStripper {
         // we don't care about the output, we just need to process the entire PDF
         writeText(pdf, outputSink);
         if (!pagesWithTextColumns.isEmpty()) {
-            throw new IllegalStateException("(Pages " + pagesWithTextColumns.stream().sorted().toList() + ") Encountered " +
+            log.atWarn().log("(Pages {}) Encountered " +
                     "unusual line segments, which is likely caused by text columns. Text columns are currently not " +
-                    "supported. Please remove offending pages and attempt again. " +
-                    "While no other pages caused errors, it is possible that more pages exist which contain text columns." +
-                    "Please note that any such pages are not covered by this tool and must be manually checked.");
+                    "supported. Features on such pages may be missing and/or incorrect.", pagesWithTextColumns.stream().sorted().toList());
         }
 
         return result.entrySet().stream().map(featureComponentListEntry -> {
@@ -101,14 +103,11 @@ public final class SectionExtractor extends PDFTextStripper {
 
     private void updateSections(List<TextPosition> textPositions) {
 
-        try {
-            closeAndSaveOpenSectionsFromPreviousLine();
-            closeAndSaveSectionsEndingInCurrentWord(textPositions);
-            addOpenSectionsForCurrentWord(textPositions);
-            closeAndSaveSectionsEndingInCurrentWord(textPositions);
-        } catch (IndexOutOfBoundsException e) {
-            pagesWithTextColumns.add(getCurrentPageNo());
-        }
+        closeAndSaveOpenSectionsFromPreviousLine();
+        closeAndSaveSectionsEndingInCurrentWord(textPositions);
+        addOpenSectionsForCurrentWord(textPositions);
+        closeAndSaveSectionsEndingInCurrentWord(textPositions);
+
     }
 
     private void closeAndSaveSectionsEndingInCurrentWord(List<TextPosition> textPositions) {
@@ -126,7 +125,8 @@ public final class SectionExtractor extends PDFTextStripper {
 
             // Assume pdfbox writes words without crossing line boundaries
             int offset = featureComponent.getCoordinates().toInclusive().character() - wordStartPosition.character();
-            saveSection(sectionStart, textPositions.get(offset));
+
+            saveSection(sectionStart, getSafelyAndRecordBoundsViolation(textPositions, offset));
             openSections.remove(featureComponent);
         }
     }
@@ -134,8 +134,19 @@ public final class SectionExtractor extends PDFTextStripper {
     private void addOpenSectionsForCurrentWord(List<TextPosition> textPositions) {
         var startingComponents = getComponentsStartingInCurrentWord();
         for (var component : startingComponents) {
-            openSections.put(component, positionWithCurrentLocation(textPositions.get(component.getCoordinates().fromInclusive().character())));
+            int index = component.getCoordinates().fromInclusive().character();
+            openSections.put(component, positionWithCurrentLocation(getSafelyAndRecordBoundsViolation(textPositions, index)));
         }
+    }
+
+    private TextPosition getSafelyAndRecordBoundsViolation(List<TextPosition> textPositions, int index) {
+        if (index < textPositions.size()) return textPositions.get(index);
+
+        // Current limitation of this implementation: parsing text sections in reading order combines adjacent
+        // text columns into a single column, leading to bogus indices. For now, we simply report the issue and
+        // attempt to continue processing, for convenience's sake.
+        pagesWithTextColumns.add(getCurrentPageNo());
+        return textPositions.getLast();
     }
 
     private List<FeatureComponent> getComponentsStartingInCurrentWord() {

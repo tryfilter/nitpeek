@@ -1,4 +1,6 @@
 module nitpeek.lib.core {
+    requires org.slf4j;
+
     exports nitpeek.core.api.common;
     exports nitpeek.core.api.analyze;
     exports nitpeek.core.api.util;

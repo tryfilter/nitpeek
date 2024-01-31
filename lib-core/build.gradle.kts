@@ -3,6 +3,10 @@ plugins {
     id("maven-publish")
 }
 
+dependencies {
+    implementation(libs.slf4j.api)
+}
+
 group = "org.example.nitpeek"
 version = "0.0"
 

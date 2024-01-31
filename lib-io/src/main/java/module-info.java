@@ -3,6 +3,8 @@ module nitpeek.lib.io {
     requires org.apache.pdfbox;
     requires org.apache.pdfbox.io;
 
+    requires jdk.unsupported; // more complex workarounds may be required in the future. See app/build.gradle.kts prior to this commit.
+
     exports nitpeek.io.pdf;
     exports nitpeek.io.pdf.convenience;
 }

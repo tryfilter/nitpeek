@@ -22,11 +22,6 @@ tasks.startScripts {
         // Hack to add the plugins folder to the module path
         injectPluginsFolderToScript(windowsScript, ";%APP_HOME%\\\\plugins")
         injectPluginsFolderToScript(unixScript, ":\\\$APP_HOME/plugins")
-
-        // Another hack to work around pdfbox not playing nice with java modules (defaultJvmOpts seems broken on both platforms too)
-        val allowReflectionOptions = " --add-opens java.base/java.nio=org.apache.pdfbox.io --add-opens java.base/jdk.internal.ref=org.apache.pdfbox.io"
-        appendValueForParameter(windowsScript, "DEFAULT_JVM_OPTS", allowReflectionOptions)
-        appendValueForQuotedParameter(unixScript, "DEFAULT_JVM_OPTS", allowReflectionOptions)
     }
 }
 

@@ -1,8 +1,8 @@
-package nitpeek.io.internal;
+package nitpeek.io.pdf.internal;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.io.internal.SectionExtractor.Section;
+import nitpeek.io.pdf.internal.SectionExtractor.Section;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;
@@ -10,7 +10,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationHighlight;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationTextMarkup;
 
-public final class AnnotationCreator {
+final class AnnotationCreator {
 
     private final String author;
 

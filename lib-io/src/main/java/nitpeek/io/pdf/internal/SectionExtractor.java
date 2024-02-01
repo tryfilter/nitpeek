@@ -1,4 +1,4 @@
-package nitpeek.io.internal;
+package nitpeek.io.pdf.internal;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
@@ -38,17 +38,14 @@ public final class SectionExtractor extends PDFTextStripper {
 
     private final Set<Integer> pagesWithTextColumns = new HashSet<>();
 
-    public record LocalTextPosition(TextPosition position, int page, int line) {
-    }
-
-    public LocalTextPosition positionWithCurrentLocation(TextPosition position) {
-        return new LocalTextPosition(position, currentPage(), currentLine());
-    }
 
     public record ComponentWithSections(FeatureComponent component, List<Section> sections) {
     }
 
     public record Section(LocalTextPosition start, LocalTextPosition end, int page) {
+    }
+
+    public record LocalTextPosition(TextPosition position, int page, int line) {
     }
 
     public SectionExtractor(List<Feature> features, List<TextPage> pages) {
@@ -137,6 +134,10 @@ public final class SectionExtractor extends PDFTextStripper {
             int index = component.getCoordinates().fromInclusive().character();
             openSections.put(component, positionWithCurrentLocation(getSafelyAndRecordBoundsViolation(textPositions, index)));
         }
+    }
+
+    private LocalTextPosition positionWithCurrentLocation(TextPosition position) {
+        return new LocalTextPosition(position, currentPage(), currentLine());
     }
 
     private TextPosition getSafelyAndRecordBoundsViolation(List<TextPosition> textPositions, int index) {

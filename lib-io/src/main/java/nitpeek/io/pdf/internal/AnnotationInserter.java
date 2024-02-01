@@ -1,11 +1,10 @@
-package nitpeek.io.internal;
+package nitpeek.io.pdf.internal;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.translate.IdentityTranslation;
-import nitpeek.io.internal.SectionExtractor.ComponentWithSections;
-import nitpeek.io.internal.SectionExtractor.Section;
+import nitpeek.io.pdf.internal.SectionExtractor.ComponentWithSections;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.IOException;
@@ -38,19 +37,19 @@ public final class AnnotationInserter {
 
     }
 
-    private void saveAllExceptFirstWithoutDescription(List<Section> sections, FeatureComponent originalComponent) throws IOException {
+    private void saveAllExceptFirstWithoutDescription(List<SectionExtractor.Section> sections, FeatureComponent originalComponent) throws IOException {
         var componentWithNoDescription = new SimpleFeatureComponent(
                 "",
                 originalComponent.getCoordinates(),
                 originalComponent.getRelevantTextPortion().orElse("")
         );
 
-        for (Section section : sections.stream().skip(1).toList()) {
+        for (SectionExtractor.Section section : sections.stream().skip(1).toList()) {
             save(section, componentWithNoDescription, i18nNoop);
         }
     }
 
-    private void save(Section section, FeatureComponent featureComponent, Translation i18n) throws IOException {
+    private void save(SectionExtractor.Section section, FeatureComponent featureComponent, Translation i18n) throws IOException {
 
         var annotation = annotationCreator.create(section, featureComponent, i18n);
         int relevantPage = section.page();

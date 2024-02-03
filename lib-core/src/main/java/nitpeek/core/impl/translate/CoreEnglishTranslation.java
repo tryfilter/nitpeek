@@ -22,7 +22,6 @@ public final class CoreEnglishTranslation implements Translation {
             case MISSING_PAGES_COMPONENT_DESCRIPTION -> translate(2, args ->
                     i18n.missingPagesComponentDescription((Integer) args[0], (Integer) args[1]), arguments);
 
-
             case MISSING_PAGES_FEATURE_NAME -> i18n.missingPagesFeatureName();
 
             case MISSING_PAGES_FEATURE_DESCRIPTION -> i18n.missingPagesFeatureDescription();
@@ -84,6 +83,8 @@ public final class CoreEnglishTranslation implements Translation {
             case REPLACE_LITERAL_COMPONENT_DESCRIPTION -> translate(1, args ->
                     i18n.replaceLiteralComponentDescription(args[0].toString()), arguments);
 
+            case REPLACE_LITERAL_COMPONENT_DESCRIPTION_DELETE -> i18n.replaceLiteralComponentDescriptionDelete();
+
             case DEBUG_FEATURE_NAME -> i18n.debugFeatureName();
 
             case DEBUG_FEATURE_DESCRIPTION -> i18n.debugFeatureDescription();
@@ -101,8 +102,10 @@ public final class CoreEnglishTranslation implements Translation {
 
             case UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION -> translate(1, args ->
                     i18n.unpairedClosingParenthesisComponentDescription(args[0].toString()), arguments);
+
             case PLUGIN_ALL_RULES_ID_NAME -> translate(1, args ->
                     i18n.pluginAllRulesIdName(args[0].toString()), arguments);
+
             case PLUGIN_ALL_RULES_ID_DESCRIPTION -> translate(1, args ->
                     i18n.pluginAllRulesIdDescription(args[0].toString()), arguments);
         };

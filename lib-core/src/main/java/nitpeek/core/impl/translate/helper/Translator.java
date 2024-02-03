@@ -23,6 +23,7 @@ public interface Translator {
     String processedPagesFeatureDescription();
 
     String processedPagesComponentDescriptionChunk(int firstProcessedPage, int lastProcessedPage);
+
     String processedSinglePageComponentDescription(int processedPage);
 
     String processedPagesComponentDescription(int firstProcessedPage, int lastProcessedPage, int pageCount);
@@ -76,9 +77,12 @@ public interface Translator {
     String unpairedParenthesesFeatureDescription();
 
     String unpairedOpenParenthesisComponentDescription(String missingParenthesis);
+
     String unpairedClosingParenthesisComponentDescription(String missingParenthesis);
 
     String pluginAllRulesIdName(String pluginId);
+
     String pluginAllRulesIdDescription(String pluginId);
 
+    String replaceLiteralComponentDescriptionDelete();
 }

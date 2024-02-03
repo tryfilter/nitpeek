@@ -2,6 +2,7 @@ package nitpeek.core.impl.analyze.analyzer;
 
 import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.*;
+import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.common.SimpleFeature;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.SimpleFeatureType;
@@ -16,6 +17,7 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 import static nitpeek.core.impl.translate.CoreTranslationKeys.REPLACE_LITERAL_COMPONENT_DESCRIPTION;
+import static nitpeek.core.impl.translate.CoreTranslationKeys.REPLACE_LITERAL_COMPONENT_DESCRIPTION_DELETE;
 
 /**
  * Reports values matching a regular expression that should be replaced with some other value.<br>
@@ -125,9 +127,15 @@ public final class RegexReplacer implements Analyzer {
 
     private FeatureComponent component(TextSelection textSelection, String newValue, String oldValue) {
         return new SimpleFeatureComponent(
-                i18n -> i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION.key(), newValue),
+                i18n -> replaceOrDelete(newValue, i18n),
                 textSelection,
                 oldValue
         );
+    }
+
+    private String replaceOrDelete(String newValue, Translation i18n) {
+        if (newValue.isEmpty()) return i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION_DELETE.key());
+
+        return i18n.translate(REPLACE_LITERAL_COMPONENT_DESCRIPTION.key(), newValue);
     }
 }

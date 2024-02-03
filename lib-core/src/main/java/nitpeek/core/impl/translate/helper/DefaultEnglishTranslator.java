@@ -204,4 +204,9 @@ public class DefaultEnglishTranslator implements Translator {
     public String pluginAllRulesIdDescription(String pluginId) {
         return "This RuleSet contains all rules made available by the plugin " + pluginId;
     }
+
+    @Override
+    public String replaceLiteralComponentDescriptionDelete() {
+        return "Delete";
+    }
 }

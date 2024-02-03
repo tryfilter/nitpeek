@@ -14,7 +14,7 @@ public final class AnonymousFeature implements Feature {
     private final List<FeatureComponent> featureComponents;
 
     public AnonymousFeature(List<FeatureComponent> featureComponents) {
-        this.featureComponents = featureComponents;
+        this.featureComponents = List.copyOf(featureComponents);
     }
 
     @Override
@@ -31,6 +31,9 @@ public final class AnonymousFeature implements Feature {
         );
     }
 
+    /**
+     * @return an unmodifiable copy
+     */
     @Override
     public List<FeatureComponent> getComponents() {
         return featureComponents;

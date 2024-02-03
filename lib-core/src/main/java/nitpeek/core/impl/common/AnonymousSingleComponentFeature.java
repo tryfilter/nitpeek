@@ -43,6 +43,9 @@ public final class AnonymousSingleComponentFeature implements Feature {
         return feature.getType();
     }
 
+    /**
+     * @return an unmodifiable copy
+     */
     @Override
     public List<FeatureComponent> getComponents() {
         return feature.getComponents();

@@ -49,8 +49,7 @@ public final class CrossPageAnalyzer implements Analyzer {
     }
 
     /**
-     *
-     * @return the features produced by the wrapped analyzer on the single page consisting of the concatenation the lines
+     * @return the features produced by the wrapped analyzer on the single page consisting of the concatenation of the lines
      * of all pages processed so far by the wrapping analyzer; note that this implies that page gaps are ignored
      */
     @Override

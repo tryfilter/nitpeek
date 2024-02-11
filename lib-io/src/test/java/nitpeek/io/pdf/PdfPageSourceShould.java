@@ -17,7 +17,7 @@ final class PdfPageSourceShould {
     @Test
     void throwForInvalidFile() {
         assertThrows(IOException.class, () -> {
-            try (var input = PdfPageSourceShould.class.getResourceAsStream("TestFile.txt")) {
+            try (var input = PdfPageSourceShould.class.getResourceAsStream("../TestFile.txt")) {
                 PdfPageSource.createFrom(input);
             }
         });

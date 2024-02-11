@@ -1,6 +1,7 @@
 plugins {
     application
     id("convention-java")
+    id("org.gradlex.extra-java-module-info").version(libs.versions.extraJavaModuleInfo)
 }
 
 dependencies {
@@ -16,6 +17,17 @@ dependencies {
 application {
     mainModule = "nitpeek.app.main"
     mainClass = "nitpeek.client.console.Main"
+}
+
+repositories {
+    maven {
+        url = uri("https://plugins.gradle.org/m2/")
+    }
+}
+
+// unfortunately automatic modules are contagious: we inherit them from lib-io
+extraJavaModuleInfo {
+    deriveAutomaticModuleNamesFromFileNames = true
 }
 
 

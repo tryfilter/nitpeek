@@ -1,11 +1,12 @@
-package nitpeek.io.docx.internal;
+package nitpeek.io.docx.internal.render;
 
 import jakarta.xml.bind.JAXBElement;
+import nitpeek.io.docx.internal.JaxbUtil;
 import org.docx4j.wml.*;
 
 import java.util.*;
 
-public final class PageInfoRenderer implements ParagraphRenderer {
+public final class PageInfoParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
     private final int pageCount;
 
@@ -15,7 +16,7 @@ public final class PageInfoRenderer implements ParagraphRenderer {
     private static final String FIELD_CODE_NAME = "instrText";
     private static final String TEXT_CODE_NAME = "t";
 
-    public PageInfoRenderer(int currentPage, int pageCount) {
+    public PageInfoParagraphRenderer(int currentPage, int pageCount) {
         this.currentPage = currentPage;
         this.pageCount = pageCount;
     }

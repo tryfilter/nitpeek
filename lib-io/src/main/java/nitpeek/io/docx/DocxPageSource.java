@@ -1,10 +1,12 @@
 package nitpeek.io.docx;
 
 import jakarta.xml.bind.JAXBException;
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
-import nitpeek.core.impl.process.StringPageSource;
-import nitpeek.io.docx.internal.DocxPageExtractor;
+import nitpeek.core.impl.process.SimplePageSource;
+import nitpeek.io.docx.internal.DefaultDocxPageExtractor;
+import nitpeek.io.docx.internal.render.HeaderFooterFootnotesDocxPageRenderer;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -36,15 +38,16 @@ public final class DocxPageSource implements PageSource {
 
     private static PageSource toMemoryPageSource(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
 
-        return new StringPageSource(extractPages(docx));
+        return new SimplePageSource(extractPages(docx));
     }
 
-    private static List<String> extractPages(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
+    private static List<TextPage> extractPages(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
 
-        var pageExtractor = new DocxPageExtractor(docx);
-        return pageExtractor.getPages();
+        var pageExtractor = new DefaultDocxPageExtractor(docx);
+        var pages = pageExtractor.extractPages();
+        var renderer = new HeaderFooterFootnotesDocxPageRenderer(docx);
+        return renderer.renderPages(pages);
     }
-
 
     @Override
     public void dischargeTo(PageConsumer consumer) {

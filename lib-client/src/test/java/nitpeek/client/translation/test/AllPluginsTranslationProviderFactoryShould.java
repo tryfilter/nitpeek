@@ -9,7 +9,6 @@ import nitpeek.core.api.translate.Translation;
 import nitpeek.core.api.translate.TranslationProvider;
 import nitpeek.core.impl.translate.CoreTranslationKeys;
 import nitpeek.core.impl.translate.CurrentDefaultLocaleProvider;
-import nitpeek.test.mockito.MockitoInitialized;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoInitialized.class)
 @ExtendWith(MockitoExtension.class)
 final class AllPluginsTranslationProviderFactoryShould {
 

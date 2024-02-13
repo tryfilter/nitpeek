@@ -2,7 +2,6 @@ module test.nitpeek.lib.core {
     requires nitpeek.lib.core;
 
     // enable tests
-    requires nitpeek.test.util;
     requires org.junit.jupiter.api;
     requires org.junit.jupiter.params;
     requires org.mockito;

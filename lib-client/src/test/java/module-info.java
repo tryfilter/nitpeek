@@ -3,7 +3,6 @@ module test.nitpeek.lib.client {
     requires nitpeek.lib.client;
 
     // enable tests
-    requires nitpeek.test.util;
     requires org.junit.jupiter.api;
     requires org.mockito;
     requires org.mockito.junit.jupiter;

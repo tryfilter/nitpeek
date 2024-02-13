@@ -1,23 +1,23 @@
 package test.nitpeek.core.impl.analyze.analyzer;
 
-import nitpeek.core.impl.analyze.analyzer.UnpairedParentheses;
 import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.impl.analyze.SimpleTextPage;
+import nitpeek.core.impl.analyze.analyzer.UnpairedParentheses;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.StandardFeature;
-import test.nitpeek.core.testutil.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import test.nitpeek.core.testutil.TestUtil;
 
 import java.util.List;
 
-import static test.nitpeek.core.testutil.FeatureAssert.assertEquivalentFeatures;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static test.nitpeek.core.testutil.FeatureAssert.assertEquivalentFeatures;
 
 final class UnpairedParenthesesShould {
 

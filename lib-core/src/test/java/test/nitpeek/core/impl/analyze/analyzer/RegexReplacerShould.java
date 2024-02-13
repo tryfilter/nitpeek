@@ -1,18 +1,18 @@
 package test.nitpeek.core.impl.analyze.analyzer;
 
-import nitpeek.core.impl.analyze.analyzer.RegexReplacer;
 import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextPage;
+import nitpeek.core.impl.analyze.analyzer.RegexReplacer;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.common.StandardFeature;
 import nitpeek.core.impl.process.ListPageConsumer;
-import test.nitpeek.core.testutil.TestUtil;
-import test.nitpeek.core.testutil.pagesource.HamletAct2ExcerptEdited;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import test.nitpeek.core.testutil.TestUtil;
+import test.nitpeek.core.testutil.pagesource.HamletAct2ExcerptEdited;
 
 import java.util.List;
 import java.util.regex.Pattern;

@@ -8,8 +8,6 @@ dependencies {
     implementation(libs.apache.pdfbox)
     implementation(libs.slf4j.api)
     implementation(libs.bundles.docx4j)
-
-    testImplementation(project(":test-util"))
 }
 
 tasks.jar {

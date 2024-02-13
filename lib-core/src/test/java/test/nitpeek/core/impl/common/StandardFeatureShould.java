@@ -1,7 +1,7 @@
 package test.nitpeek.core.impl.common;
 
 import nitpeek.core.impl.common.StandardFeature;
-import nitpeek.core.impl.translate.helper.DefaultNoTranslationTranslation;
+import nitpeek.core.impl.translate.IdentityTranslation;
 import nitpeek.core.api.translate.Translation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ final class StandardFeatureShould {
     void translateUsingProvidedCustomTranslator() {
         StandardFeature feature = StandardFeature.MISSING_PAGES;
 
-        Translation customTranslation = new DefaultNoTranslationTranslation("dummy");
+        Translation customTranslation = new IdentityTranslation();
 
         Assertions.assertEquals(customTranslation.translate(MISSING_PAGES_FEATURE_NAME.key()), feature.getType().getFeatureId().getName(customTranslation));
         Assertions.assertEquals(customTranslation.translate(MISSING_PAGES_FEATURE_DESCRIPTION.key()), feature.getType().getFeatureId().getDescription(customTranslation));

@@ -5,6 +5,8 @@ plugins {
 
 dependencies {
     implementation(libs.slf4j.api)
+
+    testImplementation(project(":test-util"))
 }
 
 group = "org.example.nitpeek"

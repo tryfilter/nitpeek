@@ -1,8 +1,8 @@
 package test.nitpeek.core.impl.analyze.analyzer;
 
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.analyze.FeatureNotifier;
 import nitpeek.core.api.analyze.NotifyingAnalyzer;
-import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.analyze.analyzer.ObservableAnalyzer;
 
 import java.util.List;

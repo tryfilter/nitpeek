@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 
+@ExtendWith(nitpeek.test.mockito.MockitoInitialized.class)
 @ExtendWith(MockitoExtension.class)
 final class AllPluginsRuleSetProviderShould {
 

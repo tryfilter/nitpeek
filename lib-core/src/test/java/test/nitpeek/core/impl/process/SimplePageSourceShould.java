@@ -6,6 +6,7 @@ import nitpeek.core.impl.analyze.SimpleTextPage;
 import nitpeek.core.impl.process.ListPageConsumer;
 import nitpeek.core.impl.process.SimplePageSource;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@ExtendWith(nitpeek.test.mockito.MockitoInitialized.class)
 final class SimplePageSourceShould {
 
     private static final TextPage p1 = new SimpleTextPage("Page 1 sample content", 0);

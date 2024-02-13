@@ -16,4 +16,11 @@ module nitpeek.lib.core {
     exports nitpeek.core.impl.process;
     exports nitpeek.core.impl.report;
     exports nitpeek.core.impl.translate;
+
+    // Compiler warns that it can't find the test.nitpeek.lib.core module, but this seems like a bogus warning.
+    // Not only does the module exist, but its tests compile successfully, which they would not without the qualified exports.
+    // Probably another quirk of Gradle's module path handling.
+    // The warnings seem safe to ignore.
+    exports nitpeek.core.internal to test.nitpeek.lib.core;
+    exports nitpeek.core.impl.translate.helper to test.nitpeek.lib.core;
 }

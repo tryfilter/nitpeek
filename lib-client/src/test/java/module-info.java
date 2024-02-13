@@ -1,4 +1,4 @@
-module nitpeek.lib.client.test {
+module test.nitpeek.lib.client {
     requires nitpeek.lib.core;
     requires nitpeek.lib.client;
 

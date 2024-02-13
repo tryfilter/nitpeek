@@ -1,4 +1,4 @@
-package nitpeek.io.pdf.testutil;
+package nitpeek.io.testutil;
 
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.process.PageSource;

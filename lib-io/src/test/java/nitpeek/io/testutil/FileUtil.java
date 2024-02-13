@@ -1,4 +1,4 @@
-package nitpeek.io.pdf.testutil;
+package nitpeek.io.testutil;
 
 import java.io.IOException;
 import java.nio.file.FileSystem;

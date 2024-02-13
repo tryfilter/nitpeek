@@ -2,7 +2,7 @@ package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.process.ListPageConsumer;
-import nitpeek.io.pdf.testutil.TestFile;
+import nitpeek.io.testutil.TestFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

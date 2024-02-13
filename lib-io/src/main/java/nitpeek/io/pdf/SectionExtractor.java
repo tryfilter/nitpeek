@@ -1,4 +1,4 @@
-package nitpeek.io.pdf.internal;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 
 import static java.lang.Math.round;
 
-public final class SectionExtractor extends PDFTextStripper {
+final class SectionExtractor extends PDFTextStripper {
 
     private final Logger log = LoggerFactory.getLogger(SectionExtractor.class);
 

@@ -1,12 +1,11 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
-import nitpeek.io.docx.internal.JaxbUtil;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
 
 import java.util.List;
 
-public final class  SimpleComponentRenderer<T extends ContentAccessor> implements GenericRenderer {
+final class  SimpleComponentRenderer<T extends ContentAccessor> implements GenericRenderer {
 
     private final T component;
     private final ContentRenderer contentRenderer;

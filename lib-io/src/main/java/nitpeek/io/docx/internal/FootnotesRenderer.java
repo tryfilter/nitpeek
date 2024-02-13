@@ -1,8 +1,8 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
 import java.util.List;
 import java.util.Set;
 
-public interface FootnotesRenderer {
+interface FootnotesRenderer {
     List<String> renderFootnotes(Set<Integer> footnotesToRender);
 }

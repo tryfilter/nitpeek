@@ -1,8 +1,8 @@
-package nitpeek.io.pdf.internal;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.io.pdf.internal.SectionExtractor.Section;
+import nitpeek.io.pdf.SectionExtractor.Section;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.color.PDColor;
 import org.apache.pdfbox.pdmodel.graphics.color.PDDeviceRGB;

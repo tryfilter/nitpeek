@@ -1,9 +1,7 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.analyze.SimpleTextPage;
-import nitpeek.io.docx.internal.DocxPage;
-import nitpeek.io.docx.internal.JaxbUtil;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.*;
 

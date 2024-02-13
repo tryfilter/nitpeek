@@ -1,10 +1,9 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
 import nitpeek.core.api.common.TextPage;
-import nitpeek.io.docx.internal.DocxPage;
 
 import java.util.List;
 
-public interface DocxPageRenderer {
+interface DocxPageRenderer {
     List<TextPage> renderPages(List<DocxPage> pages);
 }

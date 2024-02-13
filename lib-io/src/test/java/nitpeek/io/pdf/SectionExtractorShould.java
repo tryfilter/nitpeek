@@ -1,4 +1,4 @@
-package nitpeek.io.pdf.internal;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.TextCoordinate;
@@ -6,9 +6,8 @@ import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.core.impl.common.AnonymousSingleComponentFeature;
 import nitpeek.core.impl.process.ListPageConsumer;
-import nitpeek.io.pdf.PdfPageSource;
-import nitpeek.io.pdf.internal.SectionExtractor.ComponentWithSections;
-import nitpeek.io.pdf.internal.SectionExtractor.Section;
+import nitpeek.io.pdf.SectionExtractor.ComponentWithSections;
+import nitpeek.io.pdf.SectionExtractor.Section;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class SectionExtractorShould {
 
-    private static final String TEST_PDF = "../TestFile.pdf";
+    private static final String TEST_PDF = "TestFile.pdf";
     private final PDDocument testPdf = getTestPdf();
 
     private final List<TextPage> pages = new ListPageConsumer(PdfPageSource.createFrom(getPdfStream())).getPages();

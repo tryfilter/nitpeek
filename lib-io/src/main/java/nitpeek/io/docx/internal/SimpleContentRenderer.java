@@ -1,11 +1,10 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
-import nitpeek.io.docx.internal.JaxbUtil;
 import org.docx4j.wml.P;
 
 import java.util.List;
 
-public final class SimpleContentRenderer implements ContentRenderer {
+final class SimpleContentRenderer implements ContentRenderer {
 
     private final ParagraphRenderer paragraphRenderer;
 

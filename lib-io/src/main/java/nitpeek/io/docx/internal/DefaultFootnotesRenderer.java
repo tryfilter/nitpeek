@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
 import org.docx4j.wml.CTFootnotes;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public final class DefaultFootnotesRenderer implements FootnotesRenderer {
+final class DefaultFootnotesRenderer implements FootnotesRenderer {
 
     private final ParagraphRenderer paragraphRenderer;
     private final CTFootnotes footnotes;

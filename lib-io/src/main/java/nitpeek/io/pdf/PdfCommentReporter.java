@@ -5,8 +5,6 @@ import nitpeek.core.api.report.Reporter;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.process.ListPageConsumer;
-import nitpeek.io.pdf.internal.AnnotationInserter;
-import nitpeek.io.pdf.internal.SectionExtractor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;

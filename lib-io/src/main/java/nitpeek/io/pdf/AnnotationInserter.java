@@ -1,16 +1,16 @@
-package nitpeek.io.pdf.internal;
+package nitpeek.io.pdf;
 
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.common.SimpleFeatureComponent;
 import nitpeek.core.impl.translate.IdentityTranslation;
-import nitpeek.io.pdf.internal.SectionExtractor.ComponentWithSections;
+import nitpeek.io.pdf.SectionExtractor.ComponentWithSections;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.IOException;
 import java.util.List;
 
-public final class AnnotationInserter {
+final class AnnotationInserter {
 
     private final Translation i18nNoop = new IdentityTranslation();
     private final PDDocument pdf;

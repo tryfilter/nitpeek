@@ -1,12 +1,11 @@
-package nitpeek.io.docx.internal.render;
+package nitpeek.io.docx.internal;
 
 import jakarta.xml.bind.JAXBElement;
-import nitpeek.io.docx.internal.JaxbUtil;
 import org.docx4j.wml.*;
 
 import java.util.*;
 
-public final class PageInfoParagraphRenderer implements ParagraphRenderer {
+final class PageInfoParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
     private final int pageCount;
 

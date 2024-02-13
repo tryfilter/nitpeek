@@ -6,7 +6,7 @@ import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
 import nitpeek.core.impl.process.SimplePageSource;
 import nitpeek.io.docx.internal.DefaultDocxPageExtractor;
-import nitpeek.io.docx.internal.render.HeaderFooterFootnotesDocxPageRenderer;
+import nitpeek.io.docx.internal.HeaderFooterFootnotesDocxPageRenderer;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;

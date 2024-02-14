@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal;
+package nitpeek.io.docx.internal.pagesource;
 
 import java.util.List;
 

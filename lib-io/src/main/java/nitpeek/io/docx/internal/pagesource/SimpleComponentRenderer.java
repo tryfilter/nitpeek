@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal;
+package nitpeek.io.docx.internal.pagesource;
 
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;

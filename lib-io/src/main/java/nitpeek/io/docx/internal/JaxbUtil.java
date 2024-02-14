@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // These helper methods feel a bit hacky, but they are quite convenient.
-public final class JaxbUtil {
+final class JaxbUtil {
     private JaxbUtil() {}
 
     public static List<JAXBElement<?>> keepJaxbElements(List<Object> objects) {

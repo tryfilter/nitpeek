@@ -38,7 +38,7 @@ final class DefaultFootnotesRenderer implements FootnotesRenderer {
             List<String> paragraphs = contentRenderer.renderParagraphs(footnote.getContent());
             if (paragraphs.isEmpty()) continue;
 
-            result.add(footnote.getId() + " " + paragraphs.getFirst());
+            result.add(footnote.getId() + paragraphs.getFirst());
             result.addAll(paragraphs.subList(1, paragraphs.size()));
         }
 

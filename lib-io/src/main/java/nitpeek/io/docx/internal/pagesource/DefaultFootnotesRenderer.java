@@ -16,12 +16,15 @@ final class DefaultFootnotesRenderer implements FootnotesRenderer {
         this.footnotes = footnotes;
     }
 
+    /**
+     * @return an unmodifiable copy
+     */
     @Override
     public List<String> renderFootnotes(Set<Integer> footnotesToRender) {
         if (footnotes == null) return List.of();
         var relevantFootnotes = footnotes.getFootnote()
                 .stream()
-                .filter(f -> f.getType() == null) // Word ads some meta-elements among the footnotes; "real" footnotes don't have a Type
+                .filter(f -> f.getType() == null) // Word adds some meta-elements among the footnotes; "real" footnotes don't have a Type
                 .filter(f -> footnotesToRender.contains(f.getId().intValue()))
                 .toList();
 
@@ -31,12 +34,14 @@ final class DefaultFootnotesRenderer implements FootnotesRenderer {
         var result = new ArrayList<String>(relevantFootnotes.size());
 
         for (var footnote : relevantFootnotes) {
-            // Generally there should only be one paragraph per footnote. If not, we separate the paragraphs belonging to
-            // the same footnote by space.
-            var footnoteContents = String.join(" ", contentRenderer.renderParagraphs(footnote.getContent()));
-            result.add(footnote.getId() + " " + footnoteContents);
+
+            List<String> paragraphs = contentRenderer.renderParagraphs(footnote.getContent());
+            if (paragraphs.isEmpty()) continue;
+
+            result.add(footnote.getId() + " " + paragraphs.getFirst());
+            result.addAll(paragraphs.subList(1, paragraphs.size()));
         }
 
-        return result;
+        return List.copyOf(result);
     }
 }

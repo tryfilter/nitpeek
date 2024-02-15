@@ -24,7 +24,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     private final List<String> currentPageLines = new ArrayList<>();
 
     /**
-     * @return unmodifiable copy
+     * @return an unmodifiable copy
      */
     @Override
     public List<DocxPage> extractPages() {

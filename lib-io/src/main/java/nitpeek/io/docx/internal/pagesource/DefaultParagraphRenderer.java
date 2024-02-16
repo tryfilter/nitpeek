@@ -5,7 +5,10 @@ import org.docx4j.wml.*;
 
 import java.util.*;
 
-final class PageInfoParagraphRenderer implements ParagraphRenderer {
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+final class DefaultParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
     private final int pageCount;
 
@@ -15,21 +18,56 @@ final class PageInfoParagraphRenderer implements ParagraphRenderer {
     private static final String FIELD_CODE_NAME = "instrText";
     private static final String TEXT_CODE_NAME = "t";
 
-    public PageInfoParagraphRenderer(int currentPage, int pageCount) {
+    public DefaultParagraphRenderer(int currentPage, int pageCount) {
         this.currentPage = currentPage;
         this.pageCount = pageCount;
     }
 
     @Override
     public String render(P paragraph) {
+        return renderRuns(DocxUtil.getRuns(paragraph));
+    }
+
+    @Override
+    public String renderFrom(int firstRun, P paragraph) {
+        var relevantRuns = subListFromInclusive(DocxUtil.getRuns(paragraph), firstRun);
+        return renderRuns(relevantRuns);
+    }
+
+    @Override
+    public String renderTo(int lastRun, P paragraph) {
+        var relevantRuns = subListToInclusive(DocxUtil.getRuns(paragraph), lastRun);
+        return renderRuns(relevantRuns);
+    }
+
+    @Override
+    public String renderBetween(int firstRun, int lastRun, P paragraph) {
+        var allRuns = DocxUtil.getRuns(paragraph);
+        return renderRuns(allRuns.subList(firstRun, lastRun + 1));
+    }
+
+    private <T> List<T> subListFromInclusive(List<T> elements, int firstIndex) {
+        return subList(elements, firstIndex, elements.size() - 1);
+    }
+
+    private <T> List<T> subListToInclusive(List<T> elements, int lastIndex) {
+        return subList(elements, 0, lastIndex);
+    }
+
+    private <T> List<T> subList(List<T> elements, int firstIndex, int lastIndex) {
+        if (firstIndex > lastIndex || lastIndex < 0 || firstIndex >= elements.size()) return List.of();
+        int startIndex = max(0, firstIndex);
+        int endIndex = min(elements.size(), lastIndex + 1);
+        return elements.subList(startIndex, endIndex);
+    }
+
+    private String renderRuns(List<R> runs) {
         inComplexField = false;
         result = new StringBuilder();
-        var runs = paragraph.getContent().stream().filter(R.class::isInstance).map(R.class::cast).toList();
 
         for (var run : runs) {
             applyContents(getContent(run));
         }
-
         return result.toString();
     }
 
@@ -43,6 +81,7 @@ final class PageInfoParagraphRenderer implements ParagraphRenderer {
         switch (element.getValue()) {
             case Text text -> applyText(text, element);
             case FldChar fldChar when isProcessingSwitch(fldChar) -> inComplexField = !inComplexField;
+            case CTFtnEdnRef footnote -> result.append(footnote.getId().intValue());
             default -> {
                 // not implemented
             }
@@ -69,6 +108,6 @@ final class PageInfoParagraphRenderer implements ParagraphRenderer {
     }
 
     private List<JAXBElement<?>> getContent(R run) {
-        return JaxbUtil.keepJaxbElements(run.getContent());
+        return DocxUtil.keepJaxbElements(run.getContent());
     }
 }

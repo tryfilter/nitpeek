@@ -5,23 +5,20 @@ import jakarta.xml.bind.JAXBException;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.CTFtnEdnRef;
-import org.docx4j.wml.P;
-import org.docx4j.wml.R;
-import org.docx4j.wml.Text;
+import org.docx4j.wml.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.math.BigInteger;
+import java.util.*;
 
 public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final MainDocumentPart document;
+    private final WordprocessingMLPackage docx;
     private final List<DocxPage> pages = new ArrayList<>();
 
     private final Set<Integer> currentPageFootnotes = new HashSet<>();
-    private final List<String> currentPageLines = new ArrayList<>();
+    private int firstRunCurrentParagraph = 0;
+    private final List<P> currentPageParagraphs = new ArrayList<>();
 
     /**
      * @return an unmodifiable copy
@@ -32,79 +29,110 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     }
 
     public DefaultDocxPageExtractor(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
+        this.docx = docx;
         this.document = docx.getMainDocumentPart();
         collectPages();
     }
 
     private void collectPages() throws JAXBException, XPathBinderAssociationIsPartialException {
-        var paragraphs = getParagraphs();
+        var paragraphs = getBodyParagraphs();
         collectPagesFromParagraphs(paragraphs);
     }
 
-    private List<P> getParagraphs() throws JAXBException, XPathBinderAssociationIsPartialException {
+    private List<P> getBodyParagraphs() throws JAXBException, XPathBinderAssociationIsPartialException {
         var paragraphs = document.getJAXBNodesViaXPath("//w:p", false);
-        return JaxbUtil.keepElementsOfType(paragraphs, P.class);
+        return DocxUtil.keepElementsOfType(paragraphs, P.class);
     }
 
     private void collectPagesFromParagraphs(List<P> paragraphs) throws JAXBException, XPathBinderAssociationIsPartialException {
-        var currentLine = new StringBuilder();
         for (P p : paragraphs) {
-            currentLine = appendParagraph(currentLine, p);
+            appendParagraph(p);
         }
 
         // Add last page
-        if (!currentPageLines.isEmpty()) finishPageAndReturnNext(currentLine);
+        if (!currentPageParagraphs.isEmpty()) finishCurrentPage();
     }
 
-    private StringBuilder appendParagraph(StringBuilder currentLine, P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
+    private void appendParagraph(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
         if (isParagraphOnNewPage(paragraph)) {
-            currentLine = finishPageAndReturnNext(currentLine);
+            finishCurrentPage();
         }
-        currentLine = appendAndSplitIfNecessary(currentLine, paragraph);
-        if (!currentLine.isEmpty()) {
-            currentPageLines.add(currentLine.toString());
-            currentLine = new StringBuilder();
-        }
-
-        return currentLine;
+        processAndSplitIfNecessary(paragraph);
     }
 
     private boolean isParagraphOnNewPage(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
         return !document.getJAXBNodesViaXPath("w:pPr[w:pageBreakBefore]", paragraph, false).isEmpty();
     }
 
-    private StringBuilder finishPageAndReturnNext(StringBuilder line) {
+    private void processAndSplitIfNecessary(P currentParagraph) {
 
-        if (!line.isEmpty()) currentPageLines.add(line.toString());
-
-        pages.add(new DocxPage(currentPageLines, currentPageFootnotes));
-        currentPageLines.clear();
-        currentPageFootnotes.clear();
-        return new StringBuilder();
-    }
-
-    private StringBuilder appendAndSplitIfNecessary(StringBuilder currentLine, P currentParagraph) throws JAXBException, XPathBinderAssociationIsPartialException {
-        var relevantElements = getRelevantElements(currentParagraph);
-
-        for (var element : relevantElements) {
-            var content = element.getValue();
-
-            switch (content) {
-                case Text text -> currentLine.append(text.getValue());
-                case CTFtnEdnRef footnoteRef -> {
-                    currentLine.append(footnoteRef.getId());
-                    currentPageFootnotes.add(footnoteRef.getId().intValue());
-                }
-                case R.LastRenderedPageBreak ignored -> currentLine = finishPageAndReturnNext(currentLine);
-
-                default -> throw new IllegalStateException("Unexpected value: " + content);
+        var runs = DocxUtil.getRuns(currentParagraph);
+        for (int i = 0; i < runs.size(); i++) {
+            var run = runs.get(i);
+            saveFootnotes(run);
+            if (isRunOnNextPage(run)) {
+                // The current paragraph is split between pages: add it to the current page too
+                currentPageParagraphs.add(currentParagraph);
+                // The current run starts on a new page. The previous run is the last run that belongs to the current page.
+                finishCurrentPageAndSplitBefore(i);
             }
         }
-        return currentLine;
+        currentPageParagraphs.add(currentParagraph);
     }
 
-    private List<JAXBElement<?>> getRelevantElements(P currentParagraph) throws JAXBException, XPathBinderAssociationIsPartialException {
-        var relevantNodes = document.getJAXBNodesViaXPath("w:r/*[self::w:t or self::w:footnoteReference or self::w:lastRenderedPageBreak]", currentParagraph, false);
-        return JaxbUtil.keepJaxbElements(relevantNodes);
+    private void finishCurrentPage() {
+
+        var previousParagraph = currentPageParagraphs.reversed().stream().findFirst();
+        var runCount = previousParagraph.map(p -> DocxUtil.getRuns(p).size()).orElse(0);
+        finishCurrentPageAndSplitBefore(runCount);
+        // The current page is being finished at a paragraph border, therefore the split needs to be undone.
+        firstRunCurrentParagraph = 0;
+    }
+
+    private void finishCurrentPageAndSplitBefore(int splitIndex) {
+
+        int currentPage = currentPageNumber();
+
+        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage).extractSegment();
+        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage).extractSegment();
+        int lastIncludedIndex = splitIndex - 1;
+        var body = new DocxSegment(currentPageParagraphs, firstRunCurrentParagraph, lastIncludedIndex);
+        var footnotes = computeFootnotes();
+        pages.add(new DocxPage(currentPage, header, body, footnotes, footer));
+        resetPageState(splitIndex);
+    }
+
+    private void resetPageState(int splitIndex) {
+        currentPageParagraphs.clear();
+        currentPageFootnotes.clear();
+        firstRunCurrentParagraph = splitIndex;
+    }
+
+    private Map<Integer, DocxSegment> computeFootnotes() {
+        var result = new HashMap<Integer, DocxSegment>();
+        for (int footnoteRef : currentPageFootnotes) {
+            var footnote = new FootnotesSegmentExtractor(docx, footnoteRef).extractSegment();
+            footnote.ifPresent(f -> result.put(footnoteRef, f));
+        }
+
+        return result;
+    }
+
+    private int currentPageNumber() {
+        return pages.size();
+    }
+
+    private void saveFootnotes(R run) {
+        var footnoteReferences = DocxUtil.keepElementsOfType(getChildren(run), CTFtnEdnRef.class);
+        currentPageFootnotes.addAll(footnoteReferences.stream().map(CTFtnEdnRef::getId).map(BigInteger::intValue).toList());
+    }
+
+    private boolean isRunOnNextPage(R run) {
+        var pageBreaks = DocxUtil.keepElementsOfType(getChildren(run), R.LastRenderedPageBreak.class);
+        return !pageBreaks.isEmpty();
+    }
+
+    private List<?> getChildren(R run) {
+        return DocxUtil.keepJaxbElements(run.getContent()).stream().map(JAXBElement::getValue).toList();
     }
 }

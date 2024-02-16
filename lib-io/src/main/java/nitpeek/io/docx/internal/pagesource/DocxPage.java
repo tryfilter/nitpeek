@@ -1,12 +1,25 @@
 package nitpeek.io.docx.internal.pagesource;
 
-import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-public record DocxPage(List<String> body, Set<Integer> footnotes) {
-
+public record DocxPage(
+        int pageIndex,
+        Optional<DocxSegment> header,
+        DocxSegment body,
+        SortedMap<Integer, DocxSegment> footnotes,
+        Optional<DocxSegment> footer) {
     public DocxPage {
-        body = List.copyOf(body);
-        footnotes = Set.copyOf(footnotes);
+        footnotes = new TreeMap<>(footnotes);
+    }
+
+    public DocxPage(int pageIndex,
+                    Optional<DocxSegment> header,
+                    DocxSegment body,
+                    Map<Integer, DocxSegment> footnotes,
+                    Optional<DocxSegment> footer) {
+        this(pageIndex, header, body, new TreeMap<>(footnotes), footer);
     }
 }

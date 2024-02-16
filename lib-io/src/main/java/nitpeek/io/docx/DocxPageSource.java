@@ -6,7 +6,7 @@ import nitpeek.core.api.process.PageConsumer;
 import nitpeek.core.api.process.PageSource;
 import nitpeek.core.impl.process.SimplePageSource;
 import nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
-import nitpeek.io.docx.internal.pagesource.HeaderFooterFootnotesDocxPageRenderer;
+import nitpeek.io.docx.internal.pagesource.DefaultDocxPageRenderer;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -45,7 +45,7 @@ public final class DocxPageSource implements PageSource {
 
         var pageExtractor = new DefaultDocxPageExtractor(docx);
         var pages = pageExtractor.extractPages();
-        var renderer = new HeaderFooterFootnotesDocxPageRenderer(docx);
+        var renderer = new DefaultDocxPageRenderer();
         return renderer.renderPages(pages);
     }
 

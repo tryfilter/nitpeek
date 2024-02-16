@@ -4,13 +4,15 @@ import jakarta.xml.bind.JAXBElement;
 import org.docx4j.openpackaging.parts.JaxbXmlPart;
 import org.docx4j.openpackaging.parts.Part;
 import org.docx4j.openpackaging.parts.relationships.RelationshipsPart;
+import org.docx4j.wml.P;
+import org.docx4j.wml.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 // These helper methods feel a bit hacky, but they are quite convenient.
-final class JaxbUtil {
-    private JaxbUtil() {}
+final class DocxUtil {
+    private DocxUtil() {}
 
     public static List<JAXBElement<?>> keepJaxbElements(List<Object> objects) {
         var result = new ArrayList<JAXBElement<?>>();
@@ -38,5 +40,9 @@ final class JaxbUtil {
             if (part instanceof JaxbXmlPart<?> jaxb) result.add(jaxb);
         }
         return result;
+    }
+
+    public static List<R> getRuns(P paragraph) {
+        return keepElementsOfType(paragraph.getContent(), R.class);
     }
 }

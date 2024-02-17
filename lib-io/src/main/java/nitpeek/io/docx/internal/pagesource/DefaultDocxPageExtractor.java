@@ -14,11 +14,12 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final MainDocumentPart document;
     private final WordprocessingMLPackage docx;
-    private final List<DocxPage> pages = new ArrayList<>();
 
     private final Set<Integer> currentPageFootnotes = new HashSet<>();
-    private int firstRunCurrentParagraph = 0;
     private final List<P> currentPageParagraphs = new ArrayList<>();
+    private int firstRunCurrentParagraph = 0;
+
+    private final List<DocxPage> pages = new ArrayList<>();
 
     /**
      * @return an unmodifiable copy
@@ -54,9 +55,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     }
 
     private void appendParagraph(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
-        if (isParagraphOnNewPage(paragraph)) {
-            finishCurrentPage();
-        }
+        if (isParagraphOnNewPage(paragraph)) finishCurrentPage();
         processAndSplitIfNecessary(paragraph);
     }
 
@@ -102,6 +101,10 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         resetPageState(splitIndex);
     }
 
+    private int currentPageNumber() {
+        return pages.size();
+    }
+
     private void resetPageState(int splitIndex) {
         currentPageParagraphs.clear();
         currentPageFootnotes.clear();
@@ -116,10 +119,6 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         }
 
         return result;
-    }
-
-    private int currentPageNumber() {
-        return pages.size();
     }
 
     private void saveFootnotes(R run) {

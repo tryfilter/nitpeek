@@ -10,6 +10,9 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
 
     private List<DocxPage> pages = List.of();
 
+    /**
+     * @return an unmodifiable list
+     */
     @Override
     public List<TextPage> renderPages(List<DocxPage> pages) {
         this.pages = List.copyOf(pages);
@@ -19,7 +22,7 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
             result.add(renderPage(pages.get(i), i));
         }
 
-        return result;
+        return List.copyOf(result);
     }
 
     private TextPage renderPage(DocxPage page, int pageIndex) {
@@ -49,7 +52,7 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
             if (lines.isEmpty()) continue;
 
             // Insert footnote number, since it is not present as text in the footnote paragraphs
-            lines.set(0, footnoteReference + lines.getFirst());
+            lines.set(0, footnoteReference + lines.get(0));
             result.addAll(lines);
         }
         return result;

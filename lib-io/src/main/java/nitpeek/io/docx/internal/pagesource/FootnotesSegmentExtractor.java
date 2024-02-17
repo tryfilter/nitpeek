@@ -32,6 +32,5 @@ final class FootnotesSegmentExtractor implements DocxSegmentExtractor {
         var paragraphs = DocxUtil.keepElementsOfType(footnote.map(CTFtnEdn::getContent).orElse(List.of()), P.class);
 
         return Optional.of(new DocxSegment(paragraphs));
-
     }
 }

@@ -5,8 +5,9 @@ import org.docx4j.wml.*;
 
 import java.util.*;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static nitpeek.util.collection.SafeSublist.subListFrom;
+import static nitpeek.util.collection.SafeSublist.subListTo;
+
 
 final class DefaultParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
@@ -30,13 +31,13 @@ final class DefaultParagraphRenderer implements ParagraphRenderer {
 
     @Override
     public String renderFrom(int firstRun, P paragraph) {
-        var relevantRuns = subListFromInclusive(DocxUtil.getRuns(paragraph), firstRun);
+        var relevantRuns = subListFrom(DocxUtil.getRuns(paragraph), firstRun);
         return renderRuns(relevantRuns);
     }
 
     @Override
     public String renderTo(int lastRun, P paragraph) {
-        var relevantRuns = subListToInclusive(DocxUtil.getRuns(paragraph), lastRun);
+        var relevantRuns = subListTo(DocxUtil.getRuns(paragraph), lastRun);
         return renderRuns(relevantRuns);
     }
 
@@ -44,21 +45,6 @@ final class DefaultParagraphRenderer implements ParagraphRenderer {
     public String renderBetween(int firstRun, int lastRun, P paragraph) {
         var allRuns = DocxUtil.getRuns(paragraph);
         return renderRuns(allRuns.subList(firstRun, lastRun + 1));
-    }
-
-    private <T> List<T> subListFromInclusive(List<T> elements, int firstIndex) {
-        return subList(elements, firstIndex, elements.size() - 1);
-    }
-
-    private <T> List<T> subListToInclusive(List<T> elements, int lastIndex) {
-        return subList(elements, 0, lastIndex);
-    }
-
-    private <T> List<T> subList(List<T> elements, int firstIndex, int lastIndex) {
-        if (firstIndex > lastIndex || lastIndex < 0 || firstIndex >= elements.size()) return List.of();
-        int startIndex = max(0, firstIndex);
-        int endIndex = min(elements.size(), lastIndex + 1);
-        return elements.subList(startIndex, endIndex);
     }
 
     private String renderRuns(List<R> runs) {

@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(project(":lib-core"))
+    implementation(project(":lib-collection-util"))
     implementation(libs.apache.pdfbox)
     implementation(libs.slf4j.api)
     implementation(libs.bundles.docx4j)

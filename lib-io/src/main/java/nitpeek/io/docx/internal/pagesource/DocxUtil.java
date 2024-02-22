@@ -11,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 // These helper methods feel a bit hacky, but they are quite convenient.
-final class DocxUtil {
-    private DocxUtil() {}
+public final class DocxUtil {
+    private DocxUtil() {
+    }
 
     public static List<JAXBElement<?>> keepJaxbElements(List<Object> objects) {
         var result = new ArrayList<JAXBElement<?>>();
@@ -44,5 +45,28 @@ final class DocxUtil {
 
     public static List<R> getRuns(P paragraph) {
         return keepElementsOfType(paragraph.getContent(), R.class);
+    }
+
+    public static List<P> getAllParagraphs(List<Object> paragraphs) {
+        return DocxUtil.keepElementsOfType(paragraphs, P.class);
+    }
+
+    public static List<P> getNonEmptyParagraphs(List<Object> paragraphs) {
+        return getAllParagraphs(paragraphs).stream().filter(p -> !DocxUtil.isEmpty(p)).toList();
+    }
+
+    public static boolean isEmpty(P paragraph) {
+        return DocxUtil.getRuns(paragraph).isEmpty();
+    }
+
+    public static int getIndexOfLastRun(List<P> paragraphs) {
+        if (paragraphs.isEmpty()) return -1;
+        var lastParagraph = paragraphs.getLast();
+        return getIndexOfLastRun(lastParagraph);
+    }
+
+    public static int getIndexOfLastRun(P paragraph) {
+        var runs = getRuns(paragraph);
+        return runs.size() - 1;
     }
 }

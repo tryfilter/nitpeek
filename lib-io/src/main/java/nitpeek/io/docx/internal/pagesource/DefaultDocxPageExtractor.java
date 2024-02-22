@@ -2,6 +2,7 @@ package nitpeek.io.docx.internal.pagesource;
 
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
+import nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -19,13 +20,13 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     private final List<P> currentPageParagraphs = new ArrayList<>();
     private int firstRunCurrentParagraph = 0;
 
-    private final List<DocxPage> pages = new ArrayList<>();
+    private final List<SegmentedDocxPage> pages = new ArrayList<>();
 
     /**
      * @return an unmodifiable copy
      */
     @Override
-    public List<DocxPage> extractPages() {
+    public List<SegmentedDocxPage> extractPages() {
         return List.copyOf(pages);
     }
 
@@ -42,7 +43,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private List<P> getBodyParagraphs() throws JAXBException, XPathBinderAssociationIsPartialException {
         var paragraphs = document.getJAXBNodesViaXPath("//w:p", false);
-        return DocxUtil.keepElementsOfType(paragraphs, P.class);
+        return DocxUtil.getAllParagraphs(paragraphs);
     }
 
     private void collectPagesFromParagraphs(List<P> paragraphs) throws JAXBException, XPathBinderAssociationIsPartialException {
@@ -71,12 +72,17 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
             saveFootnotes(run);
             if (isRunOnNextPage(run)) {
                 // The current paragraph is split between pages: add it to the current page too
-                currentPageParagraphs.add(currentParagraph);
+                addParagraphIfNotEmpty(currentParagraph);
                 // The current run starts on a new page. The previous run is the last run that belongs to the current page.
                 finishCurrentPageAndSplitBefore(i);
             }
         }
-        currentPageParagraphs.add(currentParagraph);
+        addParagraphIfNotEmpty(currentParagraph);
+    }
+
+    private void addParagraphIfNotEmpty(P paragraph) {
+        if (DocxUtil.isEmpty(paragraph)) return;
+        currentPageParagraphs.add(paragraph);
     }
 
     private void finishCurrentPage() {
@@ -92,12 +98,12 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
         int currentPage = currentPageNumber();
 
-        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage).extractSegment();
-        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage).extractSegment();
+        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage).extractSegment().orElse(null);
+        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage).extractSegment().orElse(null);
         int lastIncludedIndex = splitIndex - 1;
         var body = new DocxSegment(currentPageParagraphs, firstRunCurrentParagraph, lastIncludedIndex);
         var footnotes = computeFootnotes();
-        pages.add(new DocxPage(currentPage, header, body, footnotes, footer));
+        pages.add(new DefaultDocxPage(header, body, footnotes, footer));
         resetPageState(splitIndex);
     }
 

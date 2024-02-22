@@ -14,7 +14,7 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
      * @return an unmodifiable list
      */
     @Override
-    public List<TextPage> renderPages(List<DocxPage> pages) {
+    public List<TextPage> renderPages(List<? extends DocxPage> pages) {
         this.pages = List.copyOf(pages);
         var result = new ArrayList<TextPage>(pages.size());
 
@@ -28,10 +28,10 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
     private TextPage renderPage(DocxPage page, int pageIndex) {
         var segmentRenderer = new DefaultSegmentRenderer(getParagraphRenderer(pageIndex));
 
-        var header = renderSegment(page.header(), segmentRenderer);
-        var footer = renderSegment(page.footer(), segmentRenderer);
-        var footnotes = renderFootnotes(page.footnotes(), segmentRenderer);
-        var body = segmentRenderer.render(page.body());
+        var header = renderSegment(page.getHeader(), segmentRenderer);
+        var footer = renderSegment(page.getFooter(), segmentRenderer);
+        var footnotes = renderFootnotes(page.getFootnotes(), segmentRenderer);
+        var body = segmentRenderer.render(page.getBody());
 
         var fullPage = Stream.of(header, body, footnotes, footer).flatMap(Collection::stream).toList();
 

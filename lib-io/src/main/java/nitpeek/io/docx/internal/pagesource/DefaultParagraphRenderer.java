@@ -9,7 +9,7 @@ import static nitpeek.util.collection.SafeSublist.subListFrom;
 import static nitpeek.util.collection.SafeSublist.subListTo;
 
 
-final class DefaultParagraphRenderer implements ParagraphRenderer {
+public final class DefaultParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
     private final int pageCount;
 

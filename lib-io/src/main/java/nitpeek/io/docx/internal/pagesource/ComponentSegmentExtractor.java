@@ -2,7 +2,6 @@ package nitpeek.io.docx.internal.pagesource;
 
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
-import org.docx4j.wml.P;
 
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ final class ComponentSegmentExtractor<T extends ContentAccessor> implements Docx
     public Optional<DocxSegment> extractSegment() {
 
         if (component == null) return Optional.empty();
-        return Optional.of(new DocxSegment(DocxUtil.keepElementsOfType(component.getContent(), P.class)));
+        return Optional.of(new DocxSegment(DocxUtil.getNonEmptyParagraphs(component.getContent())));
     }
 
 }

@@ -4,9 +4,8 @@ import org.docx4j.wml.P;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-final class DefaultSegmentRenderer implements SegmentRenderer {
+public final class DefaultSegmentRenderer implements SegmentRenderer {
 
     private final ParagraphRenderer paragraphRenderer;
 
@@ -26,27 +25,29 @@ final class DefaultSegmentRenderer implements SegmentRenderer {
         var firstParagraph = paragraphs.getFirst();
         var lastParagraph = paragraphs.getLast();
         if (firstParagraph == lastParagraph)
-            return nonEmpty(renderParagraph(firstParagraph, segment.indexOfFirstRun(), segment.indexOfLastRun()));
+            return new ArrayList<>(renderParagraph(firstParagraph, segment.indexOfFirstRun(), segment.indexOfLastRun()));
 
         var result = new ArrayList<String>(paragraphs.size());
-        result.addAll(nonEmpty(renderParagraph(firstParagraph, segment.indexOfFirstRun(), null)));
-        result.addAll(nonEmpty(renderFull(getMiddleParagraphs(paragraphs))));
-        result.addAll(nonEmpty(renderParagraph(lastParagraph, null, segment.indexOfLastRun())));
+        result.addAll(renderParagraph(firstParagraph, segment.indexOfFirstRun(), null));
+        result.addAll(renderFull(getMiddleParagraphs(paragraphs)));
+        result.addAll(renderParagraph(lastParagraph, null, segment.indexOfLastRun()));
 
         return result;
     }
 
-    private List<String> nonEmpty(List<String> lines) {
-        // We want the returned list to be modifiable, so we collect it into an ArrayList
-        return lines.stream().filter(line -> !line.isEmpty()).collect(Collectors.toCollection(ArrayList::new));
-    }
-
 
     private List<String> renderParagraph(P paragraph, Integer first, Integer last) {
+        if (emptyRange(first, last, DocxUtil.getRuns(paragraph).size())) return List.of();
         if (first != null && last != null) return List.of(paragraphRenderer.renderBetween(first, last, paragraph));
         if (first != null) return List.of(paragraphRenderer.renderFrom(first, paragraph));
         if (last != null) return List.of(paragraphRenderer.renderTo(last, paragraph));
         return List.of(paragraphRenderer.render(paragraph));
+    }
+
+    private boolean emptyRange(Integer first, Integer last, int size) {
+        if (first != null && first >= size) return true;
+        if (last != null && last < 0) return true;
+        return first != null && last != null && first > last;
     }
 
     private List<String> renderFull(List<P> paragraphs) {

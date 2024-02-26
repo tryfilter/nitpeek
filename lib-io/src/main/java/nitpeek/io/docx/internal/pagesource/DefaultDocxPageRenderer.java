@@ -46,13 +46,9 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
         var result = new ArrayList<String>(footnotes.size());
 
         for (var footnoteKeyValuePair : footnotes.entrySet()) {
-            int footnoteReference = footnoteKeyValuePair.getKey();
             var footnoteSegment = footnoteKeyValuePair.getValue();
             List<String> lines = renderer.render(footnoteSegment);
             if (lines.isEmpty()) continue;
-
-            // Insert footnote number, since it is not present as text in the footnote paragraphs
-            lines.set(0, footnoteReference + lines.get(0));
             result.addAll(lines);
         }
         return result;

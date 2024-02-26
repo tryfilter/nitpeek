@@ -8,6 +8,14 @@ import java.util.*;
 import static nitpeek.util.collection.SafeSublist.subListFrom;
 import static nitpeek.util.collection.SafeSublist.subListTo;
 
+/**
+ * This is a simplified implementation:
+ * It assumes standard arabic numbering (1, 2, 3, ...) for both the current page and footnote references.
+ * Additionally, it assumes that the id of the footnote corresponds to the actual ordinal value of the footnote
+ * (e.g. footnote with id=2 is the second footnote) even though this is not guaranteed by the spec.
+ *
+ * It is not section-aware, i.e. it treats all footnotes as belonging to the same section (the entire document).
+ */
 
 public final class DefaultParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
@@ -68,10 +76,20 @@ public final class DefaultParagraphRenderer implements ParagraphRenderer {
             case Text text -> applyText(text, element);
             case FldChar fldChar when isProcessingSwitch(fldChar) -> inComplexField = !inComplexField;
             case CTFtnEdnRef footnote -> result.append(footnote.getId().intValue());
+            case R.FootnoteRef footnoteRef -> result.append(getFootnoteReference(footnoteRef));
             default -> {
                 // not implemented
             }
         }
+    }
+
+    private String getFootnoteReference(R.FootnoteRef reference) {
+        if (reference.getParent() instanceof R run
+                && run.getParent() instanceof P paragraph
+                && paragraph.getParent() instanceof CTFtnEdn footnote) {
+            return String.valueOf(footnote.getId().intValue());
+        }
+        return "";
     }
 
     private boolean isProcessingSwitch(FldChar fldChar) {

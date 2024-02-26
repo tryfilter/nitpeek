@@ -48,16 +48,16 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
         for (var footnoteKeyValuePair : footnotes.entrySet()) {
             var footnoteSegment = footnoteKeyValuePair.getValue();
             List<String> lines = renderer.render(footnoteSegment);
-            if (lines.isEmpty()) continue;
-            result.addAll(lines);
+            if (!lines.isEmpty()) result.addAll(lines);
         }
         return result;
     }
 
     private ParagraphRenderer getParagraphRenderer(int pageIndex) {
-        return new DefaultParagraphRenderer(
-                pageIndex + 1, // pageIndex is 0-based
-                pages.size()
+        return new SimpleParagraphRenderer(
+                pageIndex,
+                pages.size(),
+                new SimpleArabicNumberRenderer()
         );
     }
 }

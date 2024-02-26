@@ -10,14 +10,13 @@ import static nitpeek.util.collection.SafeSublist.subListTo;
 
 /**
  * This is a simplified implementation:
- * It assumes standard arabic numbering (1, 2, 3, ...) for both the current page and footnote references.
- * Additionally, it assumes that the id of the footnote corresponds to the actual ordinal value of the footnote
+ * It assumes that the id of the footnote corresponds to the actual ordinal value of the footnote
  * (e.g. footnote with id=2 is the second footnote) even though this is not guaranteed by the spec.
- *
+ * <br>
  * It is not section-aware, i.e. it treats all footnotes as belonging to the same section (the entire document).
  */
 
-public final class DefaultParagraphRenderer implements ParagraphRenderer {
+public final class SimpleParagraphRenderer implements ParagraphRenderer {
     private final int currentPage;
     private final int pageCount;
 
@@ -27,9 +26,18 @@ public final class DefaultParagraphRenderer implements ParagraphRenderer {
     private static final String FIELD_CODE_NAME = "instrText";
     private static final String TEXT_CODE_NAME = "t";
 
-    public DefaultParagraphRenderer(int currentPage, int pageCount) {
+    private final NumberRenderer numberRenderer;
+
+    /**
+     *
+     * @param currentPage the index of the current page, 0-based
+     * @param pageCount the total number of pages in the document
+     * @param numberRenderer a renderer for rendering footnotes and page numbers
+     */
+    public SimpleParagraphRenderer(int currentPage, int pageCount, NumberRenderer numberRenderer) {
         this.currentPage = currentPage;
         this.pageCount = pageCount;
+        this.numberRenderer = numberRenderer;
     }
 
     @Override
@@ -75,19 +83,19 @@ public final class DefaultParagraphRenderer implements ParagraphRenderer {
         switch (element.getValue()) {
             case Text text -> applyText(text, element);
             case FldChar fldChar when isProcessingSwitch(fldChar) -> inComplexField = !inComplexField;
-            case CTFtnEdnRef footnote -> result.append(footnote.getId().intValue());
-            case R.FootnoteRef footnoteRef -> result.append(getFootnoteReference(footnoteRef));
+            case CTFtnEdnRef footnote -> result.append(numberRenderer.renderFootnoteNumber(footnote.getId().intValue()));
+            case R.FootnoteRef footnoteRef -> result.append(renderFootnoteReference(footnoteRef));
             default -> {
                 // not implemented
             }
         }
     }
 
-    private String getFootnoteReference(R.FootnoteRef reference) {
+    private String renderFootnoteReference(R.FootnoteRef reference) {
         if (reference.getParent() instanceof R run
                 && run.getParent() instanceof P paragraph
                 && paragraph.getParent() instanceof CTFtnEdn footnote) {
-            return String.valueOf(footnote.getId().intValue());
+            return numberRenderer.renderFootnoteNumber(footnote.getId().intValue());
         }
         return "";
     }
@@ -100,8 +108,8 @@ public final class DefaultParagraphRenderer implements ParagraphRenderer {
         var elementName = parent.getName().getLocalPart();
         switch (elementName) {
             case FIELD_CODE_NAME -> {
-                if (text.getValue().contains("NUMPAGES")) result.append(pageCount);
-                else if (text.getValue().contains("PAGE")) result.append(currentPage);
+                if (text.getValue().contains("NUMPAGES")) result.append(numberRenderer.renderPageNumber(pageCount));
+                else if (text.getValue().contains("PAGE")) result.append(numberRenderer.renderPageNumber(currentPage + 1));
             }
             case TEXT_CODE_NAME -> {
                 // For some reason an instance of the last rendered value is saved in the docx, even though it is not

@@ -18,7 +18,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final Set<Integer> currentPageFootnotes = new HashSet<>();
     private final List<P> currentPageParagraphs = new ArrayList<>();
-    private int firstRunCurrentParagraph = 0;
+    private int firstRunOfFirstParagraphInCurrentParagraph = 0;
 
     private final List<SegmentedDocxPage> pages = new ArrayList<>();
 
@@ -69,20 +69,37 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         var runs = DocxUtil.getRuns(currentParagraph);
         for (int i = 0; i < runs.size(); i++) {
             var run = runs.get(i);
+            if (isRunOnNextPage(run)) startNewPageAtRun(i, currentParagraph);
             saveFootnotes(run);
-            if (isRunOnNextPage(run)) {
-                // The current paragraph is split between pages: add it to the current page too
-                addParagraphIfNotEmpty(currentParagraph);
-                // The current run starts on a new page. The previous run is the last run that belongs to the current page.
-                finishCurrentPageAndSplitBefore(i);
-            }
         }
-        addParagraphIfNotEmpty(currentParagraph);
+        addParagraphIfNotEmptyUpTo(runs.size(), currentParagraph);
     }
 
-    private void addParagraphIfNotEmpty(P paragraph) {
-        if (DocxUtil.isEmpty(paragraph)) return;
+    private void startNewPageAtRun(int runIndex, P paragraph) {
+        if (addParagraphIfNotEmptyUpTo(runIndex, paragraph))
+            // If the paragraph had renderable contents up to the split index, it has to be split
+            finishCurrentPageAndSplitBefore(runIndex);
+        else
+            // Otherwise consider the entire paragraph part of the new page
+            finishCurrentPage();
+    }
+
+    /**
+     * Because paragraphs are equivalent to lines in {@code TextCoordinate} terms, only consider a paragraph to be part
+     * of the current page if any of the runs belonging to the current page have visible contents.
+     * Otherwise, the row count of the body gets inflated from a paragraph that is not actually visible on the page.
+     *
+     * @return true if the paragraph was added (and thus was non-empty), false otherwise.
+     */
+    private boolean addParagraphIfNotEmptyUpTo(int firstExcludedRun, P paragraph) {
+        // We don't care about the actual page coordinates, we just want to check if something at all would be rendered
+        var simpleRenderer = new SimpleParagraphRenderer(0, 0, new SimpleArabicNumberRenderer());
+        // If up to the specified run nothing would get rendered, consider the paragraph empty and don't add it to the
+        // current page
+        if (simpleRenderer.renderTo(firstExcludedRun - 1, paragraph).isEmpty()) return false;
+
         currentPageParagraphs.add(paragraph);
+        return true;
     }
 
     private void finishCurrentPage() {
@@ -91,7 +108,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         var runCount = previousParagraph.map(p -> DocxUtil.getRuns(p).size()).orElse(0);
         finishCurrentPageAndSplitBefore(runCount);
         // The current page is being finished at a paragraph border, therefore the split needs to be undone.
-        firstRunCurrentParagraph = 0;
+        firstRunOfFirstParagraphInCurrentParagraph = 0;
     }
 
     private void finishCurrentPageAndSplitBefore(int splitIndex) {
@@ -101,7 +118,8 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage).extractSegment().orElse(null);
         var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage).extractSegment().orElse(null);
         int lastIncludedIndex = splitIndex - 1;
-        var body = new DocxSegment(currentPageParagraphs, firstRunCurrentParagraph, lastIncludedIndex);
+
+        var body = new DocxSegment(currentPageParagraphs, firstRunOfFirstParagraphInCurrentParagraph, lastIncludedIndex);
         var footnotes = computeFootnotes();
         pages.add(new DefaultDocxPage(header, body, footnotes, footer));
         resetPageState(splitIndex);
@@ -114,7 +132,7 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     private void resetPageState(int splitIndex) {
         currentPageParagraphs.clear();
         currentPageFootnotes.clear();
-        firstRunCurrentParagraph = splitIndex;
+        firstRunOfFirstParagraphInCurrentParagraph = splitIndex;
     }
 
     private Map<Integer, DocxSegment> computeFootnotes() {

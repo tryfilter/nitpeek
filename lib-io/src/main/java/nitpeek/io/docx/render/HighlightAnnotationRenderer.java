@@ -59,16 +59,7 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
         change.setRPr(copyOriginalProperties(runProperties));
         runProperties.setRPrChange(change);
     }
-
-    private XMLGregorianCalendar getCurrentDateTimeUtc() {
-        var nowUtc = Instant.now().atZone(ZoneOffset.UTC);
-        try {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(nowUtc.toString());
-        } catch (DatatypeConfigurationException e) {
-            return null;
-        }
-    }
-
+    
     private CTRPrChange.RPr copyOriginalProperties(RPr runProperties) {
         var properties = objectFactory.createCTRPrChangeRPr();
 

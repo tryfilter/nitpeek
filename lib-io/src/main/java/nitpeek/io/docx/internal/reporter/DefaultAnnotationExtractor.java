@@ -9,7 +9,7 @@ import nitpeek.io.docx.render.Message;
 import java.util.Collection;
 import java.util.List;
 
-final class DefaultAnnotationExtractor implements AnnotationExtractor {
+public final class DefaultAnnotationExtractor implements AnnotationExtractor {
 
     private final TextSelectionTransformer textSelectionTransformer;
     private final String author;

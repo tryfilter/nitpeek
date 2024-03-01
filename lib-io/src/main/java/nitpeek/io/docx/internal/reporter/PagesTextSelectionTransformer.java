@@ -29,12 +29,12 @@ import static java.lang.Math.min;
  * <br>
  * Note that this transformer is not section-aware, i.e. it doesn't respect multiple header/footer definitions.
  */
-final class PagesTextSelectionTransformer implements TextSelectionTransformer {
+public final class PagesTextSelectionTransformer implements TextSelectionTransformer {
 
     private final List<? extends SegmentedDocxPage> pages;
     private final BiFunction<Integer, Integer, ParagraphRenderer> paragraphRendererFactory;
 
-    PagesTextSelectionTransformer(List<? extends SegmentedDocxPage> pages, BiFunction<Integer, Integer, ParagraphRenderer> paragraphRendererFactory) {
+    public PagesTextSelectionTransformer(List<? extends SegmentedDocxPage> pages, BiFunction<Integer, Integer, ParagraphRenderer> paragraphRendererFactory) {
         this.pages = pages;
         this.paragraphRendererFactory = paragraphRendererFactory;
     }

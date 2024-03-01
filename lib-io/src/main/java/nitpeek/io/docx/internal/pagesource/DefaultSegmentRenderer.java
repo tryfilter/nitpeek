@@ -14,7 +14,7 @@ public final class DefaultSegmentRenderer implements SegmentRenderer {
     }
 
     /**
-     * @return a modifiable list
+     * @return an unmodifiable copy
      */
     @Override
     public List<String> render(DocxSegment segment) {
@@ -25,14 +25,14 @@ public final class DefaultSegmentRenderer implements SegmentRenderer {
         var firstParagraph = paragraphs.getFirst();
         var lastParagraph = paragraphs.getLast();
         if (firstParagraph == lastParagraph)
-            return new ArrayList<>(renderParagraph(firstParagraph, segment.indexOfFirstRun(), segment.indexOfLastRun()));
+            return renderParagraph(firstParagraph, segment.indexOfFirstRun(), segment.indexOfLastRun());
 
         var result = new ArrayList<String>(paragraphs.size());
         result.addAll(renderParagraph(firstParagraph, segment.indexOfFirstRun(), null));
         result.addAll(renderFull(getMiddleParagraphs(paragraphs)));
         result.addAll(renderParagraph(lastParagraph, null, segment.indexOfLastRun()));
 
-        return result;
+        return List.copyOf(result);
     }
 
 

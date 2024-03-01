@@ -1,11 +1,11 @@
-package nitpeek.io.docx.internal.reporter;
+package nitpeek.io.docx.render;
 
 import nitpeek.io.docx.internal.pagesource.DocxSegment;
 
 import java.util.List;
 
 /**
- * Represents a segment of contiguous text, with maximum percision, i.e. the extents being defined at the "character"
+ * Represents a segment of contiguous text, with maximum precision, i.e. the extents being defined at the "character"
  * granularity level.<br>
  * <br>
  * Note that the values of {@code indexOfFirstCharacter} and {@code indexOfLastCharacter} of a particular

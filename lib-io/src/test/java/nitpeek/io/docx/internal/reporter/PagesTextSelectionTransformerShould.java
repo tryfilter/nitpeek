@@ -4,6 +4,7 @@ import jakarta.xml.bind.JAXBException;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.io.docx.internal.pagesource.*;
+import nitpeek.io.docx.render.DocxTextSelection;
 import nitpeek.util.collection.ListEnds;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;

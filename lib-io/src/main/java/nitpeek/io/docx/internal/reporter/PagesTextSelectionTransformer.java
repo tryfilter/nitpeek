@@ -4,6 +4,7 @@ import nitpeek.core.api.common.TextSelection;
 import nitpeek.io.docx.internal.pagesource.DocxSegment;
 import nitpeek.io.docx.internal.pagesource.DocxUtil;
 import nitpeek.io.docx.internal.pagesource.ParagraphRenderer;
+import nitpeek.io.docx.render.DocxTextSelection;
 import nitpeek.util.collection.ListEnds;
 import nitpeek.util.collection.SafeSublist;
 import org.checkerframework.checker.nullness.qual.Nullable;

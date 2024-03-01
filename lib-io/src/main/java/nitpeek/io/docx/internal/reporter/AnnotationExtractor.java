@@ -15,5 +15,5 @@ interface AnnotationExtractor {
      * @return a list of abstract annotations corresponding to the representation of the provided {@code features} in some
      * specific context of a DOCX document
      */
-    List<RenderableAnnotation> extractAnnotations(List<Feature> features, Translation i18n);
+    List<DocxAnnotation> extractAnnotations(List<Feature> features, Translation i18n);
 }

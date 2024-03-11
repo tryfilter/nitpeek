@@ -1,5 +1,6 @@
 package nitpeek.io.docx.internal.reporter;
 
+import nitpeek.io.docx.render.CompositeRun;
 import nitpeek.io.docx.render.DocxTextSelection;
 import nitpeek.io.docx.render.Message;
 import nitpeek.io.docx.render.RenderableAnnotation;
@@ -14,5 +15,5 @@ import nitpeek.io.docx.render.RenderableAnnotation;
  * @param message       represents the text & author of the annotation
  * @param textSelection defines the selection of text in the document that the annotation pertains to
  */
-public record DocxAnnotation(Message message, DocxTextSelection textSelection) {
+public record DocxAnnotation<C extends CompositeRun>(Message message, DocxTextSelection<C> textSelection) {
 }

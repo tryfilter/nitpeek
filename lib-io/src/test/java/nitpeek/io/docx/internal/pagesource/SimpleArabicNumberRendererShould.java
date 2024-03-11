@@ -1,5 +1,7 @@
 package nitpeek.io.docx.internal.pagesource;
 
+import nitpeek.io.docx.internal.pagesource.render.NumberRenderer;
+import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

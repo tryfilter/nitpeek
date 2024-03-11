@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.pagesource;
+package nitpeek.io.docx.internal.common;
 
 import jakarta.xml.bind.JAXBElement;
 import org.docx4j.openpackaging.parts.JaxbXmlPart;
@@ -28,6 +28,11 @@ public final class DocxUtil {
 
     public static <T> List<T> keepElementsOfType(List<?> elements, Class<T> clazz) {
         return elements.stream().filter(clazz::isInstance).map(clazz::cast).toList();
+    }
+
+    public static <T> List<T> getElementValues(R run, Class<T> elementClass) {
+        var jaxbElements = DocxUtil.keepJaxbElements(run.getContent());
+        return keepElementsOfType(jaxbElements.stream().map(JAXBElement::getValue).toList(), elementClass);
     }
 
     public static <T> T getRelatedObject(RelationshipsPart r, Class<T> clazz) {

@@ -1,9 +1,10 @@
 package nitpeek.io.docx.internal.pagesource;
 
-import nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
+import nitpeek.io.docx.internal.common.SegmentedDocxPage;
+import nitpeek.io.docx.render.CompositeRun;
 
 import java.util.List;
 
 public interface DocxPageExtractor {
-    List<SegmentedDocxPage> extractPages();
+    List<SegmentedDocxPage<CompositeRun>> extractPages();
 }

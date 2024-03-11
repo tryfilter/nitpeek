@@ -1,25 +1,26 @@
 package nitpeek.io.docx.internal.reporter;
 
+import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.io.docx.internal.pagesource.DocxSegment;
-import nitpeek.io.docx.internal.pagesource.DocxUtil;
-import nitpeek.io.docx.internal.pagesource.ParagraphRenderer;
+import nitpeek.io.docx.internal.common.*;
+import nitpeek.io.docx.internal.pagesource.Partitioned;
+import nitpeek.io.docx.internal.reporter.EdgeDetector.SelectionEdge;
+import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.render.SplittableRun;
 import nitpeek.io.docx.render.DocxTextSelection;
 import nitpeek.util.collection.ListEnds;
-import nitpeek.util.collection.SafeSublist;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import java.util.stream.Stream;
 
 /**
  * This is a simplified implementation which assumes that footnotes are at the end of the page, after the body but
  * before the footer.<br>
+ * The {@code DocxTextSelection}s produced by this transformer are already splittable.
  * <br>
  * Note that for DOCX documents, cross-page selections are subtle: they only contain the contents of the body of each
  * page, skipping any footnotes and footer/header text in between.<br>
@@ -29,144 +30,106 @@ import static java.lang.Math.min;
  * <br>
  * Note that this transformer is not section-aware, i.e. it doesn't respect multiple header/footer definitions.
  */
-public final class PagesTextSelectionTransformer implements TextSelectionTransformer {
+public final class PagesTextSelectionTransformer implements TextSelectionTransformer<SplittableRun> {
 
-    private final List<? extends SegmentedDocxPage> pages;
-    private final BiFunction<Integer, Integer, ParagraphRenderer> paragraphRendererFactory;
+    private final List<Partitioned<? extends DocxSegment<? extends CompositeRun>>> pages;
+    private final BiFunction<Integer, Integer, RunRenderer> runRendererFactory;
 
-    public PagesTextSelectionTransformer(List<? extends SegmentedDocxPage> pages, BiFunction<Integer, Integer, ParagraphRenderer> paragraphRendererFactory) {
-        this.pages = pages;
-        this.paragraphRendererFactory = paragraphRendererFactory;
+    private final EdgeDetector edgeDetector = new EdgeDetector();
+    private final SplitEnabler splitEnabler;
+
+    public PagesTextSelectionTransformer(List<? extends Partitioned<? extends DocxSegment<? extends CompositeRun>>> pages, BiFunction<Integer, Integer, RunRenderer> runRendererFactory) {
+        this.pages = List.copyOf(pages);
+        this.runRendererFactory = runRendererFactory;
+        this.splitEnabler = new SplitEnabler(new DefaultRunSplitEnabler());
     }
 
     @Override
-    public DocxTextSelection transform(TextSelection textSelection) {
-        if (pages.isEmpty()) return new DocxTextSelection(List.of(), 0, 0);
+    public DocxTextSelection<SplittableRun> transform(TextSelection textSelection) {
 
-        int firstPageIndex = textSelection.fromInclusive().page();
-        int lastPageIndex = textSelection.toInclusive().page();
+        if (pages.isEmpty()) return SimpleDocxTextSelection.empty();
+        var paragraphs = computeParagraphs(textSelection);
+        return createSelection(paragraphs, textSelection);
+    }
 
-        var pagesSplit = new ListEnds<>(SafeSublist.subList(pages, firstPageIndex, lastPageIndex));
-        var firstPage = pagesSplit.first();
-        var lastPage = pagesSplit.last();
-        var middlePages = pagesSplit.middle();
+    private List<DocxParagraph<SplittableRun>> computeParagraphs(TextSelection textSelection) {
+        var selectedPages = pages.subList(textSelection.fromInclusive().page(), textSelection.toInclusive().page() + 1);
+        if (selectedPages.isEmpty()) return List.of();
+        if (selectedPages.size() == 1) return computeParagraphsFromSinglePage(textSelection, selectedPages.getFirst());
 
-        var segmentsFirst = computeFirstPageSegments(firstPage, textSelection);
-        var segmentsFromFirstPage = segmentsFirst.segments();
-        int indexOfFirstCharacter = segmentsFirst.characterIndex();
+        return computeParagraphsFromMultiplePages(textSelection, selectedPages);
+    }
 
-        var segmentsLast = computeLastPageSegments(lastPage, textSelection);
-        var segmentsFromLastPage = segmentsLast.segments();
-        int indexOfLastCharacter = segmentsLast.characterIndex();
+    private List<DocxParagraph<SplittableRun>> computeParagraphsFromSinglePage(TextSelection textSelection, Partitioned<? extends DocxSegment<? extends CompositeRun>> page) {
+        var firstPageParagraphs = page.partitionBetween(textSelection.fromInclusive().line(), textSelection.toInclusive().line());
+        return transformPage(firstPageParagraphs, 0);
+    }
 
-        var segmentsFromMiddlePages = middlePages
-                .stream()
-                .map(SegmentedDocxPage::getAllSegments)
-                .flatMap(Collection::stream)
-                .toList();
-
-        List<DocxSegment> segments = new ArrayList<>(segmentsFromFirstPage);
-        segments.addAll(segmentsFromMiddlePages);
-
-        // If the selection only spans a single page, the segments corresponding to the first and last page must be
-        // merged appropriately and common segments shall not be duplicated.
-        if (firstPageIndex == lastPageIndex) {
-            segments = mergeSegments(segments, segmentsFromLastPage);
+    private List<DocxParagraph<SplittableRun>> computeParagraphsFromMultiplePages(TextSelection textSelection, List<Partitioned<? extends DocxSegment<? extends CompositeRun>>> pages) {
+        var splittableFirstPageParagraphs = transformPage(pages.getFirst().partitionFrom(textSelection.fromInclusive().line()), 0);
+        var splittableMiddlePageParagraphs = new ArrayList<DocxParagraph<SplittableRun>>();
+        for (int i = 1; i < pages.size() - 1; i++) {
+            var page = pages.get(i);
+            splittableMiddlePageParagraphs.addAll(transformPage(page.fullPartition(), i));
         }
-        // If the selection spans 2 or more pages, only one of the edge conditions is relevant in each case:
-        // first page - all segments starting with and including selection start
-        // last page - all segments up to and including selection end
-        else {
-            segments.addAll(segmentsFromLastPage);
-        }
+        int lastPageIndex = pages.size() - 1;
+        var splittableLastPageParagraphs = transformPage(pages.getLast().partitionTo(textSelection.toInclusive().line()), lastPageIndex);
 
-        return new DocxTextSelection(segments, indexOfFirstCharacter, indexOfLastCharacter);
+        return Stream.of(splittableFirstPageParagraphs, splittableMiddlePageParagraphs, splittableLastPageParagraphs).flatMap(Collection::stream).toList();
     }
 
-    private List<DocxSegment> mergeSegments(List<DocxSegment> existingSegments, List<DocxSegment> lastPageSegments) {
-        var result = new ArrayList<DocxSegment>();
-        for (var existingSegment : existingSegments) {
-            var lastPageSegment = getMatchingSegment(existingSegment, lastPageSegments);
-            if (lastPageSegment != null) result.add(merge(existingSegment, lastPageSegment));
-        }
-        return result;
+    private List<DocxParagraph<SplittableRun>> transformPage(DocxSegment<? extends CompositeRun> pageContent, int pageIndex) {
+        var runRenderer = runRendererFactory.apply(pageIndex, pages.size());
+        return pageContent.paragraphs().stream().map(paragraph -> splitEnabler.convertParagraph(paragraph, runRenderer)).toList();
     }
 
-    private DocxSegment merge(DocxSegment a, DocxSegment b) {
-        int indexOfFirstRun = max(a.indexOfFirstRun(), b.indexOfFirstRun());
-        int indexOfLastRun = min(a.indexOfLastRun(), b.indexOfLastRun());
-        return new DocxSegment(a.paragraphs(), indexOfFirstRun, indexOfLastRun);
+    private DocxTextSelection<SplittableRun> createSelection(List<DocxParagraph<SplittableRun>> paragraphs, TextSelection textSelection) {
+        var first = computeFirstCharacterInFirstRun(textSelection);
+        var last = computeLastCharacterInLastRun(textSelection);
+        if (paragraphs.isEmpty()) return SimpleDocxTextSelection.empty();
+        if (paragraphs.size() == 1) return singleParagraphSelection(paragraphs.getFirst(), first, last);
+
+        var paragraphsSplit = new ListEnds<>(paragraphs);
+
+        var firstParagraphTransformed = paragraphsSplit.first().partitionFrom(first.runIndex());
+        var middleParagraphs = paragraphsSplit.middle();
+        var lastParagraphTransformed = paragraphsSplit.last().partitionTo(last.runIndex());
+
+        var transformedParagraphs = Stream.of(
+                List.of(firstParagraphTransformed),
+                middleParagraphs,
+                List.of(lastParagraphTransformed)
+        ).flatMap(Collection::stream).toList();
+
+        return selection(transformedParagraphs, first.characterIndexWithinRun(), last.characterIndexWithinRun());
     }
 
-    private @Nullable DocxSegment getMatchingSegment(DocxSegment segment, List<DocxSegment> searchSegments) {
-        for (var candidateSegment : searchSegments) {
-            if (candidateSegment.paragraphs().equals(segment.paragraphs())) return candidateSegment;
-        }
-        return null;
+    private DocxTextSelection<SplittableRun> singleParagraphSelection(DocxParagraph<SplittableRun> paragraph, SelectionEdge first, SelectionEdge last) {
+        var subParagraph = paragraph.partitionBetween(first.runIndex(), last.runIndex());
+        return selection(List.of(subParagraph), first.characterIndexWithinRun(), last.characterIndexWithinRun());
     }
 
-    private SegmentsWithCharacterIndex computeFirstPageSegments(SegmentedDocxPage firstPage, TextSelection textSelection) {
-        int firstParagraphIndex = textSelection.fromInclusive().line();
-        List<DocxSegment> segments = new ArrayList<>(firstPage.getSegmentsFrom(firstParagraphIndex));
-        if (segments.isEmpty()) return new SegmentsWithCharacterIndex(List.of(), 0);
-        var first = recomputeFirstSegment(segments.getFirst(), textSelection.fromInclusive().character());
-        segments.set(0, first.segment());
-        return new SegmentsWithCharacterIndex(segments, first.characterIndex());
+    DocxTextSelection<SplittableRun> selection(List<DocxParagraph<SplittableRun>> paragraphs, int firstCharacter, int lastCharacter) {
+        return new SimpleDocxTextSelection<>(new SimpleDocxSegment<>(paragraphs), firstCharacter, lastCharacter);
     }
 
-    private SegmentWithCharacterIndex recomputeFirstSegment(DocxSegment segment, int originalCharacterIndex) {
-        if (segment.paragraphs().isEmpty()) return new SegmentWithCharacterIndex(segment, originalCharacterIndex);
-
-        int remainingCharacterIndex = originalCharacterIndex;
-        var firstParagraph = segment.paragraphs().getFirst();
-        int currentRun;
-        int lastRun = DocxUtil.getIndexOfLastRun(firstParagraph);
-        for (currentRun = segment.indexOfFirstRun(); currentRun <= lastRun; currentRun++) {
-            int currentPage = 0;
-            int pageCount = pages.size();
-            var paragraphRenderer = paragraphRendererFactory.apply(currentPage, pageCount);
-            int currentRunLength = paragraphRenderer.renderBetween(currentRun, currentRun, firstParagraph).length();
-            if (currentRunLength <= remainingCharacterIndex) remainingCharacterIndex -= currentRunLength;
-            else break;
-        }
-
-        return new SegmentWithCharacterIndex(new DocxSegment(segment.paragraphs(), currentRun, segment.indexOfLastRun()), remainingCharacterIndex);
+    private SelectionEdge computeFirstCharacterInFirstRun(TextSelection textSelection) {
+        return computeCharacterAndRunCorrespondingTo(textSelection.fromInclusive());
     }
 
-    private SegmentsWithCharacterIndex computeLastPageSegments(SegmentedDocxPage lastPage, TextSelection textSelection) {
-        int lastParagraphIndex = textSelection.toInclusive().line();
-        List<DocxSegment> segments = new ArrayList<>(lastPage.getSegmentsTo(lastParagraphIndex));
-        if (segments.isEmpty()) return new SegmentsWithCharacterIndex(List.of(), 0);
-        var last = recomputeLastSegment(segments.getLast(), textSelection.toInclusive().character());
-        segments.set(segments.size() - 1, last.segment());
-        return new SegmentsWithCharacterIndex(segments, last.characterIndex());
+    private SelectionEdge computeLastCharacterInLastRun(TextSelection textSelection) {
+        return computeCharacterAndRunCorrespondingTo(textSelection.toInclusive());
     }
 
-    private SegmentWithCharacterIndex recomputeLastSegment(DocxSegment segment, int originalCharacterIndex) {
-        if (segment.paragraphs().isEmpty()) return new SegmentWithCharacterIndex(segment, originalCharacterIndex);
+    private SelectionEdge computeCharacterAndRunCorrespondingTo(TextCoordinate textCoordinate) {
+        int pageIndex = textCoordinate.page();
+        var page = pages.get(pageIndex);
+        int lineIndex = textCoordinate.line();
+        var lineParagraph = page.partitionBetween(lineIndex, lineIndex).paragraphs().getFirst();
+        int characterIndex = textCoordinate.character();
+        var runRenderer = runRendererFactory.apply(pageIndex, pages.size());
 
-        int remainingCharacterIndex = originalCharacterIndex;
-        var lastParagraph = segment.paragraphs().getLast();
-        int currentRun;
-        for (currentRun = segment.indexOfFirstRun(); currentRun <= segment.indexOfLastRun(); currentRun++) {
-            int currentPage = pages.size() - 1;
-            int pageCount = pages.size();
-            var paragraphRenderer = paragraphRendererFactory.apply(currentPage, pageCount);
-            int currentRunLength = paragraphRenderer.renderBetween(currentRun, currentRun, lastParagraph).length();
-
-            if (currentRunLength <= remainingCharacterIndex)
-                remainingCharacterIndex -= currentRunLength;
-            else
-                break;
-        }
-
-        return new SegmentWithCharacterIndex(new DocxSegment(segment.paragraphs(), segment.indexOfFirstRun(), currentRun), remainingCharacterIndex);
-    }
-
-    private record SegmentWithCharacterIndex(DocxSegment segment, int characterIndex) {
-    }
-
-    private record SegmentsWithCharacterIndex(List<DocxSegment> segments, int characterIndex) {
-
+        var runs = lineParagraph.runs();
+        return edgeDetector.computeSelectionEdge(runs, characterIndex, runRenderer);
     }
 }

@@ -1,7 +1,5 @@
 package nitpeek.io.docx.render;
 
-import nitpeek.io.docx.internal.pagesource.DocxSegment;
-
 import java.util.List;
 
 /**
@@ -9,8 +7,8 @@ import java.util.List;
  * Crucially, its extents are on run borders, meaning any manipulations can be applied directly to any of the runs that
  * are part of the annotation.
  *
- * @param message  represents the text & author of the annotation
- * @param segments the segments that make up the selection of text in the document that the annotation pertains to
+ * @param message represents the text & author of the annotation
+ * @param runs    the runs that make up the selection of text in the document that the annotation pertains to
  */
-public record RenderableAnnotation(Message message, List<DocxSegment> segments) {
+public record RenderableAnnotation(Message message, List<? extends CompositeRun> runs) {
 }

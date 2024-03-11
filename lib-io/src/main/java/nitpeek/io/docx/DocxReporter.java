@@ -6,6 +6,10 @@ import nitpeek.core.api.report.Reporter;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.io.docx.internal.pagesource.*;
+import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
+import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
+import nitpeek.io.docx.render.SplittableRun;
 import nitpeek.io.docx.internal.reporter.*;
 import nitpeek.io.docx.render.AnnotationRenderer;
 import nitpeek.io.docx.render.RenderableAnnotation;
@@ -56,21 +60,19 @@ public final class DocxReporter implements Reporter {
 
     private void addAnnotations(WordprocessingMLPackage docx, List<Feature> features, Translation i18n) throws JAXBException, XPathBinderAssociationIsPartialException {
         var pages = new DefaultDocxPageExtractor(docx).extractPages();
-        var annotationExtractor = new DefaultAnnotationExtractor(new PagesTextSelectionTransformer(pages, this::getParagraphRenderer), AUTHOR_NAME);
-        renderAnnotations(annotationExtractor.extractAnnotations(features, i18n));
+        var annotationExtractor = new DefaultAnnotationExtractor(new PagesTextSelectionTransformer(pages, this::getRunRenderer), AUTHOR_NAME);
+        var annotations = annotationExtractor.extractAnnotations(features, i18n);
+        renderAnnotations(annotations);
     }
 
-    private void renderAnnotations(List<DocxAnnotation> annotations) {
-        // hack to prevent the rendering of the current annotation to be impacted by modifications made during the
-        // rendering of previous annotations: start from the last annotation and prepare them in reverse order.
-        // assumes annotations are in encounter order in the document
-        for (var annotation : annotations.reversed()) {
-            RenderableAnnotation preparedAnnotation = annotationPreparer.prepare(annotation);
-            annotationRenderer.renderAnnotation(preparedAnnotation);
+    private void renderAnnotations(List<DocxAnnotation<SplittableRun>> annotations) {
+        var renderableAnnotations = annotations.stream().map(annotationPreparer::prepare).toList();
+        for (var annotation : renderableAnnotations.reversed()) {
+            annotationRenderer.renderAnnotation(annotation);
         }
     }
 
-    private ParagraphRenderer getParagraphRenderer(int currentPage, int pageCount) {
-        return new SimpleParagraphRenderer(currentPage, pageCount, new SimpleArabicNumberRenderer());
+    private RunRenderer getRunRenderer(int currentPage, int pageCount) {
+        return new SimpleRunRenderer(currentPage, pageCount, new SimpleArabicNumberRenderer());
     }
 }

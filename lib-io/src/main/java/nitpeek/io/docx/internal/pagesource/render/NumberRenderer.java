@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.pagesource;
+package nitpeek.io.docx.internal.pagesource.render;
 
 public interface NumberRenderer {
 

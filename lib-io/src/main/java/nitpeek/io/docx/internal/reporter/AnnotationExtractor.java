@@ -2,10 +2,11 @@ package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.io.docx.render.CompositeRun;
 
 import java.util.List;
 
-interface AnnotationExtractor {
+interface AnnotationExtractor<C extends CompositeRun> {
 
     /**
      * Extract from an underlying DOCX document annotations that correspond to the provided features
@@ -15,5 +16,5 @@ interface AnnotationExtractor {
      * @return a list of abstract annotations corresponding to the representation of the provided {@code features} in some
      * specific context of a DOCX document
      */
-    List<DocxAnnotation> extractAnnotations(List<Feature> features, Translation i18n);
+    List<DocxAnnotation<C>> extractAnnotations(List<Feature> features, Translation i18n);
 }

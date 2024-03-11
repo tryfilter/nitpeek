@@ -1,15 +1,9 @@
 package nitpeek.io.docx.render;
 
 import jakarta.xml.bind.JAXBElement;
-import nitpeek.io.docx.internal.pagesource.DocxSegment;
 import org.docx4j.XmlUtils;
 import org.docx4j.wml.*;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.List;
 
 public final class HighlightAnnotationRenderer implements AnnotationRenderer {
@@ -23,15 +17,18 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
 
     @Override
     public void renderAnnotation(RenderableAnnotation annotation) {
-        for (var segment : annotation.segments()) {
-            highlightSegment(segment, annotation.message().author() + ": " + annotation.message().messageText());
+        highlightRuns(annotation.runs(), annotation.message().author() + ": " + annotation.message().messageText());
+    }
+
+    private void highlightRuns(List<? extends CompositeRun> runs, String authorString) {
+        for (var run : runs) {
+            highlightCompositeRun(run, authorString);
         }
     }
 
-    private void highlightSegment(DocxSegment segment, String authorString) {
-        var runsToHighlight = segment.getRuns();
-        for (var run : runsToHighlight) {
-            highlightRun(run, authorString);
+    private void highlightCompositeRun(CompositeRun run, String authorString) {
+        for (R r : run.componentRuns()) {
+            highlightRun(r, authorString);
         }
     }
 

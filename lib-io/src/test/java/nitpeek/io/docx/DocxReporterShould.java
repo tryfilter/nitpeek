@@ -21,24 +21,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static nitpeek.io.docx.render.HighlightAnnotationRenderer.*;
+import static nitpeek.io.docx.render.HighlightAnnotationRenderer.HighlightColor;
 
-@Disabled("Time consuming test, that needs to be verified manually. Unfortunately it doesn't even work as a" +
+@Disabled("Time consuming test, that needs to be verified manually. Unfortunately it doesn't even work as a " +
         "regression detector since it modifies the files even if there is no change in behavior")
 final class DocxReporterShould {
     private static final String REPLACE = "Better Value";
 
-    private static RuleSetProvider getRuleSetProvider(String toReplace, String replaceWith) {
+    private static RuleSetProvider getRuleSetProvider(List<String> toReplace, String replaceWith) {
         var ruleId = new SimpleIdentifier("test", "Test", "testing");
         var ruleSetId = new SimpleIdentifier("test", "Test", "testing");
         return new SimpleRuleSetProvider(
-                Set.of(new SimpleRule(
+                toReplace.stream().map(replace -> new SimpleRule(
                         () -> ruleId,
-                        () -> new CrossLineCrossPageAnalyzer(new RegexReplacer(Pattern.compile(toReplace), replaceWith))
-                )),
+                        () -> new CrossLineCrossPageAnalyzer(new RegexReplacer(Pattern.compile(replace), replaceWith))
+                )).collect(Collectors.toUnmodifiableSet()),
                 ruleSetId);
     }
 
@@ -79,8 +80,7 @@ final class DocxReporterShould {
         insertHighlightAnnotationsForSearchTerm("me simple te", "#CrossWordBoundary");
     }
 
-    // Fails to highlight the 2 in "Page 2/3" on the footer of the second page
-    // This appears to be a limitation of Word.
+    // Common issue: any selections in one header/footer are duplicated to the header/footer of all pages.
     @Test
     void insertAnnotationDigit() {
         insertHighlightAnnotationsForSearchTerm("2", "#Digit");
@@ -107,9 +107,17 @@ final class DocxReporterShould {
         insertHighlightAnnotationsForSearchTerm("third.*three", "#MultiPage");
     }
 
+    @Test
+    void insertMultipleAnnotationsInSameRun() {
+        insertHighlightAnnotationsForSearchTerm(List.of("g", "le-", "Sin", "Pa", "ine"), "#MultiAnnotation");
+    }
 
     private void insertHighlightAnnotationsForSearchTerm(String searchTerm, String filename) {
-        var processor = getReplacingCrossPageProcessor(searchTerm);
+        insertHighlightAnnotationsForSearchTerm(List.of(searchTerm), filename);
+    }
+
+    private void insertHighlightAnnotationsForSearchTerm(List<String> searchTerms, String filename) {
+        var processor = getReplacingCrossPageProcessor(searchTerms);
 
         try (var input = DocxReporterShould.class.getResourceAsStream("TestFile.docx");
              var output = Files.newOutputStream(Path.of("src", "test", "resources", "temp", "highlight_" + filename + "_TestFile.docx"))) {
@@ -128,7 +136,7 @@ final class DocxReporterShould {
         }
     }
 
-    private static SimpleProcessor getReplacingCrossPageProcessor(String toReplace) {
-        return new SimpleProcessor(getRuleSetProvider(toReplace, REPLACE));
+    private static SimpleProcessor getReplacingCrossPageProcessor(List<String> replacementTerms) {
+        return new SimpleProcessor(getRuleSetProvider(replacementTerms, REPLACE));
     }
 }

@@ -2,7 +2,12 @@ package nitpeek.io.docx.internal.pagesource;
 
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
-import nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
+import nitpeek.io.docx.internal.common.*;
+import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
+import nitpeek.io.docx.internal.pagesource.render.SimpleParagraphRenderer;
+import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
+import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.util.collection.ListEnds;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -18,15 +23,17 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final Set<Integer> currentPageFootnotes = new HashSet<>();
     private final List<P> currentPageParagraphs = new ArrayList<>();
-    private int firstRunOfFirstParagraphInCurrentParagraph = 0;
+    private int firstRunOfFirstParagraphInCurrentPage = 0;
 
-    private final List<SegmentedDocxPage> pages = new ArrayList<>();
+    private final List<SegmentedDocxPage<CompositeRun>> pages = new ArrayList<>();
+
+    private final ParagraphTransformer paragraphTransformer = new CompositingParagraphTransformer(new ComplexRunsGrouper());
 
     /**
      * @return an unmodifiable copy
      */
     @Override
-    public List<SegmentedDocxPage> extractPages() {
+    public List<SegmentedDocxPage<CompositeRun>> extractPages() {
         return List.copyOf(pages);
     }
 
@@ -93,10 +100,12 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
      */
     private boolean addParagraphIfNotEmptyUpTo(int firstExcludedRun, P paragraph) {
         // We don't care about the actual page coordinates, we just want to check if something at all would be rendered
-        var simpleRenderer = new SimpleParagraphRenderer(0, 0, new SimpleArabicNumberRenderer());
+        var simpleRenderer = new SimpleParagraphRenderer(new SimpleRunRenderer(0, 0, new SimpleArabicNumberRenderer()));
         // If up to the specified run nothing would get rendered, consider the paragraph empty and don't add it to the
         // current page
-        if (simpleRenderer.renderTo(firstExcludedRun - 1, paragraph).isEmpty()) return false;
+        int lastIncludedRun = firstExcludedRun - 1;
+        var paragraphPart = paragraphTransformer.transform(paragraph).partitionTo(lastIncludedRun);
+        if (simpleRenderer.render(paragraphPart).isEmpty()) return false;
 
         currentPageParagraphs.add(paragraph);
         return true;
@@ -108,21 +117,34 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         var runCount = previousParagraph.map(p -> DocxUtil.getRuns(p).size()).orElse(0);
         finishCurrentPageAndSplitBefore(runCount);
         // The current page is being finished at a paragraph border, therefore the split needs to be undone.
-        firstRunOfFirstParagraphInCurrentParagraph = 0;
+        firstRunOfFirstParagraphInCurrentPage = 0;
     }
 
     private void finishCurrentPageAndSplitBefore(int splitIndex) {
 
         int currentPage = currentPageNumber();
 
-        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage).extractSegment().orElse(null);
-        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage).extractSegment().orElse(null);
+        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
+        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
         int lastIncludedIndex = splitIndex - 1;
 
-        var body = new DocxSegment(currentPageParagraphs, firstRunOfFirstParagraphInCurrentParagraph, lastIncludedIndex);
+        var body = assembleBodySegment(currentPageParagraphs, firstRunOfFirstParagraphInCurrentPage, lastIncludedIndex);
         var footnotes = computeFootnotes();
-        pages.add(new DefaultDocxPage(header, body, footnotes, footer));
+        pages.add(new DefaultDocxPage<>(header, body, footnotes, footer));
         resetPageState(splitIndex);
+    }
+
+    private DocxSegment<CompositeRun> assembleBodySegment(List<P> paragraphs, int indexOfFirstRun, int indexOfLastRun) {
+        if (paragraphs.isEmpty()) return new SimpleDocxSegment<>(List.of());
+        if (paragraphs.size() == 1)
+            return new SimpleDocxSegment<>(List.of(paragraphTransformer.transformBetween(indexOfFirstRun, indexOfLastRun, paragraphs.getFirst())));
+
+        var paragraphsSplit = new ListEnds<>(paragraphs);
+        var resultingParagraphs = new ArrayList<DocxParagraph<CompositeRun>>(paragraphs.size());
+        resultingParagraphs.add(paragraphTransformer.transformFrom(indexOfFirstRun, paragraphsSplit.first()));
+        resultingParagraphs.addAll(paragraphsSplit.middle().stream().map(paragraphTransformer::transform).toList());
+        resultingParagraphs.add(paragraphTransformer.transformTo(indexOfLastRun, paragraphsSplit.last()));
+        return new SimpleDocxSegment<>(resultingParagraphs);
     }
 
     private int currentPageNumber() {
@@ -132,13 +154,13 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
     private void resetPageState(int splitIndex) {
         currentPageParagraphs.clear();
         currentPageFootnotes.clear();
-        firstRunOfFirstParagraphInCurrentParagraph = splitIndex;
+        firstRunOfFirstParagraphInCurrentPage = splitIndex;
     }
 
-    private Map<Integer, DocxSegment> computeFootnotes() {
-        var result = new HashMap<Integer, DocxSegment>();
+    private Map<Integer, DocxSegment<CompositeRun>> computeFootnotes() {
+        var result = new HashMap<Integer, DocxSegment<CompositeRun>>();
         for (int footnoteRef : currentPageFootnotes) {
-            var footnote = new FootnotesSegmentExtractor(docx, footnoteRef).extractSegment();
+            var footnote = new FootnotesSegmentExtractor(docx, footnoteRef, paragraphTransformer).extractSegment();
             footnote.ifPresent(f -> result.put(footnoteRef, f));
         }
 

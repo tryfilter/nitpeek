@@ -2,7 +2,7 @@ package nitpeek.io.docx.internal.pagesource.render;
 
 import nitpeek.io.docx.internal.common.DocxParagraph;
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRenderer;
 
 import java.util.stream.Collectors;
 

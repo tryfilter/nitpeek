@@ -3,7 +3,7 @@ package nitpeek.io.docx.internal.reporter;
 import nitpeek.io.docx.internal.common.DocxParagraph;
 import nitpeek.io.docx.internal.common.PartialParagraph;
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.render.SplittableRun;
 
 final class SplitEnabler {

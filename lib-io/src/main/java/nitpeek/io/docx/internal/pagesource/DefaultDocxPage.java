@@ -1,12 +1,15 @@
-package nitpeek.io.docx.internal.common;
+package nitpeek.io.docx.internal.pagesource;
 
+import nitpeek.io.docx.internal.common.DocxParagraph;
+import nitpeek.io.docx.internal.common.DocxSegment;
+import nitpeek.io.docx.internal.common.SimpleDocxSegment;
 import nitpeek.io.docx.render.CompositeRun;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-public final class DefaultDocxPage<C extends CompositeRun> implements SegmentedDocxPage<C> {
+final class DefaultDocxPage<C extends CompositeRun> implements SegmentedDocxPage<C> {
     @Nullable private final DocxSegment<C> header;
     private final DocxSegment<C> body;
     private final SortedMap<Integer, DocxSegment<C>> footnotes;

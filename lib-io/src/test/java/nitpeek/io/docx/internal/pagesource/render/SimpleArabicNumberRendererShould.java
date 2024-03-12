@@ -1,10 +1,8 @@
-package nitpeek.io.docx.internal.pagesource;
+package nitpeek.io.docx.internal.pagesource.render;
 
-import nitpeek.io.docx.internal.pagesource.render.NumberRenderer;
-import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class SimpleArabicNumberRendererShould {
 

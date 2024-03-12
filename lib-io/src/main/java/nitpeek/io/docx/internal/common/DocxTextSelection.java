@@ -1,6 +1,7 @@
-package nitpeek.io.docx.render;
+package nitpeek.io.docx.internal.common;
 
 import nitpeek.io.docx.internal.common.DocxSegment;
+import nitpeek.io.docx.render.CompositeRun;
 
 /**
  * Represents a segment of text, with maximum precision, i.e. the extents being defined at the "character"

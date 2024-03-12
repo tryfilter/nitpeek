@@ -2,7 +2,7 @@ package nitpeek.io.docx.internal.reporter;
 
 
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.DocxTextSelection;
+import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.io.docx.render.RenderableAnnotation;
 import nitpeek.io.docx.render.SplittableRun;
 import nitpeek.util.collection.ListEnds;

@@ -1,6 +1,6 @@
 package nitpeek.io.docx.render;
 
-import nitpeek.io.docx.internal.pagesource.run.SingletonRun;
+import nitpeek.io.docx.internal.common.SingletonRun;
 import nitpeek.io.docx.render.HighlightAnnotationRenderer.HighlightColor;
 import nitpeek.io.docx.testutil.DocxTestUtil;
 import org.docx4j.wml.BooleanDefaultTrue;

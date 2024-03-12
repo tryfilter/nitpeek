@@ -9,7 +9,7 @@ import org.docx4j.wml.Text;
 
 import java.util.Optional;
 
-public final class TextRunSplitter implements RunSplitter {
+final class TextRunSplitter implements RunSplitter {
     private final ObjectFactory objectFactory = new ObjectFactory();
 
     @Override

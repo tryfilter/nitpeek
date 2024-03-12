@@ -1,11 +1,10 @@
-package nitpeek.io.docx.internal.pagesource.run;
+package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.io.docx.internal.common.DocxUtil;
-import nitpeek.io.docx.internal.reporter.EdgeDetector;
+import nitpeek.io.docx.internal.common.RunRenderer;
+import nitpeek.io.docx.internal.common.SingletonRun;
 import nitpeek.io.docx.internal.reporter.EdgeDetector.SelectionEdge;
-import nitpeek.io.docx.internal.reporter.RunSplitter;
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.RunRenderer;
 import nitpeek.io.docx.render.SplittableRun;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.R;
@@ -13,7 +12,7 @@ import org.docx4j.wml.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class SplitRun implements SplittableRun {
+final class SplitRun implements SplittableRun {
     private final List<R> runs;
     private final RunRenderer renderer;
     private final RunSplitter runSplitter;

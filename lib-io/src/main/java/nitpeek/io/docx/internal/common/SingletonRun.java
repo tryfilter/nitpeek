@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.pagesource.run;
+package nitpeek.io.docx.internal.common;
 
 import nitpeek.io.docx.render.CompositeRun;
 import org.docx4j.wml.R;

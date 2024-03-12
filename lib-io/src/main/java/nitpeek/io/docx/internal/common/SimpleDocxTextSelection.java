@@ -1,7 +1,6 @@
 package nitpeek.io.docx.internal.common;
 
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.DocxTextSelection;
 
 import java.util.List;
 

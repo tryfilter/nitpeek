@@ -1,7 +1,5 @@
 package nitpeek.io.docx.internal.common;
 
-import nitpeek.io.docx.internal.pagesource.Partitioned;
-
 import java.util.List;
 import java.util.function.Function;
 

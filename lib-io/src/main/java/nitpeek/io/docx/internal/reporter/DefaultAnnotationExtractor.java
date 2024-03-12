@@ -4,7 +4,7 @@ import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.io.docx.render.SplittableRun;
-import nitpeek.io.docx.render.DocxTextSelection;
+import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.io.docx.render.Message;
 
 import java.util.Collection;

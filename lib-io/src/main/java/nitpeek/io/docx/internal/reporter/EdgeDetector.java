@@ -1,11 +1,11 @@
 package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRenderer;
 
 import java.util.List;
 
-public final class EdgeDetector {
+final class EdgeDetector {
     public SelectionEdge computeSelectionEdge(List<? extends CompositeRun> runs, int offset, RunRenderer runRenderer) {
 
         int characterIndex = offset;

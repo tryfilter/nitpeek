@@ -8,7 +8,7 @@ import java.util.Optional;
  * Splits an existing run into two resulting runs.<br>
  * The original run may be modified, but a reference to it is always returned.
  */
-public interface RunSplitter {
+interface RunSplitter {
 
     SplitResult splitAfter(R run, int lastIndexToKeep);
 

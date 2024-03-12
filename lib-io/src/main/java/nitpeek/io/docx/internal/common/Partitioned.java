@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.pagesource;
+package nitpeek.io.docx.internal.common;
 
 public interface Partitioned<T> {
     T fullPartition();

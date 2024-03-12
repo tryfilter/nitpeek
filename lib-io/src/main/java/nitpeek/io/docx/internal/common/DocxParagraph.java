@@ -1,6 +1,5 @@
 package nitpeek.io.docx.internal.common;
 
-import nitpeek.io.docx.internal.pagesource.Partitioned;
 import nitpeek.io.docx.render.CompositeRun;
 
 import java.util.List;

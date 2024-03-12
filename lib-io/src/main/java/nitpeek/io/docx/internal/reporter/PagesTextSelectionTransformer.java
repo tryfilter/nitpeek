@@ -3,12 +3,12 @@ package nitpeek.io.docx.internal.reporter;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
 import nitpeek.io.docx.internal.common.*;
-import nitpeek.io.docx.internal.pagesource.Partitioned;
+import nitpeek.io.docx.internal.common.Partitioned;
 import nitpeek.io.docx.internal.reporter.EdgeDetector.SelectionEdge;
-import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.render.CompositeRun;
 import nitpeek.io.docx.render.SplittableRun;
-import nitpeek.io.docx.render.DocxTextSelection;
+import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.util.collection.ListEnds;
 
 import java.util.ArrayList;

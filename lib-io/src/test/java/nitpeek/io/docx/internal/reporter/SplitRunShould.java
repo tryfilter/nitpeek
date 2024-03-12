@@ -1,12 +1,15 @@
-package nitpeek.io.docx.internal.pagesource.run;
+package nitpeek.io.docx.internal.reporter;
 
-import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
+import nitpeek.io.docx.internal.pagesource.ComplexRun;
+import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
-import nitpeek.io.docx.internal.reporter.TextRunSplitter;
+import nitpeek.io.docx.internal.common.SingletonRun;
+import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.RunRenderer;
 import nitpeek.io.docx.render.SplittableRun;
-import org.docx4j.wml.*;
+import org.docx4j.wml.ObjectFactory;
+import org.docx4j.wml.P;
+import org.docx4j.wml.R;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

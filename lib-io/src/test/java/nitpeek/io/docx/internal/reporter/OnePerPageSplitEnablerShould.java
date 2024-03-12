@@ -2,8 +2,8 @@ package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
-import nitpeek.io.docx.internal.pagesource.run.SingletonRun;
-import nitpeek.io.docx.render.RunRenderer;
+import nitpeek.io.docx.internal.common.SingletonRun;
+import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.render.SplittableRun;
 import org.junit.jupiter.api.Test;
 

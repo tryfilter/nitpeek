@@ -3,13 +3,13 @@ package nitpeek.io.docx.internal.reporter;
 import jakarta.xml.bind.JAXBException;
 import nitpeek.core.api.common.TextCoordinate;
 import nitpeek.core.api.common.TextSelection;
-import nitpeek.io.docx.internal.pagesource.SegmentedDocxPage;
-import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
-import nitpeek.io.docx.internal.pagesource.*;
-import nitpeek.io.docx.internal.pagesource.render.*;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.PageTransformers;
 import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.io.docx.internal.common.RunRenderer;
+import nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
+import nitpeek.io.docx.internal.pagesource.SegmentedDocxPage;
+import nitpeek.io.docx.internal.pagesource.render.*;
+import nitpeek.io.docx.render.CompositeRun;
 import nitpeek.io.docx.render.SplittableRun;
 import nitpeek.util.collection.ListEnds;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -34,10 +35,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 final class PagesTextSelectionTransformerShould {
 
     private final List<? extends SegmentedDocxPage<? extends CompositeRun>> pages;
+    private final List<? extends SegmentedDocxPage<? extends CompositeRun>> bodyOnlyPages;
+    private final List<? extends SegmentedDocxPage<? extends CompositeRun>> footnotesOnlyPages;
 
     PagesTextSelectionTransformerShould() throws Docx4JException, JAXBException {
         WordprocessingMLPackage docx = WordprocessingMLPackage.load(PagesTextSelectionTransformerShould.class.getResourceAsStream("../../TestFile_Paragraphs.docx"));
-        pages = new DefaultDocxPageExtractor(docx).extractPages();
+        this.pages = new DefaultDocxPageExtractor(docx, UnaryOperator.identity()).extractPages();
+        this.bodyOnlyPages = new DefaultDocxPageExtractor(docx, PageTransformers::keepOnlyBody).extractPages();
+        this.footnotesOnlyPages = new DefaultDocxPageExtractor(docx, PageTransformers::keepOnlyFootnotes).extractPages();
     }
 
     @Test
@@ -253,6 +258,30 @@ final class PagesTextSelectionTransformerShould {
 
         var docxTextSelection = transformer.transform(selection);
         assertEquals(footnoteLines, renderDocxSelection(docxTextSelection, getRunRenderer(page)));
+    }
+
+    @Test
+    void returnSelectionAdjustedForBodyOnlyPages() {
+        int page = 1;
+        int line = 0; // Note that if the page only contains content from the page body, the selectedText below occurs at the first line (the header line is not counted)
+        String selectedText = "tum ac. Do";
+        TextSelection selection = new TextCoordinate(page, line, 9).extendToSelection(selectedText.length());
+        var transformer = new PagesTextSelectionTransformer(bodyOnlyPages, this::getRunRenderer);
+
+        var docxTextSelection = transformer.transform(selection);
+        assertEquals(List.of(selectedText), renderDocxSelection(docxTextSelection, getRunRenderer(page)));
+    }
+
+    @Test
+    void returnSelectionAdjustedForFootnotesOnlyPages() {
+        int page = 0;
+        int line = 2; // Note that if the page only contains content from footnotes, the selectedText below occurs at the third line (header and body lines are not counted)
+        String selectedText = "nd line of Footnote #2 h";
+        TextSelection selection = new TextCoordinate(page, line, 4).extendToSelection(selectedText.length());
+        var transformer = new PagesTextSelectionTransformer(footnotesOnlyPages, this::getRunRenderer);
+
+        var docxTextSelection = transformer.transform(selection);
+        assertEquals(List.of(selectedText), renderDocxSelection(docxTextSelection, getRunRenderer(page)));
     }
 
     private RunRenderer getRunRenderer(int currentPage) {

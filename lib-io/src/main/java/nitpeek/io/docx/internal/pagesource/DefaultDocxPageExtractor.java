@@ -2,11 +2,15 @@ package nitpeek.io.docx.internal.pagesource;
 
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
-import nitpeek.io.docx.internal.common.*;
+import nitpeek.io.docx.internal.common.DocxParagraph;
+import nitpeek.io.docx.internal.common.DocxSegment;
+import nitpeek.io.docx.internal.common.DocxUtil;
+import nitpeek.io.docx.internal.common.SimpleDocxSegment;
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleParagraphRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.render.DocxPage;
 import nitpeek.util.collection.ListEnds;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -15,6 +19,7 @@ import org.docx4j.wml.*;
 
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.UnaryOperator;
 
 public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
@@ -29,6 +34,8 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final ParagraphTransformer paragraphTransformer = new CompositingParagraphTransformer(new ComplexRunsGrouper());
 
+    private final UnaryOperator<DocxPage<CompositeRun>> pageTransformer;
+
     /**
      * @return an unmodifiable copy
      */
@@ -37,9 +44,10 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
         return List.copyOf(pages);
     }
 
-    public DefaultDocxPageExtractor(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
+    public DefaultDocxPageExtractor(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
         this.docx = docx;
         this.document = docx.getMainDocumentPart();
+        this.pageTransformer = pageTransformer;
         collectPages();
     }
 
@@ -130,7 +138,8 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
         var body = assembleBodySegment(currentPageParagraphs, firstRunOfFirstParagraphInCurrentPage, lastIncludedIndex);
         var footnotes = computeFootnotes();
-        pages.add(new DefaultDocxPage<>(header, body, footnotes, footer));
+        var preProcessedPage = pageTransformer.apply(new SimpleDocxPage<>(header, body, footnotes, footer));
+        pages.add(new DefaultDocxPage<>(preProcessedPage));
         resetPageState(splitIndex);
     }
 

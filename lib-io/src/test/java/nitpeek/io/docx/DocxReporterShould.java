@@ -10,6 +10,8 @@ import nitpeek.core.impl.common.SimpleIdentifier;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.core.impl.process.SimpleRuleSetProvider;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
+import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.render.DocxPage;
 import nitpeek.io.docx.render.HighlightAnnotationRenderer;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -87,6 +90,26 @@ final class DocxReporterShould {
     }
 
     @Test
+    void insertAnnotationDigitInFootnotesOnly() {
+        insertHighlightAnnotationsForSearchTerm("2", "#Footnotes_Digit", PageTransformers::keepOnlyFootnotes);
+    }
+
+    @Test
+    void insertAnnotationLetterInFootnotesOnly() {
+        insertHighlightAnnotationsForSearchTerm("o", "#Footnotes_o", PageTransformers::keepOnlyFootnotes);
+    }
+
+    @Test
+    void insertAnnotationDigitInBodyOnly() {
+        insertHighlightAnnotationsForSearchTerm("2", "#Body_Digit", PageTransformers::keepOnlyBody);
+    }
+
+    @Test
+    void insertAnnotationLetterInBodyOnly() {
+        insertHighlightAnnotationsForSearchTerm("o", "#Body_o", PageTransformers::keepOnlyBody);
+    }
+
+    @Test
     void insertAnnotationOtherFontSection() {
         insertHighlightAnnotationsForSearchTerm("ferent.*hyphen", "#OtherFontSection");
     }
@@ -116,7 +139,15 @@ final class DocxReporterShould {
         insertHighlightAnnotationsForSearchTerm(List.of(searchTerm), filename);
     }
 
+    private void insertHighlightAnnotationsForSearchTerm(String searchTerm, String filename, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) {
+        insertHighlightAnnotationsForSearchTerm(List.of(searchTerm), filename, pageTransformer);
+    }
+
     private void insertHighlightAnnotationsForSearchTerm(List<String> searchTerms, String filename) {
+        insertHighlightAnnotationsForSearchTerm(searchTerms, filename, UnaryOperator.identity());
+    }
+
+    private void insertHighlightAnnotationsForSearchTerm(List<String> searchTerms, String filename, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) {
         var processor = getReplacingCrossPageProcessor(searchTerms);
 
         try (var input = DocxReporterShould.class.getResourceAsStream("TestFile.docx");
@@ -125,11 +156,11 @@ final class DocxReporterShould {
             input.transferTo(inMemory);
             var docxToAnalyze = new ByteArrayInputStream(inMemory.toByteArray());
             var docxToAnnotate = new ByteArrayInputStream(inMemory.toByteArray());
-            var docxSource = DocxPageSource.createFrom(docxToAnalyze);
+            var docxSource = DocxPageSource.createFrom(docxToAnalyze, pageTransformer);
             processor.startProcessing(docxSource);
             var features = processor.getFeatures();
 
-            var reporter = new DocxReporter(docxToAnnotate, output, new HighlightAnnotationRenderer(HighlightColor.CYAN));
+            var reporter = new DocxReporter(docxToAnnotate, output, new HighlightAnnotationRenderer(HighlightColor.CYAN), pageTransformer);
             reporter.reportFeatures(features, new DefaultFallbackEnglishTranslation());
         } catch (IOException | ReportingException | JAXBException | Docx4JException e) {
             Assertions.fail("Exception thrown during annotation insertion", e);

@@ -52,4 +52,48 @@ public final class TestFile {
 
         return new StringPageSource(pages);
     }
+
+    public static PageSource getBodyOnlyContent() {
+        var pages =  List.of(
+                """
+                        Main Heading
+                        Some simple test in a paragraph.
+                        Next line.
+                        Skipped 2 lines.
+                        Italicized text.
+                        Some special characters: üÄß^°ä#`'”
+                        “Quote”
+                        “”
+                        «Other quote»
+                        Footnote:1 another footnote: 2
+                        And a third footnote3
+                        """,
+                """
+                        Single-Line Page
+                        """,
+                """
+                        Following this line there will be three more lines.
+                        Second line Different Font ending in a hyphen-
+                        ated word. Technically the third line contains part of it as well
+                        Special string: (marker)
+                        """
+        );
+
+        return new StringPageSource(pages);
+    }
+
+    public static PageSource getFootnotesOnlyContent() {
+        var pages =  List.of(
+                """
+                        1 Footnote 1
+                        2 Second footnote
+                        3 This is the last one""",
+                "",
+                ""
+        );
+
+        return new StringPageSource(pages);
+    }
+
+
 }

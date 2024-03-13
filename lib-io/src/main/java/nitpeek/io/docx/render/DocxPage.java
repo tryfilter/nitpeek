@@ -1,7 +1,6 @@
-package nitpeek.io.docx.internal.pagesource;
+package nitpeek.io.docx.render;
 
 import nitpeek.io.docx.internal.common.DocxSegment;
-import nitpeek.io.docx.render.CompositeRun;
 
 import java.util.Optional;
 import java.util.SortedMap;

@@ -7,12 +7,15 @@ import nitpeek.core.api.process.PageSource;
 import nitpeek.core.impl.process.SimplePageSource;
 import nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
 import nitpeek.io.docx.internal.pagesource.render.DefaultDocxPageRenderer;
+import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.render.DocxPage;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 
 public final class DocxPageSource implements PageSource {
@@ -28,22 +31,27 @@ public final class DocxPageSource implements PageSource {
      * is rendered.
      *
      * @param input representing a valid DOCX file. The InputStream is not closed by this method.
+     * @param pageTransformer the transformer to use before reading the page contents
      * @return a page source containing all pages of the provided DOCX
      */
-    public static DocxPageSource createFrom(InputStream input) throws Docx4JException, JAXBException {
+    public static DocxPageSource createFrom(InputStream input, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws Docx4JException, JAXBException {
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(input);
 
-        return new DocxPageSource(toMemoryPageSource(wordMLPackage));
+        return new DocxPageSource(toMemoryPageSource(wordMLPackage, pageTransformer));
     }
 
-    private static PageSource toMemoryPageSource(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
-
-        return new SimplePageSource(extractPages(docx));
+    public static DocxPageSource createFrom(InputStream input) throws Docx4JException, JAXBException {
+        return createFrom(input, UnaryOperator.identity());
     }
 
-    private static List<TextPage> extractPages(WordprocessingMLPackage docx) throws JAXBException, XPathBinderAssociationIsPartialException {
+    private static PageSource toMemoryPageSource(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
 
-        var pageExtractor = new DefaultDocxPageExtractor(docx);
+        return new SimplePageSource(extractPages(docx, pageTransformer));
+    }
+
+    private static List<TextPage> extractPages(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
+
+        var pageExtractor = new DefaultDocxPageExtractor(docx, pageTransformer);
         var pages = pageExtractor.extractPages();
         var renderer = new DefaultDocxPageRenderer();
         return renderer.renderPages(pages);

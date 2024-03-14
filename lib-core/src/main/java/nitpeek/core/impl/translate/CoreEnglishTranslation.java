@@ -108,6 +108,9 @@ public final class CoreEnglishTranslation implements Translation {
 
             case PLUGIN_ALL_RULES_ID_DESCRIPTION -> translate(1, args ->
                     i18n.pluginAllRulesIdDescription(args[0].toString()), arguments);
+            case RULESET_AGGREGATE_ID_NAME -> i18n.ruleSetAggregateIdName();
+            case RULESET_AGGREGATE_ID_DESCRIPTION -> translate(1, args ->
+                    i18n.ruleSetAggregateIdDescription(args[0].toString()), arguments);
         };
     }
 

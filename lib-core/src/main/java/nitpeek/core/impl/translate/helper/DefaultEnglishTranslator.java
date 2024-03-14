@@ -209,4 +209,14 @@ public class DefaultEnglishTranslator implements Translator {
     public String replaceLiteralComponentDescriptionDelete() {
         return "Delete";
     }
+
+    @Override
+    public String ruleSetAggregateIdName() {
+        return "Aggregate Rule Set";
+    }
+
+    @Override
+    public String ruleSetAggregateIdDescription(String ruleSetList) {
+        return "This is a rule set combining the rules from the rule sets with the following IDs: " + ruleSetList;
+    }
 }

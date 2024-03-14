@@ -85,4 +85,8 @@ public interface Translator {
     String pluginAllRulesIdDescription(String pluginId);
 
     String replaceLiteralComponentDescriptionDelete();
+
+    String ruleSetAggregateIdName();
+
+    String ruleSetAggregateIdDescription(String ruleSetList);
 }

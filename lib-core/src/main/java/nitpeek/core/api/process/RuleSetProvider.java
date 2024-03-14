@@ -8,4 +8,8 @@ import java.util.Set;
 public interface RuleSetProvider {
     Identifier getRuleSetId();
     Set<Rule> getRules();
+
+    default Set<RuleSetTag> getTags() {
+        return Set.of();
+    }
 }

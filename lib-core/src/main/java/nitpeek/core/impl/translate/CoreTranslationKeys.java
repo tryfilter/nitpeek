@@ -42,6 +42,8 @@ public enum CoreTranslationKeys {
     UNPAIRED_CLOSING_PARENTHESIS_COMPONENT_DESCRIPTION,
     PLUGIN_ALL_RULES_ID_NAME,
     PLUGIN_ALL_RULES_ID_DESCRIPTION,
+    RULESET_AGGREGATE_ID_NAME,
+    RULESET_AGGREGATE_ID_DESCRIPTION,
     ;
 
     public static CoreTranslationKeys getForKey(String key) {

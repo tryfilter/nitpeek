@@ -81,7 +81,7 @@ public final class UnpairedParentheses implements Analyzer {
         var unpairedParentheses = new ArrayList<Parenthesis>();
         Deque<Parenthesis> openParenthesesStack = new ArrayDeque<>();
         for (var parenthesis : parentheses) {
-            saveUnpairedClosingAndPlaceOpeningOnStack(parenthesis, unpairedParentheses, openParenthesesStack);
+            saveUnpairedClosingOrPlaceOpeningOnStack(parenthesis, unpairedParentheses, openParenthesesStack);
         }
 
         unpairedParentheses.addAll(openParenthesesStack);
@@ -89,7 +89,7 @@ public final class UnpairedParentheses implements Analyzer {
         return unpairedParentheses;
     }
 
-    private void saveUnpairedClosingAndPlaceOpeningOnStack(Parenthesis parenthesis, List<Parenthesis> unpairedParentheses, Deque<Parenthesis> openParenthesesStack) {
+    private void saveUnpairedClosingOrPlaceOpeningOnStack(Parenthesis parenthesis, List<Parenthesis> unpairedParentheses, Deque<Parenthesis> openParenthesesStack) {
         switch (parenthesis.type) {
             case OPEN -> openParenthesesStack.addLast(parenthesis);
             case CLOSE -> {

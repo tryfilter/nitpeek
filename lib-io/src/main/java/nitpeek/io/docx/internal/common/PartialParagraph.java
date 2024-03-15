@@ -1,7 +1,8 @@
 package nitpeek.io.docx.internal.common;
 
 import nitpeek.core.api.common.TextCoordinate;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxParagraph;
 import org.docx4j.wml.P;
 
 import java.util.List;

@@ -1,5 +1,8 @@
 package nitpeek.io.docx.render;
 
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.Message;
+
 import java.util.List;
 
 /**

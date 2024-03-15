@@ -1,15 +1,16 @@
 package nitpeek.io.docx.internal.pagesource;
 
-import nitpeek.io.docx.internal.common.DocxParagraph;
-import nitpeek.io.docx.internal.common.DocxSegment;
+import nitpeek.io.docx.types.DocxParagraph;
+import nitpeek.io.docx.types.DocxSegment;
 import nitpeek.io.docx.internal.common.SimpleDocxSegment;
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.DocxPage;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxPage;
+import nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
 
 import java.util.*;
 import java.util.stream.Stream;
 
-final class DefaultDocxPage<C extends CompositeRun> implements SegmentedDocxPage<C> {
+public final class DefaultDocxPage<C extends CompositeRun> implements SegmentedDocxPage<C> {
     private final DocxPage<C> backingPage;
     private final DocxSegment<C> allParagraphs;
 

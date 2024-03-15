@@ -2,6 +2,7 @@ package nitpeek.io.docx;
 
 import jakarta.xml.bind.JAXBException;
 import nitpeek.core.impl.process.ListPageConsumer;
+import nitpeek.io.docx.internal.reporter.PageTransformers;
 import nitpeek.io.testutil.TestFile;
 import nitpeek.io.testutil.TestFileParagraphs;
 import org.docx4j.openpackaging.exceptions.Docx4JException;

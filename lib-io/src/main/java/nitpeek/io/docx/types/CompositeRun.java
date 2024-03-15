@@ -1,4 +1,4 @@
-package nitpeek.io.docx.render;
+package nitpeek.io.docx.types;
 
 import org.docx4j.wml.R;
 

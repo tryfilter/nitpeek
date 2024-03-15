@@ -1,6 +1,7 @@
 package nitpeek.io.docx.internal.common;
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.SplittableRun;
 import org.docx4j.wml.R;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public final class SingletonRun implements CompositeRun {
      * equals and hashCode are overridden so that annotations containing the same runs can split said runs while keeping
      * the splits synchronized between annotations.
      * More specifically, {@code SingletonRun}s are used as keys in a lookup table that is employed to reuse the
-     * {@code SingletonRun}s when repeatedly converting the same one to a {@link nitpeek.io.docx.render.SplittableRun}.<br>
+     * {@code SingletonRun}s when repeatedly converting the same one to a {@link SplittableRun}.<br>
      * See also {@link nitpeek.io.docx.internal.reporter.DefaultRunSplitEnabler}.<br>
      * Normally, object identity would be general enough for equality conditions, EXCEPT when multiple pages refer to
      * the same set of {@link R} runs as is the case, for instance, with headers and footers. In such situations it can

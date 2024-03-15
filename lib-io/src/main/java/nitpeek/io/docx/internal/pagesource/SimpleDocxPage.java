@@ -1,8 +1,8 @@
 package nitpeek.io.docx.internal.pagesource;
 
-import nitpeek.io.docx.internal.common.DocxSegment;
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.DocxPage;
+import nitpeek.io.docx.types.DocxSegment;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxPage;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.*;
@@ -13,7 +13,7 @@ public final class SimpleDocxPage<C extends CompositeRun> implements DocxPage<C>
     private final SortedMap<Integer, DocxSegment<C>> footnotes;
     @Nullable private final DocxSegment<C> footer;
 
-    public SimpleDocxPage(@Nullable DocxSegment<C> header, DocxSegment<C> body, Map<Integer, DocxSegment<C>> footnotes, @Nullable DocxSegment<C> footer) {
+    public SimpleDocxPage(@Nullable DocxSegment<C> header, DocxSegment<C> body, Map<Integer, ? extends DocxSegment<C>> footnotes, @Nullable DocxSegment<C> footer) {
         this.header = header;
         this.body = body;
         this.footnotes = new TreeMap<>(footnotes);

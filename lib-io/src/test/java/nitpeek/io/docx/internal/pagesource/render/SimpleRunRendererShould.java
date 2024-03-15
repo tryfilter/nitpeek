@@ -5,7 +5,7 @@ import jakarta.xml.bind.JAXBException;
 import nitpeek.io.docx.internal.common.DocxUtil;
 import nitpeek.io.docx.internal.pagesource.ComplexRun;
 import nitpeek.io.docx.internal.common.SingletonRun;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.testutil.DocxTestUtil;
 import org.docx4j.XmlUtils;

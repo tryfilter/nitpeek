@@ -1,4 +1,4 @@
-package nitpeek.io.docx.render;
+package nitpeek.io.docx.types;
 
 /**
  * The textual information representing an annotation in a DOCX document

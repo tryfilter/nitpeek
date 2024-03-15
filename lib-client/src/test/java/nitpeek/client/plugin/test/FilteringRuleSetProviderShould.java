@@ -1,6 +1,6 @@
 package nitpeek.client.plugin.test;
 
-import nitpeek.client.plugin.FilteringRuleSetProvider;
+import nitpeek.core.impl.process.FilteringRuleSetProvider;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.process.RuleSetTag;
@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static nitpeek.client.plugin.RuleSetProviderFilters.matchesAllTags;
-import static nitpeek.client.plugin.RuleSetProviderFilters.matchesAnyTags;
+import static nitpeek.core.impl.process.RuleSetProviderFilters.matchesAllTags;
+import static nitpeek.core.impl.process.RuleSetProviderFilters.matchesAnyTags;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 

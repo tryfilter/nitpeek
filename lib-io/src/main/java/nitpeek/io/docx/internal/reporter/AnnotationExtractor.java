@@ -2,7 +2,7 @@ package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package nitpeek.io.docx.internal.common;
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxSegment;
 
 import java.util.List;
 

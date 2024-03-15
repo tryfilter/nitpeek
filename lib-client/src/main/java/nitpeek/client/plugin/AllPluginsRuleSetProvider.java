@@ -4,6 +4,7 @@ import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Identifier;
 import nitpeek.core.api.plugin.Plugin;
 import nitpeek.core.api.process.RuleSetProvider;
+import nitpeek.core.impl.process.FilteringRuleSetProvider;
 
 import java.util.Collection;
 import java.util.Set;

@@ -6,8 +6,10 @@ import nitpeek.io.docx.internal.common.*;
 import nitpeek.io.docx.internal.common.Partitioned;
 import nitpeek.io.docx.internal.reporter.EdgeDetector.SelectionEdge;
 import nitpeek.io.docx.internal.common.RunRenderer;
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxParagraph;
+import nitpeek.io.docx.types.DocxSegment;
+import nitpeek.io.docx.types.SplittableRun;
 import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.util.collection.ListEnds;
 

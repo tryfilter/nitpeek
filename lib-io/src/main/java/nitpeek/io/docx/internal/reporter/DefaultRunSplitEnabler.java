@@ -1,25 +1,25 @@
 package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.io.docx.internal.common.SingletonRun;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.RunRenderer;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.SplittableRun;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The run splitting mechanics employed by the {@link nitpeek.io.docx.DocxReporter} rely heavily on the implementation
+ * The run splitting mechanics employed by the {@link DocxReporter} rely heavily on the implementation
  * of {@link SplitRun}. However, a SplitRun can only guarantee its correct
  * functioning if it is the only object modifying the underlying runs and their parent paragraph.<br>
  * Therefore, this SplitEnabler enforces this uniqueness through a table lookup.<br>
  * It is paramount that for each DocxPage only a single {@link DefaultRunSplitEnabler} is used so that the table lookup
  * can track all already transformed runs and avoid duplicating them.<br>
  */
-final class DefaultRunSplitEnabler implements RunSplitEnabler {
+public final class DefaultRunSplitEnabler implements RunSplitEnabler {
     private final Map<CompositeRun, SplittableRun> transformedRuns;
 
-    DefaultRunSplitEnabler() {
+    public DefaultRunSplitEnabler() {
         this.transformedRuns = new HashMap<>();
     }
 

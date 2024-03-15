@@ -3,7 +3,7 @@ package nitpeek.io.docx.internal.reporter;
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import nitpeek.io.docx.internal.common.SingletonRun;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.RunRenderer;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.R;

@@ -1,8 +1,8 @@
 package nitpeek.io.docx.internal.reporter;
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.DocxTextSelection;
-import nitpeek.io.docx.render.Message;
+import nitpeek.io.docx.types.Message;
 import nitpeek.io.docx.render.RenderableAnnotation;
 
 /**

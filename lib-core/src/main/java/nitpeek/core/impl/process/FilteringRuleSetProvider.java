@@ -1,4 +1,4 @@
-package nitpeek.client.plugin;
+package nitpeek.core.impl.process;
 
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Identifier;

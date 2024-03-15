@@ -1,6 +1,7 @@
 package nitpeek.io.docx.render;
 
 import jakarta.xml.bind.JAXBElement;
+import nitpeek.io.docx.types.CompositeRun;
 import org.docx4j.XmlUtils;
 import org.docx4j.wml.*;
 

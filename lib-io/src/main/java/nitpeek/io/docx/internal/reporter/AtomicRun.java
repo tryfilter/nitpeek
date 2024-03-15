@@ -1,7 +1,7 @@
 package nitpeek.io.docx.internal.reporter;
 
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.SplittableRun;
 import org.docx4j.wml.R;
 
 import java.util.List;

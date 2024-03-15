@@ -15,4 +15,5 @@ module nitpeek.lib.io {
     exports nitpeek.io.pdf.convenience;
     exports nitpeek.io.docx;
     exports nitpeek.io.docx.render;
+    exports nitpeek.io.docx.types;
 }

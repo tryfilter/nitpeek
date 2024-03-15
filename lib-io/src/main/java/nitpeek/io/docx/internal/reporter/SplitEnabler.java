@@ -1,15 +1,13 @@
 package nitpeek.io.docx.internal.reporter;
 
-import nitpeek.io.docx.internal.common.DocxParagraph;
-import nitpeek.io.docx.internal.common.PartialParagraph;
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.internal.common.RunRenderer;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.internal.common.*;
+import nitpeek.io.docx.types.*;
 
-final class SplitEnabler {
+
+public final class SplitEnabler {
     private final RunSplitEnabler runSplitEnabler;
 
-    SplitEnabler(RunSplitEnabler runSplitEnabler) {
+    public SplitEnabler(RunSplitEnabler runSplitEnabler) {
         this.runSplitEnabler = runSplitEnabler;
     }
 

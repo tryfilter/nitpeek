@@ -4,8 +4,8 @@ import nitpeek.io.docx.internal.common.DocxUtil;
 import nitpeek.io.docx.internal.common.RunRenderer;
 import nitpeek.io.docx.internal.common.SingletonRun;
 import nitpeek.io.docx.internal.reporter.EdgeDetector.SelectionEdge;
-import nitpeek.io.docx.render.CompositeRun;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.SplittableRun;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.R;
 

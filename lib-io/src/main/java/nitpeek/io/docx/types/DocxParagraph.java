@@ -1,6 +1,6 @@
-package nitpeek.io.docx.internal.common;
+package nitpeek.io.docx.types;
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.internal.common.Partitioned;
 
 import java.util.List;
 

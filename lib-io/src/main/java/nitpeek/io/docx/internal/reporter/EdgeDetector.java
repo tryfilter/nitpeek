@@ -1,6 +1,6 @@
 package nitpeek.io.docx.internal.reporter;
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.RunRenderer;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package nitpeek.io.docx.internal.pagesource.render;
 import jakarta.xml.bind.JAXBElement;
 import nitpeek.io.docx.internal.common.DocxUtil;
 import nitpeek.io.docx.internal.common.RunRenderer;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import org.docx4j.wml.*;
 
 import java.util.EnumSet;

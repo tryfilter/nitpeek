@@ -1,4 +1,6 @@
-package nitpeek.io.docx.render;
+package nitpeek.io.docx.types;
+
+import nitpeek.io.docx.types.CompositeRun;
 
 /**
  * Represents a composite run that may be split.<br>

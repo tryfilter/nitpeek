@@ -2,9 +2,9 @@ package nitpeek.io.docx.internal.pagesource.render;
 
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.analyze.SimpleTextPage;
-import nitpeek.io.docx.internal.common.DocxSegment;
-import nitpeek.io.docx.render.DocxPage;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.DocxSegment;
+import nitpeek.io.docx.types.DocxPage;
+import nitpeek.io.docx.types.CompositeRun;
 
 import java.util.*;
 import java.util.stream.Stream;

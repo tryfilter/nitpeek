@@ -1,7 +1,9 @@
 package nitpeek.io.docx.internal.pagesource;
 
 import nitpeek.io.docx.internal.common.*;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
+import nitpeek.io.docx.types.DocxParagraph;
+import nitpeek.io.docx.types.DocxSegment;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.P;
@@ -31,5 +33,4 @@ final class ComponentSegmentExtractor<T extends ContentAccessor> implements Docx
         List<DocxParagraph<CompositeRun>> transformedParagraphs = originalParagraphs.stream().map(paragraphTransformer::transform).toList();
         return Optional.of(new SimpleDocxSegment<>(transformedParagraphs));
     }
-
 }

@@ -1,7 +1,7 @@
 package nitpeek.io.docx.internal.pagesource;
 
 import nitpeek.io.docx.internal.common.DocxUtil;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.SingletonRun;
 import org.docx4j.wml.FldChar;
 import org.docx4j.wml.R;

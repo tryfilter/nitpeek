@@ -3,9 +3,9 @@ package nitpeek.io.docx.internal.reporter;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.FeatureComponent;
 import nitpeek.core.api.translate.Translation;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.SplittableRun;
 import nitpeek.io.docx.internal.common.DocxTextSelection;
-import nitpeek.io.docx.render.Message;
+import nitpeek.io.docx.types.Message;
 
 import java.util.Collection;
 import java.util.List;

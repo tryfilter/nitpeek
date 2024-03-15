@@ -1,9 +1,9 @@
 package nitpeek.io.docx.internal.pagesource;
 
-import nitpeek.io.docx.internal.common.DocxSegment;
+import nitpeek.io.docx.types.DocxSegment;
 import nitpeek.io.docx.internal.common.SimpleDocxSegment;
 import nitpeek.io.docx.internal.common.DocxUtil;
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.wml.CTFootnotes;

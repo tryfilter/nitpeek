@@ -1,10 +1,10 @@
 package nitpeek.io.docx.internal.reporter;
 
 
-import nitpeek.io.docx.render.CompositeRun;
+import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.internal.common.DocxTextSelection;
 import nitpeek.io.docx.render.RenderableAnnotation;
-import nitpeek.io.docx.render.SplittableRun;
+import nitpeek.io.docx.types.SplittableRun;
 import nitpeek.util.collection.ListEnds;
 
 import java.util.Collection;

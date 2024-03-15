@@ -18,9 +18,6 @@ final class RecordingSubscriber implements FeatureSubscriber {
         recordingTarget.add(feature);
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     public List<Feature> getRecording() {
         return List.copyOf(recordingTarget);
     }

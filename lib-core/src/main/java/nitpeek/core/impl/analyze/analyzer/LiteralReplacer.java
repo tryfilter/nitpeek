@@ -52,9 +52,6 @@ public final class LiteralReplacer implements Analyzer {
         return flags;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<Feature> findFeatures() {
         return regexReplacer.findFeatures();

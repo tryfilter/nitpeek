@@ -42,9 +42,6 @@ public final class ObservableAnalyzer implements NotifyingAnalyzer {
         this.notifier = notifier;
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     @Override
     public List<Feature> findFeatures() {
         return List.copyOf(analyzer.findFeatures());

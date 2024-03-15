@@ -31,9 +31,6 @@ public final class AnonymousFeature implements Feature {
         );
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<FeatureComponent> getComponents() {
         return featureComponents;

@@ -16,9 +16,6 @@ public record SimpleTextPage(List<String> lines, int number) implements TextPage
         this(pageContent.lines().toList(), number);
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<String> getLines() {
         return lines;

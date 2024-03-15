@@ -14,9 +14,6 @@ public final class SingletonRun implements CompositeRun {
         this.runs = List.of(run);
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<R> componentRuns() {
         return runs;

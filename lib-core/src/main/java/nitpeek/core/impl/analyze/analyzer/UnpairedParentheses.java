@@ -42,9 +42,6 @@ public final class UnpairedParentheses implements Analyzer {
         this.closeParenthesis = closeParenthesis;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<Feature> findFeatures() {
         return List.copyOf(features);

@@ -34,9 +34,6 @@ public final class ListPageConsumer implements PageConsumer {
         finished = true;
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     public List<TextPage> getPages() {
         return List.copyOf(consumedPages);
     }

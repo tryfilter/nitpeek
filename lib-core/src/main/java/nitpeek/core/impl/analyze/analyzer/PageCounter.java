@@ -36,9 +36,6 @@ public final class PageCounter implements Analyzer {
         processedPageNumbers.add(page.getPageNumber());
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     @Override
     public List<Feature> findFeatures() {
         SimpleFeatureType simpleFeatureType = StandardFeature.PROCESSED_PAGES.getType();

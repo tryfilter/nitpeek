@@ -90,9 +90,6 @@ final class SplitRun implements SplittableRun {
         }
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<R> componentRuns() {
         return List.copyOf(runs);

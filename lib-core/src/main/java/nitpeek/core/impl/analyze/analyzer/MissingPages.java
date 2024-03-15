@@ -32,9 +32,6 @@ public final class MissingPages implements Analyzer {
         processedPageNumbers.add(page.getPageNumber());
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     @Override
     public List<Feature> findFeatures() {
         if (processedPageNumbers.isEmpty())

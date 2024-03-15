@@ -34,9 +34,6 @@ public final class DummyFeature implements Feature {
         );
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     @Override
     public List<FeatureComponent> getComponents() {
         return List.of();

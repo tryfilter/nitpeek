@@ -47,9 +47,6 @@ public final class RegexReplacer implements Analyzer {
         this.reportedSimpleFeatureType = reportedSimpleFeatureType;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<Feature> findFeatures() {
         return List.copyOf(features);

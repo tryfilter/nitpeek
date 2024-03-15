@@ -13,9 +13,6 @@ public final class SimpleSegmentRenderer implements SegmentRenderer {
         this.paragraphRenderer = paragraphRenderer;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<String> render(DocxSegment<? extends CompositeRun> segment) {
 

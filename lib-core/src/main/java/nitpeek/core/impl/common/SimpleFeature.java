@@ -26,9 +26,6 @@ public record SimpleFeature(FeatureType type, List<FeatureComponent> components,
         return type;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<FeatureComponent> getComponents() {
         return components;

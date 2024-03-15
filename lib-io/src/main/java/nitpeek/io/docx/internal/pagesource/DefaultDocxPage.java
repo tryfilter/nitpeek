@@ -42,9 +42,6 @@ final class DefaultDocxPage<C extends CompositeRun> implements SegmentedDocxPage
         return backingPage.getBody();
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public SortedMap<Integer, DocxSegment<C>> getFootnotes() {
         return backingPage.getFootnotes();

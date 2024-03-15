@@ -25,9 +25,6 @@ public final class AggregatingAnalyzer implements Analyzer {
         this.analyzers = analyzers;
     }
 
-    /**
-     * @return an unmodifiable snapshot
-     */
     @Override
     public List<Feature> findFeatures() {
         List<Feature> features = new ArrayList<>();

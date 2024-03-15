@@ -19,7 +19,7 @@ public final class ListEnds<T> {
     }
 
     /**
-     * @return an unmodifiable copy containing all elements except the first and the last
+     * @return a copy containing all elements except the first and the last
      */
     public List<T> middle() {
         if (list.size() == 1) return List.of();

@@ -16,9 +16,6 @@ public final class SimpleRuleSetProvider implements RuleSetProvider {
         this.identifier = identifier;
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public Set<Rule> getRules() {
         return rules;

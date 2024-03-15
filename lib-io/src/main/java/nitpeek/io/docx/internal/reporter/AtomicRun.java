@@ -14,9 +14,6 @@ public final class AtomicRun implements SplittableRun {
         this.runs = List.copyOf(compositeRun.componentRuns());
     }
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<R> componentRuns() {
         return runs;

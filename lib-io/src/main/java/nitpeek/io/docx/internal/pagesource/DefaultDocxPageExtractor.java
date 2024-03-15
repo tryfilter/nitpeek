@@ -36,9 +36,6 @@ public final class DefaultDocxPageExtractor implements DocxPageExtractor {
 
     private final UnaryOperator<DocxPage<CompositeRun>> pageTransformer;
 
-    /**
-     * @return an unmodifiable copy
-     */
     @Override
     public List<SegmentedDocxPage<CompositeRun>> extractPages() {
         return List.copyOf(pages);

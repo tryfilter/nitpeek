@@ -13,9 +13,6 @@ public final class DefaultDocxPageRenderer implements DocxPageRenderer {
 
     private List<? extends DocxPage<? extends CompositeRun>> pages = List.of();
 
-    /**
-     * @return an unmodifiable list
-     */
     @Override
     public List<TextPage> renderPages(List<? extends DocxPage<? extends CompositeRun>> pages) {
         this.pages = List.copyOf(pages);

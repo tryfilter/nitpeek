@@ -21,7 +21,7 @@ E.g. on Windows:
 `cd .\app\build\install\app\bin`  
 `.\app.bat`  
 This should result in a new PDF file under app/build/install/outputPDF.  
-Given the demo-plugin and TestFile.pdf described above, this file should be called nitpicked_TestFile.pdf and should contain a single comment on the first page suggesting the word 'test' be replaced with the value ''.
+Given the demo-plugin and TestFile.pdf described above, this file should be called nitpicked_TestFile.pdf and should contain a single comment on the first page suggesting the word 'test' be deleted.
 
 
 # API considerations

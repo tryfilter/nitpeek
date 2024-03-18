@@ -14,13 +14,14 @@ To install the console application:
 To build the example plugin:  
 `gradlew :demo-plugin:assemble`
 
-Place the resulting jar (demo-plugin/build/libs/demo-plugin.jar) inside the plugins folder of the app module (app/build/install/plugins).  
-Place a PDF file to be analyzed in the inputPDF folder (app/build/install/inputPDF), for instance lib-io/src/test/resources/nitpeek/io/pdf/TestFile.pdf.  
-To run the application, execute the start script for your platform from app/build/install/bin/.  
+- Place the resulting jar (demo-plugin/build/libs/demo-plugin.jar) inside the plugins folder of the app module (app/build/install/plugins).  
+- Place a PDF file to be analyzed in the inputPDF folder (app/build/install/inputPDF), for instance lib-io/src/test/resources/nitpeek/io/pdf/TestFile.pdf.  
+Alternatively (or in addition), place a DOCX file to be analyzed in the inputDOCX folder (app/build/install/inputDOCX), for instance lib-io/src/test/resources/nitpeek/io/docx/TestFile.docx.  
+- To run the application, execute the start script for your platform from app/build/install/bin/.  
 E.g. on Windows:  
 `cd .\app\build\install\app\bin`  
 `.\app.bat`  
-This should result in a new PDF file under app/build/install/outputPDF.  
+- This should result in a new PDF file under app/build/install/outputPDF and/or a new DOCX file under app/build/install/outputDOCX.  
 Given the demo-plugin and TestFile.pdf described above, this file should be called nitpicked_TestFile.pdf and should contain a single comment on the first page suggesting the word 'test' be deleted.
 
 

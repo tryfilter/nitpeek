@@ -12,8 +12,7 @@ module nitpeek.lib.io {
     requires org.checkerframework.checker.qual;
 
     exports nitpeek.io.pdf;
-    exports nitpeek.io.pdf.convenience;
+    exports nitpeek.io.pdf.util;
     exports nitpeek.io.docx;
-    exports nitpeek.io.docx.render;
-    exports nitpeek.io.docx.types;
+    exports nitpeek.io.docx.util;
 }

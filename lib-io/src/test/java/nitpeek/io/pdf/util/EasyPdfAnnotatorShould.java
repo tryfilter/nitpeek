@@ -1,4 +1,4 @@
-package nitpeek.io.pdf.convenience;
+package nitpeek.io.pdf.util;
 
 import com.google.common.jimfs.Jimfs;
 import nitpeek.core.api.analyze.Rule;
@@ -8,6 +8,7 @@ import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
 import nitpeek.core.impl.process.ListPageConsumer;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
+import nitpeek.io.SimpleAnnotator;
 import nitpeek.io.pdf.PdfPageSource;
 import nitpeek.io.testutil.FileUtil;
 import nitpeek.io.testutil.PdfCreator;
@@ -32,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-final class PdfAnnotatorShould {
+final class EasyPdfAnnotatorShould {
 
     private static final String INPUT_TEST_FOLDER = "In_PdfAnnotator_TestDir";
     private static final String OUTPUT_TEST_FOLDER = "Out_PdfAnnotator_TestDir";
@@ -61,13 +62,13 @@ final class PdfAnnotatorShould {
         var pdfCreator = new PdfCreator(TestFile.getContent());
 
         var pdfIn = createPdf("testSameContents.pdf");
-        var pdfOut = PdfAnnotator.outputPath(pdfIn, outputDir);
+        var pdfOut = SimpleAnnotator.outputPath(pdfIn, outputDir);
         pdfCreator.createPdf(pdfIn);
 
         var pdfSource = PdfPageSource.createFrom(Files.newInputStream(pdfIn));
         var pagesOriginal = new ListPageConsumer(pdfSource);
 
-        var pdfAnnotator = new PdfAnnotator(ruleSetProvider, i18n);
+        var pdfAnnotator = new EasyPdfAnnotator(ruleSetProvider, i18n);
         pdfAnnotator.annotateFeatures(pdfIn, outputDir);
 
 
@@ -85,9 +86,9 @@ final class PdfAnnotatorShould {
     void annotateGeneratedPdf() throws IOException, ReportingException {
         var pdfIn = createPdf("testAnnotations");
 
-        var pdfAnnotator = new PdfAnnotator(ruleSetProvider, i18n);
+        var pdfAnnotator = new EasyPdfAnnotator(ruleSetProvider, i18n);
         pdfAnnotator.annotateFeatures(pdfIn, outputDir);
-        var pdfOut = PdfAnnotator.outputPath(pdfIn, outputDir);
+        var pdfOut = SimpleAnnotator.outputPath(pdfIn, outputDir);
 
         var randomAccess = new RandomAccessReadBuffer(Files.newInputStream(pdfOut));
         var inputPdf = Loader.loadPDF(randomAccess);

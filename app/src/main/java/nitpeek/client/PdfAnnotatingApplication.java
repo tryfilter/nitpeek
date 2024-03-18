@@ -8,7 +8,7 @@ import nitpeek.client.translation.AllPluginsTranslationProviderFactory;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.LocaleProvider;
 import nitpeek.core.api.translate.TranslationProvider;
-import nitpeek.io.pdf.convenience.PdfAnnotator;
+import nitpeek.io.pdf.util.EasyPdfAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,13 +45,13 @@ public final class PdfAnnotatingApplication implements Application {
         var combinedRuleSetProvider = new AllPluginsRuleSetProvider(new ServiceProviderPluginManager());
 
         var i18n = translationProvider.getTranslation(localeProvider);
-        var processor = new PdfAnnotator(combinedRuleSetProvider, i18n);
+        var annotator = new EasyPdfAnnotator(combinedRuleSetProvider, i18n);
 
         printMessage("Processing files...");
         var files = getPdfFilesInInputFolder();
         for (var inputPdf : files) {
             printMessage("Processing file " + inputPdf);
-            processor.annotateFeatures(inputPdf, outputFolder);
+            annotator.annotateFeatures(inputPdf, outputFolder);
         }
         printMessage("Finished processing " + files.size() + " files.");
     }

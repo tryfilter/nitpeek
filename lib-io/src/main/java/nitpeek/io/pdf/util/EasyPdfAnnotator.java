@@ -1,9 +1,10 @@
-package nitpeek.io.pdf.convenience;
+package nitpeek.io.pdf.util;
 
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.process.SimpleProcessor;
+import nitpeek.io.SimpleAnnotator;
 import nitpeek.io.pdf.PdfCommentReporter;
 import nitpeek.io.pdf.PdfPageSource;
 
@@ -13,18 +14,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class PdfAnnotator {
+import static nitpeek.io.SimpleAnnotator.outputPath;
 
-    private static final String ANNOTATED_PDF_PREFIX = "nitpicked_";
+public final class EasyPdfAnnotator implements SimpleAnnotator {
+
     private final RuleSetProvider ruleSetProvider;
     private final Translation i18n;
 
-    public PdfAnnotator(RuleSetProvider ruleSetProvider, Translation i18n) {
+    public EasyPdfAnnotator(RuleSetProvider ruleSetProvider, Translation i18n) {
         this.ruleSetProvider = ruleSetProvider;
         this.i18n = i18n;
     }
 
-    public void annotateFeatures(Path inputPdf, Path outputDirectory) throws IOException, ReportingException {
+    @Override
+    public void annotateFeatures(Path inputPdf, Path outputDirectory) throws ReportingException {
 
         var processor = new SimpleProcessor(ruleSetProvider);
 
@@ -42,10 +45,8 @@ public final class PdfAnnotator {
 
             var reporter = new PdfCommentReporter(pdfToAnnotate, output);
             reporter.reportFeatures(features, i18n);
+        } catch (IOException e) {
+            throw new ReportingException("Exception while annotating features", e);
         }
-    }
-
-    public static Path outputPath(Path inputPdf, Path outputDirectory) {
-        return outputDirectory.resolve(outputDirectory.getFileSystem().getPath(ANNOTATED_PDF_PREFIX + inputPdf.getFileName()));
     }
 }

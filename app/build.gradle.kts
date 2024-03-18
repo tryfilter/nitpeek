@@ -43,6 +43,11 @@ tasks.startScripts {
         val log4jOption = "-Dlog4j2.configurationFile"
         appendValueForParameter(windowsScript, "DEFAULT_JVM_OPTS", " $log4jOption=${pathRelativeToAppHomeWindows(log4jLocation)}")
         appendValueForQuotedParameter(unixScript, "DEFAULT_JVM_OPTS", " $log4jOption=${pathRelativeToAppHomeUnix(log4jLocation)}")
+
+        // Another hack to work around docx4j not playing nice with java modules (defaultJvmOpts of startScripts seems broken on both platforms too)
+        val openJaxbRuntimeToDocx4j = " --add-opens org.glassfish.jaxb.runtime/org.glassfish.jaxb.runtime.v2.runtime=org.docx4j.JAXB_ReferenceImpl"
+        appendValueForParameter(windowsScript, "DEFAULT_JVM_OPTS", openJaxbRuntimeToDocx4j)
+        appendValueForQuotedParameter(unixScript, "DEFAULT_JVM_OPTS", openJaxbRuntimeToDocx4j)
     }
 }
 private fun pathRelativeToAppHomeWindows(relativePath: String): String {

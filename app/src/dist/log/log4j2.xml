@@ -9,5 +9,9 @@
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
+        <!--    Make docx4j quiet by default    -->
+        <Logger name="org.docx4j" level="error">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>

@@ -34,27 +34,33 @@ public final class DocxPageSource implements PageSource {
      * @param pageTransformer the transformer to use before reading the page contents
      * @return a page source containing all pages of the provided DOCX
      */
-    public static DocxPageSource createFrom(InputStream input, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws Docx4JException, JAXBException {
+    public static PageSource createFrom(InputStream input, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws Docx4JException, JAXBException {
         WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(input);
 
         return new DocxPageSource(toMemoryPageSource(wordMLPackage, pageTransformer));
     }
 
-    public static DocxPageSource createFrom(InputStream input) throws Docx4JException, JAXBException {
+    public static PageSource createFrom(InputStream input) throws Docx4JException, JAXBException {
         return createFrom(input, UnaryOperator.identity());
     }
 
-    private static PageSource toMemoryPageSource(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
+    public static PageSource createFrom(List<? extends DocxPage<? extends CompositeRun>> docxPages) {
+        return new SimplePageSource(renderPages(docxPages));
+    }
 
+    private static PageSource toMemoryPageSource(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
         return new SimplePageSource(extractPages(docx, pageTransformer));
     }
 
     private static List<TextPage> extractPages(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws JAXBException, XPathBinderAssociationIsPartialException {
-
         var pageExtractor = new DefaultDocxPageExtractor(docx, pageTransformer);
         var pages = pageExtractor.extractPages();
+        return renderPages(pages);
+    }
+
+    private static List<TextPage> renderPages(List<? extends DocxPage<? extends CompositeRun>> docxPages) {
         var renderer = new DefaultDocxPageRenderer();
-        return renderer.renderPages(pages);
+        return renderer.renderPages(docxPages);
     }
 
     @Override

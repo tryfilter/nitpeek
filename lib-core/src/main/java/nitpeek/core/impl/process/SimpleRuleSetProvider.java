@@ -3,6 +3,7 @@ package nitpeek.core.impl.process;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Identifier;
 import nitpeek.core.api.process.RuleSetProvider;
+import nitpeek.core.api.process.RuleSetTag;
 
 import java.util.Set;
 
@@ -11,9 +12,16 @@ public final class SimpleRuleSetProvider implements RuleSetProvider {
     private final Set<Rule> rules;
     private final Identifier identifier;
 
+    private final Set<RuleSetTag> tags;
+
     public SimpleRuleSetProvider(Set<Rule> rules, Identifier identifier) {
+        this(rules, identifier, Set.of());
+    }
+
+    public SimpleRuleSetProvider(Set<Rule> rules, Identifier identifier, Set<RuleSetTag> tags) {
         this.rules = Set.copyOf(rules);
         this.identifier = identifier;
+        this.tags = Set.copyOf(tags);
     }
 
     @Override
@@ -24,5 +32,10 @@ public final class SimpleRuleSetProvider implements RuleSetProvider {
     @Override
     public Identifier getRuleSetId() {
         return identifier;
+    }
+
+    @Override
+    public Set<RuleSetTag> getTags() {
+        return tags;
     }
 }

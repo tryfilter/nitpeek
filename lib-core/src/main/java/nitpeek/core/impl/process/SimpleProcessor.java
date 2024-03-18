@@ -1,6 +1,7 @@
 package nitpeek.core.impl.process;
 
 import nitpeek.core.api.analyze.AnalyzerOfRule;
+import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.process.PageConsumer;
@@ -15,11 +16,14 @@ import java.util.stream.Collectors;
 public final class SimpleProcessor implements Processor {
 
     private Consumer innerConsumer;
-
-    private final RuleSetProvider ruleSetProvider;
+    private final Set<Rule> rules;
 
     public SimpleProcessor(RuleSetProvider ruleSetProvider) {
-        this.ruleSetProvider = ruleSetProvider;
+        this.rules = ruleSetProvider.getRules();
+    }
+
+    public SimpleProcessor(Set<Rule> rules) {
+        this.rules = rules;
     }
 
     @Override
@@ -34,7 +38,7 @@ public final class SimpleProcessor implements Processor {
 
     private final class Consumer implements PageConsumer {
         private boolean isFinished = false;
-        private final Set<AnalyzerOfRule> analyzers = ruleSetProvider.getRules().stream()
+        private final Set<AnalyzerOfRule> analyzers = rules.stream()
                 .map(AnalyzerOfRule::createFrom)
                 .collect(Collectors.toUnmodifiableSet());
 

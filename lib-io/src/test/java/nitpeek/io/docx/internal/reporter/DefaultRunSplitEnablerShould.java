@@ -8,9 +8,10 @@ import nitpeek.io.docx.types.SplittableRun;
 import org.junit.jupiter.api.Test;
 
 import static nitpeek.io.docx.testutil.DocxTestUtil.createSampleRun;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-final class OnePerPageSplitEnablerShould {
+final class DefaultRunSplitEnablerShould {
 
     private final RunSplitEnabler runSplitEnabler = new DefaultRunSplitEnabler();
     private final RunRenderer runRenderer = new SimpleRunRenderer(0, 0, new SimpleArabicNumberRenderer());
@@ -21,5 +22,12 @@ final class OnePerPageSplitEnablerShould {
         SplittableRun initialConvertedRun = runSplitEnabler.toSplittable(singletonRun, runRenderer);
         SplittableRun sameRunConvertedAgain = runSplitEnabler.toSplittable(singletonRun, runRenderer);
         assertSame(initialConvertedRun, sameRunConvertedAgain);
+    }
+
+    @Test
+    void preserveContents() {
+        var singletonRun = new SingletonRun(createSampleRun("Sample Text"));
+        SplittableRun splittableRun = runSplitEnabler.toSplittable(singletonRun, runRenderer);
+        assertEquals(runRenderer.render(singletonRun), runRenderer.render(splittableRun));
     }
 }

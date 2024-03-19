@@ -2,13 +2,15 @@ package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.process.RuleSetProvider;
-import nitpeek.core.api.process.StandardRuleSetTags;
+import nitpeek.core.api.process.RuleSetTag;
 import nitpeek.core.impl.process.FilteringRuleSetProvider;
 import nitpeek.core.impl.process.RuleSetProviderFilters;
 import nitpeek.core.impl.process.SimpleRuleSetProvider;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static nitpeek.core.api.process.StandardRuleSetTags.*;
 
 public final class BodyFootnotesRuleSetPartitioner {
 
@@ -35,17 +37,17 @@ public final class BodyFootnotesRuleSetPartitioner {
     }
 
     private boolean isRuleSetProviderUniversallyApplicable(RuleSetProvider ruleSetProvider) {
-        if (ruleSetProvider.getTags().isEmpty())
+        if (RuleSetTag.keepTagsFromCategory(Category.CONTENT.getId(), ruleSetProvider.getTags()).isEmpty())
             return true; // by default, when no tags are configured, consider that the rule set provider is general purpose
-        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(StandardRuleSetTags.contentAny()));
+        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(contentAny()));
     }
 
     private boolean isRuleSetProviderApplicableToBody(RuleSetProvider ruleSetProvider) {
-        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(StandardRuleSetTags.contentBody()));
+        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(contentBody()));
     }
 
     private boolean isRuleSetProviderApplicableToFootnotes(RuleSetProvider ruleSetProvider) {
-        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(StandardRuleSetTags.contentFootnotes()));
+        return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(contentFootnotes()));
     }
 
     private RuleSetProvider keepAllExcept(Set<Rule> rulesToRemove, RuleSetProvider ruleSetProvider) {

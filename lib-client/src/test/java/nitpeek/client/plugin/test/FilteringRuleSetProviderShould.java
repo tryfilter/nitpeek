@@ -25,11 +25,12 @@ final class FilteringRuleSetProviderShould {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS) private RuleSetProvider provider13, provider25, provider4;
 
     private Set<RuleSetProvider> allProviders;
+    private static final String category = "Test";
 
-    private final RuleSetTag TAG_EVEN = new RuleSetTag("Even", "Marks rule sets that have one or more even-numbered rules");
-    private final RuleSetTag TAG_ODD = new RuleSetTag("Odd", "Marks rule sets that have one or more odd-numbered rules");
-    private final RuleSetTag TAG_PRIME = new RuleSetTag("Prime", "Marks rule sets that have one or more prime-numbered rules");
-    private final RuleSetTag TAG_SQUARE = new RuleSetTag("Square", "Marks rule sets that have one or more square-numbered rules");
+    private final RuleSetTag TAG_EVEN = new RuleSetTag(category, "Even", "Marks rule sets that have one or more even-numbered rules");
+    private final RuleSetTag TAG_ODD = new RuleSetTag(category, "Odd", "Marks rule sets that have one or more odd-numbered rules");
+    private final RuleSetTag TAG_PRIME = new RuleSetTag(category, "Prime", "Marks rule sets that have one or more prime-numbered rules");
+    private final RuleSetTag TAG_SQUARE = new RuleSetTag(category, "Square", "Marks rule sets that have one or more square-numbered rules");
 
     @BeforeEach
     void setup() {

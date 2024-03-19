@@ -21,8 +21,10 @@ import static org.mockito.Mockito.when;
 final class BodyFootnotesRuleSetPartitionerShould {
 
     @Mock private Rule rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9;
+    @Mock private Rule rule10;
 
     @Mock private RuleSetProvider provider13NoTags, provider25TagBody, provider4TagBodyFootnotes, provider6TagFootnotes, provider7TagAnyAll, provider89AllTags;
+    @Mock private RuleSetProvider providerTagFromDifferentCategory;
 
     private BodyFootnotesRuleSetPartitioner partitioner;
 
@@ -42,14 +44,23 @@ final class BodyFootnotesRuleSetPartitionerShould {
         when(provider6TagFootnotes.getTags()).thenReturn(Set.of(StandardRuleSetTags.contentFootnotes()));
         when(provider7TagAnyAll.getTags()).thenReturn(Set.of(StandardRuleSetTags.contentAny()));
         when(provider89AllTags.getTags()).thenReturn(Set.of(StandardRuleSetTags.contentBody(), StandardRuleSetTags.contentFootnotes(), StandardRuleSetTags.contentAny()));
+        when(providerTagFromDifferentCategory.getTags()).thenReturn(Set.of(StandardRuleSetTags.languageEnglish(), StandardRuleSetTags.languageAny()));
 
-        Set<RuleSetProvider> allProviders = Set.of(provider13NoTags, provider25TagBody, provider4TagBodyFootnotes, provider6TagFootnotes, provider7TagAnyAll, provider89AllTags);
+        Set<RuleSetProvider> allProviders = Set.of(provider13NoTags, provider25TagBody, provider4TagBodyFootnotes, provider6TagFootnotes, provider7TagAnyAll, provider89AllTags, providerTagFromDifferentCategory);
         partitioner = new BodyFootnotesRuleSetPartitioner(allProviders);
     }
 
     @Test
     void partitionRulesFromUntaggedRuleSetsToUniversallyApplicable() {
         assertTrue(partitioner.rulesApplicableUniversally().containsAll(provider13NoTags.getRules()));
+    }
+
+    // Even if the rule-set has some tags, as long as they aren't from the nitpeek.CONTENT category, consider the rule-set
+    // applicable.
+    @Test
+    void partitionRulesFromRuleSetsWithNoTagsFromCategoryToUniversallyApplicable() {
+        when(providerTagFromDifferentCategory.getRules()).thenReturn(Set.of(rule10));
+        assertTrue(partitioner.rulesApplicableUniversally().containsAll(providerTagFromDifferentCategory.getRules()));
     }
 
     @Test

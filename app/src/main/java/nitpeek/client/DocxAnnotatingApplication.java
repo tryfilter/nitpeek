@@ -3,6 +3,8 @@ package nitpeek.client;
 import nitpeek.client.application.Application;
 import nitpeek.client.plugin.PluginManager;
 import nitpeek.client.plugin.ServiceProviderPluginManager;
+import nitpeek.client.ruleset.Language;
+import nitpeek.client.ruleset.LanguageRuleSetFilter;
 import nitpeek.client.translation.AllPluginsTranslationProviderFactory;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.LocaleProvider;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -28,11 +29,14 @@ public final class DocxAnnotatingApplication implements Application {
     private final Path outputFolder;
     private final Logger log = LoggerFactory.getLogger(DocxAnnotatingApplication.class);
 
+    private final Language language;
+
     private static final PathMatcher DOCX_EXTENSION = FileSystems.getDefault().getPathMatcher("glob:*.docx");
 
     private final TranslationProvider translationProvider = new AllPluginsTranslationProviderFactory(pluginManager).createTranslationProvider();
 
-    public DocxAnnotatingApplication(LocaleProvider localeProvider, Path inputFolder, Path outputFolder) {
+    public DocxAnnotatingApplication(LocaleProvider localeProvider, Path inputFolder, Path outputFolder, Language language) {
+        this.language = language;
         if (!inputFolder.toFile().isDirectory()) throw new IllegalArgumentException("input directory not found: " + inputFolder);
         if (!outputFolder.toFile().isDirectory()) throw new IllegalArgumentException("output directory not found: " + inputFolder);
 
@@ -42,11 +46,12 @@ public final class DocxAnnotatingApplication implements Application {
     }
 
     @Override
-    public void run() throws ReportingException, IOException {
+    public void run() throws ReportingException {
         var allRuleSetsFromPlugins = new ServiceProviderPluginManager().getRuleSetProviders();
 
         var i18n = translationProvider.getTranslation(localeProvider);
-        var annotator = new EasyDocxAnnotator(allRuleSetsFromPlugins, i18n);
+        var keepRuleSetsApplicableForSelectedLanguage = new LanguageRuleSetFilter(language);
+        var annotator = new EasyDocxAnnotator(keepRuleSetsApplicableForSelectedLanguage.filter(allRuleSetsFromPlugins), i18n);
 
         printMessage("Processing DOCX files...");
         var files = getDocxFilesInInputFolder();

@@ -5,6 +5,7 @@ module nitpeek.lib.client {
     exports nitpeek.client.plugin;
     exports nitpeek.client.application;
     exports nitpeek.client.translation;
+    exports nitpeek.client.ruleset;
 
     uses nitpeek.core.api.plugin.Plugin;
     opens nitpeek.client.application.internal to nitpeek.lib.core;

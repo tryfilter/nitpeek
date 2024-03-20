@@ -1,7 +1,7 @@
 package nitpeek.client;
 
 import nitpeek.client.application.Application;
-import nitpeek.client.plugin.AllPluginsRuleSetProvider;
+import nitpeek.client.ruleset.AllPluginsRuleSetProvider;
 import nitpeek.client.plugin.PluginManager;
 import nitpeek.client.plugin.ServiceProviderPluginManager;
 import nitpeek.client.translation.AllPluginsTranslationProviderFactory;

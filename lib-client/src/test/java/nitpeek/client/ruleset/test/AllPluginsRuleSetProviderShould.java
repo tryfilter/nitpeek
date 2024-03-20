@@ -1,6 +1,6 @@
-package nitpeek.client.plugin.test;
+package nitpeek.client.ruleset.test;
 
-import nitpeek.client.plugin.AllPluginsRuleSetProvider;
+import nitpeek.client.ruleset.AllPluginsRuleSetProvider;
 import nitpeek.client.plugin.PluginManager;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.plugin.Plugin;

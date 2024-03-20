@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.reporter;
+package nitpeek.client.ruleset;
 
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.process.RuleSetTag;
@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 import static nitpeek.core.api.process.StandardRuleSetTags.Category;
 
-final class LanguageRuleSetFilter implements RuleSetFilter {
+public final class LanguageRuleSetFilter implements RuleSetFilter {
 
     private final Language language;
 
-    LanguageRuleSetFilter(Language language) {
+    public LanguageRuleSetFilter(Language language) {
         this.language = language;
     }
 

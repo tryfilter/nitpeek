@@ -1,4 +1,4 @@
-package nitpeek.io.docx.internal.reporter;
+package nitpeek.client.ruleset;
 
 import nitpeek.core.api.process.RuleSetProvider;
 

@@ -1,5 +1,6 @@
-package nitpeek.client.plugin;
+package nitpeek.client.ruleset;
 
+import nitpeek.client.plugin.PluginManager;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Identifier;
 import nitpeek.core.api.plugin.Plugin;

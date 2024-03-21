@@ -10,6 +10,11 @@ dependencies {
 group = "org.example.nitpeek"
 version = "0.0"
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {

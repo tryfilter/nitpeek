@@ -10,11 +10,11 @@ import java.util.List;
  * It is intentionally simple and declares few constraints on its contract. Concrete implementations may enforce
  * particular characteristics such as:<br>
  * <ul>
- *  <li>Thread safety</li>
+ *  <li>Thread safety
  *  <li>Repeat processing tolerance: an analyzer is tolerant of repeat processing if the features it produces are not
  *  affected by processing the same page more than once. Analyzers that break this assumption shall document this fact.
- *  </li>
- *  <li>Order independence, which can be one of 3 degrees</li>
+ *  <li>Order independence, which can be one of 3 degrees:
+ * </ul>
  *  <ol>
  *      <li>
  *          Order Dependent: what features are produced by the analyzer depends on the order in which pages are processed.
@@ -29,7 +29,6 @@ import java.util.List;
  *          Strongly Order Independent: features are independent of page processing order
  *      </li>
  *  </ol>
- * </ul>
  */
 public interface Analyzer {
     /**

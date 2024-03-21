@@ -42,6 +42,11 @@ public final class UnpairedParentheses implements Analyzer {
         this.closeParenthesis = closeParenthesis;
     }
 
+    public UnpairedParentheses(char openParenthesis, char closeParenthesis) {
+        this.openParenthesis = String.valueOf(openParenthesis);
+        this.closeParenthesis = String.valueOf(closeParenthesis);
+    }
+
     @Override
     public List<Feature> findFeatures() {
         return List.copyOf(features);

@@ -187,12 +187,12 @@ public class DefaultEnglishTranslator implements Translator {
 
     @Override
     public String unpairedOpenParenthesisComponentDescription(String missingParenthesis) {
-        return "Missing open parenthesis " + missingParenthesis;
+        return "Missing opening " + missingParenthesis;
     }
 
     @Override
     public String unpairedClosingParenthesisComponentDescription(String missingParenthesis) {
-        return "Missing closing parenthesis " + missingParenthesis;
+        return "Missing closing " + missingParenthesis;
     }
 
     @Override

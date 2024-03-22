@@ -11,9 +11,7 @@ import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
 import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.types.DocxPage;
-import nitpeek.io.docx.types.DocxParagraph;
 import nitpeek.io.docx.types.DocxSegment;
-import nitpeek.util.collection.ListEnds;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
@@ -59,8 +57,8 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
     }
 
     private List<P> getBodyParagraphs() throws JAXBException, XPathBinderAssociationIsPartialException {
-        var paragraphs = document.getJAXBNodesViaXPath("//w:p", false);
-        return DocxUtil.getAllParagraphs(paragraphs);
+        var paragraphObjects = document.getJAXBNodesViaXPath("//w:p", false);
+        return DocxUtil.getAllParagraphs(paragraphObjects);
     }
 
     private void collectPagesFromParagraphs(List<P> paragraphs) throws JAXBException, XPathBinderAssociationIsPartialException {
@@ -74,30 +72,29 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
 
     private void appendParagraph(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
         if (isParagraphOnNewPage(paragraph)) finishCurrentPage();
-        processAndSplitIfNecessary(paragraph);
+        processParagraph(paragraph);
     }
 
     private boolean isParagraphOnNewPage(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
         return !document.getJAXBNodesViaXPath("w:pPr[w:pageBreakBefore]", paragraph, false).isEmpty();
     }
 
-    private void processAndSplitIfNecessary(P currentParagraph) {
+    private void processParagraph(P currentParagraph) {
 
+        boolean paragraphAdded = false;
+        boolean pageIsOver = false;
         var runs = DocxUtil.getRuns(currentParagraph);
         for (int i = 0; i < runs.size(); i++) {
             var run = runs.get(i);
             saveFootnotes(run);
             if (isRunOnNextPage(run)) {
-                startNewPageAtRun(i, currentParagraph);
-                return;
+                pageIsOver = true;
+                paragraphAdded = addParagraphIfNotEmptyUpTo(i, currentParagraph);
             }
         }
-        addParagraphIfNotEmptyUpTo(runs.size(), currentParagraph);
-    }
 
-    private void startNewPageAtRun(int runIndex, P paragraph) {
-        addParagraphIfNotEmptyUpTo(runIndex, paragraph);
-        finishCurrentPage();
+        if (!paragraphAdded) addParagraphIfNotEmptyUpTo(runs.size(), currentParagraph);
+        if (pageIsOver) finishCurrentPage();
     }
 
     /**
@@ -105,16 +102,18 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
      * of the current page if any of the runs belonging to the current page have visible contents.
      * Otherwise, the row count of the body gets inflated from a paragraph that is not actually visible on the page.
      */
-    private void addParagraphIfNotEmptyUpTo(int firstExcludedRun, P paragraph) {
+    private boolean addParagraphIfNotEmptyUpTo(int firstExcludedRun, P paragraph) {
         // We don't care about the actual page coordinates, we just want to check if something at all would be rendered
         var simpleRenderer = new SimpleParagraphRenderer(new SimpleRunRenderer(0, 0, new SimpleArabicNumberRenderer()));
-        // If up to the specified run nothing would get rendered, consider the paragraph empty and don't add it to the
-        // current page
+
         int lastIncludedRun = firstExcludedRun - 1;
         var paragraphPart = paragraphTransformer.transform(paragraph).partitionTo(lastIncludedRun);
-        if (simpleRenderer.render(paragraphPart).isEmpty()) return;
+        // If up to the specified run nothing would get rendered, consider the paragraph empty and don't add it to the
+        // current page
+        if (simpleRenderer.render(paragraphPart).isEmpty()) return false;
 
         currentPageParagraphs.add(paragraph);
+        return true;
     }
 
 
@@ -125,25 +124,15 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
         var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
         var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
 
-        var lastParagraph = currentPageParagraphs.reversed().stream().findFirst();
-        var body = assembleBodySegment(currentPageParagraphs, lastParagraph.map(p -> DocxUtil.getRuns(p).size() - 1).orElse(0));
+        var body = assembleBodySegment(currentPageParagraphs);
         var footnotes = computeFootnotes();
         var preProcessedPage = pageTransformer.apply(new SimpleDocxPage<>(header, body, footnotes, footer));
         pages.add(new DefaultDocxPage<>(preProcessedPage));
         resetPageState();
     }
 
-    private DocxSegment<CompositeRun> assembleBodySegment(List<P> paragraphs, int indexOfLastRun) {
-        if (paragraphs.isEmpty()) return new SimpleDocxSegment<>(List.of());
-        if (paragraphs.size() == 1)
-            return new SimpleDocxSegment<>(List.of(paragraphTransformer.transformBetween(0, indexOfLastRun, paragraphs.getFirst())));
-
-        var paragraphsSplit = new ListEnds<>(paragraphs);
-        var resultingParagraphs = new ArrayList<DocxParagraph<CompositeRun>>(paragraphs.size());
-        resultingParagraphs.add(paragraphTransformer.transformFrom(0, paragraphsSplit.first()));
-        resultingParagraphs.addAll(paragraphsSplit.middle().stream().map(paragraphTransformer::transform).toList());
-        resultingParagraphs.add(paragraphTransformer.transformTo(indexOfLastRun, paragraphsSplit.last()));
-        return new SimpleDocxSegment<>(resultingParagraphs);
+    private DocxSegment<CompositeRun> assembleBodySegment(List<P> paragraphs) {
+        return new SimpleDocxSegment<>(paragraphs.stream().map(paragraphTransformer::transform).toList());
     }
 
     private int currentPageNumber() {

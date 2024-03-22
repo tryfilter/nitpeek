@@ -12,6 +12,7 @@ import nitpeek.core.impl.process.SimpleRuleSetProvider;
 import nitpeek.core.impl.translate.CoreEnglishTranslation;
 import nitpeek.io.docx.render.HighlightAnnotationRenderer;
 import nitpeek.io.docx.render.PerSectionDocxAnnotator;
+import nitpeek.io.docx.render.SimpleDocxAnnotator;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.junit.jupiter.api.Assertions;
@@ -70,7 +71,7 @@ final class PerSectionDocxAnnotatorShould {
             var rulesBody = getRuleSetProvider(bodySearchTerm, Set.of(StandardRuleSetTags.contentBody()));
             var rulesFootnotes = getRuleSetProvider(footnotesSearchTerm, Set.of(StandardRuleSetTags.contentFootnotes()));
             var rulesUniversal = getRuleSetProvider(universalSearchTerm, Set.of(StandardRuleSetTags.contentAny()));
-            var annotator = new PerSectionDocxAnnotator(Set.of(rulesBody, rulesFootnotes, rulesUniversal), new CoreEnglishTranslation());
+            var annotator = new PerSectionDocxAnnotator(Set.of(rulesBody, rulesFootnotes, rulesUniversal), new CoreEnglishTranslation(), SimpleDocxAnnotator::defaultExtractorFactory);
             annotator.annotateDocument(docxToAnnotate, new HighlightAnnotationRenderer(HighlightAnnotationRenderer.HighlightColor.CYAN));
             docxToAnnotate.save(output);
         } catch (IOException | ReportingException | Docx4JException e) {

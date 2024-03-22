@@ -58,7 +58,7 @@ final class DocxPageSourceShould {
             var docxSource = DocxPageSource.createFrom(input);
             var consumer = new ListPageConsumer(docxSource);
 
-            var expected = new ListPageConsumer(TestFileParagraphs.getContent()).getPages();
+            var expected = new ListPageConsumer(TestFileParagraphs.getFullContentPagesAsSeen()).getPages();
             var actual = consumer.getPages();
 
             assertEquals(expected, actual);

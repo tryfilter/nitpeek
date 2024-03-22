@@ -4,6 +4,7 @@ import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.io.SimpleAnnotator;
+import nitpeek.io.docx.internal.pagesource.ParagraphPreservingDocxPageExtractor;
 import nitpeek.io.docx.render.HighlightAnnotationRenderer;
 import nitpeek.io.docx.render.PerSectionDocxAnnotator;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -31,7 +32,7 @@ public final class EasyDocxAnnotator implements SimpleAnnotator {
         try (var input = Files.newInputStream(inputDocx);
              var output = Files.newOutputStream(outputPath(inputDocx, outputDirectory))) {
 
-            var annotator = new PerSectionDocxAnnotator(ruleSetProviders, i18n);
+            var annotator = new PerSectionDocxAnnotator(ruleSetProviders, i18n, ParagraphPreservingDocxPageExtractor::new);
             var docx = WordprocessingMLPackage.load(input);
             annotator.annotateDocument(docx, new HighlightAnnotationRenderer(HighlightAnnotationRenderer.HighlightColor.CYAN));
 

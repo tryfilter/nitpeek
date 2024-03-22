@@ -150,7 +150,7 @@ final class SimpleDocxAnnotatorShould {
         try (var input = SimpleDocxAnnotatorShould.class.getResourceAsStream("../../TestFile.docx");
              var output = Files.newOutputStream(Path.of("src", "test", "resources", "temp", "highlight_#" + filename + "_TestFile.docx"))) {
             var docxToAnnotate = WordprocessingMLPackage.load(input);
-            var annotator = new SimpleDocxAnnotator(getRuleSetProvider(searchTerms, REPLACE), new DefaultFallbackEnglishTranslation(), pageTransformer);
+            var annotator = new SimpleDocxAnnotator(getRuleSetProvider(searchTerms, REPLACE), new DefaultFallbackEnglishTranslation(), pageTransformer, SimpleDocxAnnotator::defaultExtractorFactory);
             annotator.annotateDocument(docxToAnnotate, new HighlightAnnotationRenderer(HighlightColor.CYAN));
             docxToAnnotate.save(output);
         } catch (IOException | ReportingException | Docx4JException e) {

@@ -16,7 +16,9 @@ public class Main {
 
     private static final Path pdfInputFolder = WORKING_DIR.resolveSibling("inputPDF");
     private static final Path pdfOutputFolder = WORKING_DIR.resolveSibling("outputPDF");
-    private static final Path docxInputFolder = WORKING_DIR.resolveSibling("inputDOCX");
+
+    private static final Path docxInputFolderEnglish = WORKING_DIR.resolveSibling("inputDOCX_en");
+    private static final Path docxInputFolderGerman = WORKING_DIR.resolveSibling("inputDOCX_de");
     private static final Path docxOutputFolder = WORKING_DIR.resolveSibling("outputDOCX");
 
     public static void main(String[] args) throws Exception {
@@ -25,22 +27,10 @@ public class Main {
         Application app = new OneShotSuspendApplication(() -> {
             new PluginListingApplication(localeProvider).run();
             new PdfAnnotatingApplication(localeProvider, pdfInputFolder, pdfOutputFolder).run();
-            new DocxAnnotatingApplication(localeProvider, docxInputFolder, docxOutputFolder, getLanguage(args)).run();
+            new DocxAnnotatingApplication(localeProvider, docxInputFolderEnglish, docxOutputFolder, Language.ENGLISH).run();
+            new DocxAnnotatingApplication(localeProvider, docxInputFolderGerman, docxOutputFolder, Language.GERMAN).run();
         }, localeProvider);
 
         app.run();
-    }
-
-    private static Language getLanguage(String[] args) {
-        var languageKey = getParameterValue("-l", args);
-        if ("DE".equalsIgnoreCase(languageKey)) return Language.GERMAN;
-        else return Language.ENGLISH;
-    }
-
-    private static String getParameterValue(String parameterSwitch, String[] args) {
-        for (int i = 0; i < args.length - 1; i++) {
-            if (parameterSwitch.equals(args[i])) return args[i + 1];
-        }
-        return "";
     }
 }

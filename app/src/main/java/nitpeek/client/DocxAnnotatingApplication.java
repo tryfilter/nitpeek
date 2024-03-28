@@ -75,6 +75,6 @@ public final class DocxAnnotatingApplication implements Application {
     }
 
     private boolean isValidDocx(Path path) {
-        return DOCX_EXTENSION.matches(path.getFileName());
+        return DOCX_EXTENSION.matches(path.getFileName()) && !path.getFileName().toString().startsWith("~$");
     }
 }

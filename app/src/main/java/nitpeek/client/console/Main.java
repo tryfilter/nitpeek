@@ -2,12 +2,12 @@ package nitpeek.client.console;
 
 import nitpeek.client.DocxAnnotatingApplication;
 import nitpeek.client.PdfAnnotatingApplication;
-import nitpeek.client.application.Application;
-import nitpeek.client.application.OneShotSuspendApplication;
 import nitpeek.client.application.PluginListingApplication;
+import nitpeek.client.application.SuspendOnExceptionApplication;
 import nitpeek.client.ruleset.Language;
 import nitpeek.core.impl.translate.CurrentDefaultLocaleProvider;
 
+import java.io.IOException;
 import java.nio.file.Path;
 
 public class Main {
@@ -21,10 +21,10 @@ public class Main {
     private static final Path docxInputFolderGerman = WORKING_DIR.resolveSibling("inputDOCX_de");
     private static final Path docxOutputFolder = WORKING_DIR.resolveSibling("outputDOCX");
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
 
         var localeProvider = new CurrentDefaultLocaleProvider();
-        Application app = new OneShotSuspendApplication(() -> {
+        SuspendOnExceptionApplication app = new SuspendOnExceptionApplication(() -> {
             new PluginListingApplication(localeProvider).run();
             new PdfAnnotatingApplication(localeProvider, pdfInputFolder, pdfOutputFolder).run();
             new DocxAnnotatingApplication(localeProvider, docxInputFolderEnglish, docxOutputFolder, Language.ENGLISH).run();

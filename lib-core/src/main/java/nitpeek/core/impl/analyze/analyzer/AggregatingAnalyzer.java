@@ -1,13 +1,12 @@
 package nitpeek.core.impl.analyze.analyzer;
 
 import nitpeek.core.api.analyze.Analyzer;
-import nitpeek.core.api.common.TextPage;
 import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.TextPage;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Aggregates features from one or more wrapped analyzers.<br>
@@ -19,9 +18,9 @@ import java.util.Set;
  */
 public final class AggregatingAnalyzer implements Analyzer {
 
-    private final Set<Analyzer> analyzers;
+    private final List<Analyzer> analyzers;
 
-    public AggregatingAnalyzer(Set<Analyzer> analyzers) {
+    public AggregatingAnalyzer(List<Analyzer> analyzers) {
         this.analyzers = analyzers;
     }
 

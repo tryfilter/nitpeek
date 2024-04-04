@@ -1,17 +1,17 @@
 package nitpeek.client.demo.rule;
 
+import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.analyze.RuleType;
 import nitpeek.core.api.translate.Translation;
 import nitpeek.core.impl.analyze.SimpleRuleType;
 import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
-import nitpeek.core.api.analyze.Analyzer;
 import nitpeek.core.impl.analyze.analyzer.MissingPages;
 import nitpeek.core.impl.analyze.analyzer.PageCounter;
 import nitpeek.core.impl.translate.CoreTranslationKeys;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 
-import java.util.Set;
+import java.util.List;
 import java.util.function.Supplier;
 
 public enum SampleRule implements Rule {
@@ -19,7 +19,7 @@ public enum SampleRule implements Rule {
     DESCRIBE_PAGE_PROCESSING_INFORMATION(
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_NAME.key(),
             CoreTranslationKeys.DESCRIBE_PAGE_PROCESSING_INFO_RULE_DESCRIPTION.key(),
-            () -> new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages())));
+            () -> new AggregatingAnalyzer(List.of(new PageCounter(), new MissingPages())));
     private final Translation defaultEnglishTranslation = new DefaultFallbackEnglishTranslation();
     private final String nameTranslationKey;
     private final String descriptionTranslationKey;

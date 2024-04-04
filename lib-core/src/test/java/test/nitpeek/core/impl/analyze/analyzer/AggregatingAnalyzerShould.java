@@ -1,17 +1,16 @@
 package test.nitpeek.core.impl.analyze.analyzer;
 
+import nitpeek.core.api.common.Feature;
+import nitpeek.core.api.common.TextPage;
 import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.impl.analyze.analyzer.MissingPages;
 import nitpeek.core.impl.analyze.analyzer.PageCounter;
-import nitpeek.core.api.common.TextPage;
-import nitpeek.core.api.common.Feature;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import test.nitpeek.core.testutil.TestUtil;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 final class AggregatingAnalyzerShould {
 
@@ -23,11 +22,11 @@ final class AggregatingAnalyzerShould {
     );
 
     @Test
-    void aggregateResults() {
+    void aggregateResultsInOrder() {
         var pageCounter = new PageCounter();
         var missingPages = new MissingPages();
 
-        var aggregate = new AggregatingAnalyzer(Set.of(new PageCounter(), new MissingPages()));
+        var aggregate = new AggregatingAnalyzer(List.of(new PageCounter(), new MissingPages()));
 
         for (var page : pages) {
             pageCounter.processPage(page);
@@ -35,11 +34,11 @@ final class AggregatingAnalyzerShould {
             aggregate.processPage(page);
         }
 
-        Set<Feature> expected = new HashSet<>();
+        List<Feature> expected = new ArrayList<>();
         expected.addAll(pageCounter.findFeatures());
         expected.addAll(missingPages.findFeatures());
 
-        Set<Feature> actual = new HashSet<>(aggregate.findFeatures());
+        List<Feature> actual = new ArrayList<>(aggregate.findFeatures());
 
         Assertions.assertEquals(expected, actual);
     }

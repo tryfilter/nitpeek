@@ -5,7 +5,7 @@ import nitpeek.core.impl.analyze.analyzer.AggregatingAnalyzer;
 import nitpeek.core.impl.analyze.analyzer.MissingPages;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.util.Set;
+import java.util.List;
 
 final class AggregateAnalyzerWrappingMissingPagesShould implements MissingPagesShould {
 
@@ -13,7 +13,7 @@ final class AggregateAnalyzerWrappingMissingPagesShould implements MissingPagesS
 
     @BeforeEach
     void setup() {
-        simpleAggregate = new AggregatingAnalyzer(Set.of(new MissingPages()));
+        simpleAggregate = new AggregatingAnalyzer(List.of(new MissingPages()));
     }
 
     @Override

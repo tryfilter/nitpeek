@@ -136,6 +136,6 @@ final class ServiceProviderPluginManagerWithDemoPluginShould {
 
         assertEquals(1, ruleSets.size());
 
-        return new SimpleProcessor(ruleSets.getFirst());
+        return new SimpleProcessor(ruleSets.getFirst().getRules());
     }
 }

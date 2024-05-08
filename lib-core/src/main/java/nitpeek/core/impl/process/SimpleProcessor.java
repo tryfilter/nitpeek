@@ -4,26 +4,19 @@ import nitpeek.core.api.analyze.AnalyzerOfRule;
 import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.common.Feature;
 import nitpeek.core.api.common.TextPage;
-import nitpeek.core.api.process.PageConsumer;
-import nitpeek.core.api.process.PageSource;
-import nitpeek.core.api.process.Processor;
-import nitpeek.core.api.process.RuleSetProvider;
+import nitpeek.core.api.process.*;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class SimpleProcessor implements Processor {
+public final class SimpleProcessor implements FeatureProducingProcessor {
 
     private Consumer innerConsumer;
     private final Set<Rule> rules;
 
-    public SimpleProcessor(RuleSetProvider ruleSetProvider) {
-        this.rules = ruleSetProvider.getRules();
-    }
-
     public SimpleProcessor(Set<Rule> rules) {
-        this.rules = rules;
+        this.rules = Set.copyOf(rules);
     }
 
     @Override
@@ -32,7 +25,8 @@ public final class SimpleProcessor implements Processor {
         pageSource.dischargeTo(innerConsumer);
     }
 
-    public List<Feature> getFeatures() {
+    @Override
+    public List<Feature> getProcessingResult() {
         return innerConsumer.getAllFeatures();
     }
 

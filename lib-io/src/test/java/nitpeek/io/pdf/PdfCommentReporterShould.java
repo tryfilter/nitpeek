@@ -119,6 +119,6 @@ final class PdfCommentReporterShould {
     }
 
     private static SimpleProcessor getReplacingCrossPageProcessor(String toReplace) {
-        return new SimpleProcessor(getRuleSetProvider(toReplace, PdfCommentReporterShould.REPLACE));
+        return new SimpleProcessor(getRuleSetProvider(toReplace, PdfCommentReporterShould.REPLACE).getRules());
     }
 }

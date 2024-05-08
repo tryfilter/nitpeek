@@ -29,7 +29,7 @@ public final class EasyPdfAnnotator implements SimpleAnnotator {
     @Override
     public void annotateFeatures(Path inputPdf, Path outputDirectory) throws ReportingException {
 
-        var processor = new SimpleProcessor(ruleSetProvider);
+        var processor = new SimpleProcessor(ruleSetProvider.getRules());
 
         try (var input = Files.newInputStream(inputPdf);
              var output = Files.newOutputStream(outputPath(inputPdf, outputDirectory))) {

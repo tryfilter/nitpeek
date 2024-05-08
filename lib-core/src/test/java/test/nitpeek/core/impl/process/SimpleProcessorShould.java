@@ -30,7 +30,7 @@ class SimpleProcessorShould {
     @Test
     void produceNoFeaturesWithEmptyPageSource() {
 
-        var processor = new SimpleProcessor(ruleSetProvider);
+        var processor = new SimpleProcessor(ruleSetProvider.getRules());
         var pageSource = new StringPageSource(List.of());
 
         processor.startProcessing(pageSource);
@@ -40,7 +40,7 @@ class SimpleProcessorShould {
     @Test
     void produceFeatures() {
 
-        var processor = new SimpleProcessor(ruleSetProvider);
+        var processor = new SimpleProcessor(ruleSetProvider.getRules());
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);
@@ -50,7 +50,7 @@ class SimpleProcessorShould {
     @Test
     void produceSameFeaturesOnRepeatedExtraction() {
 
-        var processor = new SimpleProcessor(ruleSetProvider);
+        var processor = new SimpleProcessor(ruleSetProvider.getRules());
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);
@@ -62,7 +62,7 @@ class SimpleProcessorShould {
     @Test
     void produceSameFeaturesOnRepeatedProcessing() {
 
-        var processor = new SimpleProcessor(ruleSetProvider);
+        var processor = new SimpleProcessor(ruleSetProvider.getRules());
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);

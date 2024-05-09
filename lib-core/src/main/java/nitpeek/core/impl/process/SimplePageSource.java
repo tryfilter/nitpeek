@@ -15,10 +15,10 @@ public final class SimplePageSource implements PageSource {
     }
 
     @Override
-    public void dischargeTo(PageConsumer consumer) {
+    public <R> R dischargeTo(PageConsumer<R> consumer) {
         for (var page : pages) {
             consumer.consumePage(page);
         }
-        consumer.finish();
+        return consumer.finish();
     }
 }

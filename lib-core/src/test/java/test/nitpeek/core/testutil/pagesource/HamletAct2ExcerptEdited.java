@@ -90,7 +90,7 @@ public final class HamletAct2ExcerptEdited implements PageSource {
     ));
 
     @Override
-    public void dischargeTo(PageConsumer consumer) {
-        source.dischargeTo(consumer);
+    public <R> R dischargeTo(PageConsumer<R> consumer) {
+        return source.dischargeTo(consumer);
     }
 }

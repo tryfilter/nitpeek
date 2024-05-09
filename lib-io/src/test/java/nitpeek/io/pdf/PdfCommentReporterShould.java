@@ -6,6 +6,8 @@ import nitpeek.core.impl.analyze.SimpleRule;
 import nitpeek.core.impl.analyze.analyzer.CrossLineCrossPageAnalyzer;
 import nitpeek.core.impl.analyze.analyzer.RegexReplacer;
 import nitpeek.core.impl.common.SimpleIdentifier;
+import nitpeek.core.impl.process.RulesBasedPageConsumer;
+import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.core.impl.process.SimpleRuleSetProvider;
 import nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
@@ -119,6 +121,6 @@ final class PdfCommentReporterShould {
     }
 
     private static SimpleProcessor getReplacingCrossPageProcessor(String toReplace) {
-        return new SimpleProcessor(getRuleSetProvider(toReplace, PdfCommentReporterShould.REPLACE).getRules());
+        return new SimpleProcessor(new RulesBasedPageConsumer(getRuleSetProvider(toReplace, PdfCommentReporterShould.REPLACE).getRules(), new SimplePageProcessor()));
     }
 }

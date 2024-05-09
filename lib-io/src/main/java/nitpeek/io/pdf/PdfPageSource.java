@@ -18,8 +18,8 @@ public final class PdfPageSource implements PageSource {
     private final PageSource memoryPageSource;
 
     @Override
-    public void dischargeTo(PageConsumer consumer) {
-        memoryPageSource.dischargeTo(consumer);
+    public <R> R dischargeTo(PageConsumer<R> consumer) {
+        return memoryPageSource.dischargeTo(consumer);
     }
 
     /**

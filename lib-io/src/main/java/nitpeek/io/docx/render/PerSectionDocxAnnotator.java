@@ -4,6 +4,8 @@ import nitpeek.core.api.analyze.Rule;
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.process.RulesBasedPageConsumer;
+import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.io.docx.DocxPageSource;
 import nitpeek.io.docx.internal.common.RunRenderer;
@@ -48,7 +50,7 @@ public final class PerSectionDocxAnnotator implements DocxAnnotator {
     }
 
     private void reportFor(List<? extends SegmentedDocxPage<SplittableRun>> pages, Set<Rule> rulesToApply, AnnotationRenderer annotationRenderer) {
-        var processor = new SimpleProcessor(rulesToApply);
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(rulesToApply, new SimplePageProcessor()));
         processor.startProcessing(DocxPageSource.createFrom(pages));
         var features = processor.getFeatures();
         var reporter = new DocxReporter(pages, annotationRenderer);

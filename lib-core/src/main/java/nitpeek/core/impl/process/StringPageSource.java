@@ -127,13 +127,12 @@ public final class StringPageSource implements PageSource {
         return result;
     }
 
-
     @Override
-    public void dischargeTo(PageConsumer consumer) {
+    public <R> R dischargeTo(PageConsumer<R> consumer) {
         for (int i = 0; i < pages.size(); i++) {
             var page = pages.get(i);
             consumer.consumePage(new SimpleTextPage(page, i));
         }
-        consumer.finish();
+        return consumer.finish();
     }
 }

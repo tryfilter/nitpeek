@@ -2,7 +2,7 @@ package nitpeek.core.api.process;
 
 import nitpeek.core.api.common.TextPage;
 
-public interface PageConsumer {
+public interface PageConsumer<R> {
     void consumePage(TextPage page);
-    void finish();
+    R finish();
 }

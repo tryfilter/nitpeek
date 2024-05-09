@@ -4,6 +4,8 @@ import jakarta.xml.bind.JAXBException;
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.process.RulesBasedPageConsumer;
+import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.io.docx.DocxPageSource;
 import nitpeek.io.docx.internal.common.RunRenderer;
@@ -45,7 +47,7 @@ public final class SimpleDocxAnnotator implements DocxAnnotator {
         BiFunction<Integer, Integer, RunRenderer> runRendererFactory = (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
         var pageExtractor = pageExtractorFactory.createExtractor(docx, pageTransformer);
         var fullPages = pageExtractor.extractPages();
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
         processor.startProcessing(DocxPageSource.createFrom(fullPages));
 
         var fullPagesSplittable = DocxAnnotator.makePagesSplittable(fullPages, splitEnabler, runRendererFactory);

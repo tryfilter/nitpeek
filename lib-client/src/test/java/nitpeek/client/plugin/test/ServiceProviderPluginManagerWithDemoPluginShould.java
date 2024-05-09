@@ -4,6 +4,8 @@ import nitpeek.client.plugin.PluginManager;
 import nitpeek.client.plugin.ServiceProviderPluginManager;
 import nitpeek.core.api.plugin.Plugin;
 import nitpeek.core.api.translate.LocaleProvider;
+import nitpeek.core.impl.process.RulesBasedPageConsumer;
+import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.core.impl.process.StringPageSource;
 import nitpeek.core.impl.translate.CurrentDefaultLocaleProvider;
@@ -136,6 +138,6 @@ final class ServiceProviderPluginManagerWithDemoPluginShould {
 
         assertEquals(1, ruleSets.size());
 
-        return new SimpleProcessor(ruleSets.getFirst().getRules());
+        return new SimpleProcessor(new RulesBasedPageConsumer(ruleSets.getFirst().getRules(), new SimplePageProcessor()));
     }
 }

@@ -3,6 +3,8 @@ package nitpeek.io.pdf.util;
 import nitpeek.core.api.process.RuleSetProvider;
 import nitpeek.core.api.report.ReportingException;
 import nitpeek.core.api.translate.Translation;
+import nitpeek.core.impl.process.RulesBasedPageConsumer;
+import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.io.SimpleAnnotator;
 import nitpeek.io.pdf.PdfCommentReporter;
@@ -29,7 +31,7 @@ public final class EasyPdfAnnotator implements SimpleAnnotator {
     @Override
     public void annotateFeatures(Path inputPdf, Path outputDirectory) throws ReportingException {
 
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
 
         try (var input = Files.newInputStream(inputPdf);
              var output = Files.newOutputStream(outputPath(inputPdf, outputDirectory))) {

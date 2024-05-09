@@ -7,7 +7,7 @@ import nitpeek.core.api.common.TextPage;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ListPageConsumer implements PageConsumer {
+public final class ListPageConsumer implements PageConsumer<Void> {
 
     private volatile boolean finished = false;
 
@@ -30,8 +30,9 @@ public final class ListPageConsumer implements PageConsumer {
     }
 
     @Override
-    public void finish() {
+    public Void finish() {
         finished = true;
+        return null;
     }
 
     public List<TextPage> getPages() {

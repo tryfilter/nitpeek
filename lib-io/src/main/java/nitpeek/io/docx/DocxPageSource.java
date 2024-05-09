@@ -64,7 +64,7 @@ public final class DocxPageSource implements PageSource {
     }
 
     @Override
-    public void dischargeTo(PageConsumer consumer) {
-        memoryPageSource.dischargeTo(consumer);
+    public<R> R dischargeTo(PageConsumer<R> consumer) {
+        return memoryPageSource.dischargeTo(consumer);
     }
 }

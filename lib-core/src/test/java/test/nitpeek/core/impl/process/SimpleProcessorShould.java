@@ -5,16 +5,13 @@ import nitpeek.core.impl.analyze.SimpleRule;
 import nitpeek.core.impl.analyze.SimpleRuleType;
 import nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
 import nitpeek.core.impl.common.SimpleIdentifier;
-import nitpeek.core.impl.process.SimpleProcessor;
-import nitpeek.core.impl.process.SimpleRuleSetProvider;
-import nitpeek.core.impl.process.StringPageSource;
+import nitpeek.core.impl.process.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleProcessorShould {
 
@@ -30,7 +27,7 @@ class SimpleProcessorShould {
     @Test
     void produceNoFeaturesWithEmptyPageSource() {
 
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
         var pageSource = new StringPageSource(List.of());
 
         processor.startProcessing(pageSource);
@@ -40,7 +37,7 @@ class SimpleProcessorShould {
     @Test
     void produceFeatures() {
 
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);
@@ -50,7 +47,7 @@ class SimpleProcessorShould {
     @Test
     void produceSameFeaturesOnRepeatedExtraction() {
 
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);
@@ -60,15 +57,13 @@ class SimpleProcessorShould {
     }
 
     @Test
-    void produceSameFeaturesOnRepeatedProcessing() {
+    void throwOnRepeatedProcessing() {
 
-        var processor = new SimpleProcessor(ruleSetProvider.getRules());
+        var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));
         var pageSource = new StringPageSource("TEST 1, 2, 3, TESTTEST");
 
         processor.startProcessing(pageSource);
-        var first = processor.getFeatures();
-        processor.startProcessing(pageSource);
-        var second = processor.getFeatures();
-        assertEquals(first, second);
+        processor.getFeatures();
+        assertThrows(RuntimeException.class, () -> processor.startProcessing(pageSource));
     }
 }

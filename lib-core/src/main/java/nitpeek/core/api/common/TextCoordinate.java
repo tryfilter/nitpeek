@@ -18,12 +18,12 @@ public record TextCoordinate(int page, int line, int character) implements Compa
         return extendToSelection(1, totalCharacters);
     }
 
-    public TextSelection extendToSelection(int totalLines, int totalCharacters) {
-        return extendToSelection(1, totalLines, totalCharacters);
+    public TextSelection extendToSelection(int totalLines, int totalCharactersOnLastLine) {
+        return extendToSelection(1, totalLines, totalCharactersOnLastLine);
     }
 
-    public TextSelection extendToSelection(int totalPages, int totalLines, int totalCharacters) {
-        return new TextSelection(this, new TextCoordinate(page() + totalPages - 1, line() + totalLines - 1, character() + totalCharacters - 1));
+    public TextSelection extendToSelection(int totalPages, int totalLinesOnLastPage, int totalCharactersOnLastLine) {
+        return new TextSelection(this, new TextCoordinate(page() + totalPages - 1, line() + totalLinesOnLastPage - 1, character() + totalCharactersOnLastLine - 1));
     }
 
     @Override

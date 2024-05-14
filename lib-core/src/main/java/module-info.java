@@ -16,6 +16,8 @@ module nitpeek.lib.core {
     exports nitpeek.core.impl.common;
     exports nitpeek.core.impl.process;
     exports nitpeek.core.impl.config;
+    exports nitpeek.core.api.config.standard;
+    exports nitpeek.core.api.config.standard.footnote;
     exports nitpeek.core.impl.report;
     exports nitpeek.core.impl.translate;
 

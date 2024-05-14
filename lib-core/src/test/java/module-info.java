@@ -11,6 +11,7 @@ module test.nitpeek.lib.core {
     opens test.nitpeek.core.impl.analyze.transformer to org.junit.platform.commons;
     opens test.nitpeek.core.impl.common to org.junit.platform.commons;
     opens test.nitpeek.core.impl.process to org.junit.platform.commons;
+    opens test.nitpeek.core.impl.config to org.junit.platform.commons;
     opens test.nitpeek.core.impl.report to org.junit.platform.commons;
     opens test.nitpeek.core.impl.translate to org.junit.platform.commons;
 }

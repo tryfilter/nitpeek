@@ -8,7 +8,7 @@ import nitpeek.core.impl.process.RulesBasedPageConsumer;
 import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.io.docx.DocxPageSource;
-import nitpeek.io.docx.internal.common.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRendererFactory;
 import nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
 import nitpeek.io.docx.internal.pagesource.DocxPageExtractor;
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
@@ -18,15 +18,10 @@ import nitpeek.io.docx.types.CompositeRun;
 import nitpeek.io.docx.types.DocxPage;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 public final class SimpleDocxAnnotator implements DocxAnnotator {
-
-    private static final Logger log = LoggerFactory.getLogger(SimpleDocxAnnotator.class);
     private final RuleSetProvider ruleSetProvider;
     private final Translation i18n;
     private final UnaryOperator<DocxPage<CompositeRun>> pageTransformer;
@@ -44,7 +39,7 @@ public final class SimpleDocxAnnotator implements DocxAnnotator {
     public void annotateDocument(WordprocessingMLPackage docx, AnnotationRenderer annotationRenderer) throws ReportingException {
 
         var splitEnabler = new SplitEnabler(new DefaultRunSplitEnabler());
-        BiFunction<Integer, Integer, RunRenderer> runRendererFactory = (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
+        RunRendererFactory runRendererFactory = (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
         var pageExtractor = pageExtractorFactory.createExtractor(docx, pageTransformer);
         var fullPages = pageExtractor.extractPages();
         var processor = new SimpleProcessor(new RulesBasedPageConsumer(ruleSetProvider.getRules(), new SimplePageProcessor()));

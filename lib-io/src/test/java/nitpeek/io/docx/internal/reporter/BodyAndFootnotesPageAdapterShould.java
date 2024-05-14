@@ -1,6 +1,7 @@
 package nitpeek.io.docx.internal.reporter;
 
 import nitpeek.io.docx.internal.common.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRendererFactory;
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import nitpeek.io.docx.types.CompositeRun;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import static nitpeek.io.docx.testutil.DocxTestUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +33,7 @@ final class BodyAndFootnotesPageAdapterShould {
     private final List<DocxPage<CompositeRun>> originalPages = List.of(page1, page2);
 
 
-    private final BiFunction<Integer, Integer, RunRenderer> runRendererFactory =
+    private final RunRendererFactory runRendererFactory =
             (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
 
     @Test

@@ -8,7 +8,7 @@ import nitpeek.core.impl.process.RulesBasedPageConsumer;
 import nitpeek.core.impl.process.SimplePageProcessor;
 import nitpeek.core.impl.process.SimpleProcessor;
 import nitpeek.io.docx.DocxPageSource;
-import nitpeek.io.docx.internal.common.RunRenderer;
+import nitpeek.io.docx.internal.common.RunRendererFactory;
 import nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import nitpeek.io.docx.internal.reporter.*;
@@ -17,7 +17,6 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 public final class PerSectionDocxAnnotator implements DocxAnnotator {
@@ -36,7 +35,7 @@ public final class PerSectionDocxAnnotator implements DocxAnnotator {
     @Override
     public void annotateDocument(WordprocessingMLPackage docx, AnnotationRenderer annotationRenderer) throws ReportingException {
         var splitEnabler = new SplitEnabler(new DefaultRunSplitEnabler());
-        BiFunction<Integer, Integer, RunRenderer> runRendererFactory = (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
+        RunRendererFactory runRendererFactory = (pageIndex, pageCount) -> new SimpleRunRenderer(pageIndex, pageCount, new SimpleArabicNumberRenderer());
         var pageExtractor = pageExtractorFactory.createExtractor(docx, UnaryOperator.identity());
         var originalPages = pageExtractor.extractPages();
         var pageAdapter = new BodyAndFootnotesPageAdapter(originalPages, splitEnabler, runRendererFactory);

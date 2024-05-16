@@ -41,10 +41,32 @@ public final class DocxTestUtil {
         run.getContent().add(objectFactory.createRT(textElement));
     }
 
-    public static void applyStyle(R run) {
+    public static void applyStyleItalicBoldTimesNewRomanYellow(R run) {
         RPr runProperties = new RPr();
         runProperties.setI(new BooleanDefaultTrue());
         runProperties.setB(new BooleanDefaultTrue());
+        var font = objectFactory.createRFonts();
+        font.setAscii("Times New Roman");
+        font.setCs("Times New Roman");
+        font.setHAnsi("Times New Roman");
+        runProperties.setRFonts(font);
+        var color = objectFactory.createColor();
+        color.setVal("FFFF00");
+        runProperties.setColor(color);
+        run.setRPr(runProperties);
+    }
+
+    public static void applyStyleIntenseEmphasisRedHighlightUnderline(R run) {
+        RPr runProperties = new RPr();
+        var style = objectFactory.createRStyle();
+        style.setVal("IntenseEmphasis");
+        runProperties.setRStyle(style);
+        var highlight = objectFactory.createHighlight();
+        highlight.setVal("red");
+        runProperties.setHighlight(highlight);
+        var underline = objectFactory.createU();
+        underline.setVal(UnderlineEnumeration.SINGLE);
+        runProperties.setU(underline);
         run.setRPr(runProperties);
     }
 

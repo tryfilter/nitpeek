@@ -8,7 +8,7 @@ import nitpeek.io.docx.testutil.DocxTestUtil;
 import org.docx4j.wml.*;
 import org.junit.jupiter.api.Test;
 
-import static nitpeek.io.docx.testutil.DocxTestUtil.applyStyle;
+import static nitpeek.io.docx.testutil.DocxTestUtil.applyStyleItalicBoldTimesNewRomanYellow;
 import static org.docx4j.XmlUtils.marshaltoString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -21,7 +21,7 @@ final class TextRunSplitterShould {
     @Test
     void preserveStyleInResultingRuns() {
         R runToSplit = DocxTestUtil.createSampleRun("Sample text");
-        applyStyle(runToSplit);
+        applyStyleItalicBoldTimesNewRomanYellow(runToSplit);
         String originalStyle = styleAsString(runToSplit);
 
         var textRunSplitter = new TextRunSplitter();

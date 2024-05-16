@@ -6,6 +6,7 @@ import org.docx4j.XmlUtils;
 import org.docx4j.wml.*;
 
 import java.util.List;
+import java.util.function.Function;
 
 public final class HighlightAnnotationRenderer implements AnnotationRenderer {
 
@@ -62,6 +63,12 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
         var properties = objectFactory.createCTRPrChangeRPr();
 
         var propertyList = properties.getEGRPrBase();
+        copyFont(propertyList, runProperties);
+        copyColor(propertyList, runProperties);
+        copyStyle(propertyList, runProperties);
+        copyHighlight(propertyList, runProperties);
+        copyUnderline(propertyList, runProperties);
+
         addIfNotNull(propertyList, objectFactory.createCTRPrChangeRPrB(runProperties.getB()));
         addIfNotNull(propertyList, objectFactory.createCTRPrChangeRPrBCs(runProperties.getBCs()));
         addIfNotNull(propertyList, objectFactory.createCTRPrChangeRPrI(runProperties.getI()));
@@ -103,6 +110,31 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
         addIfNotNull(propertyList, objectFactory.createCTRPrChangeRPrCntxtAlts(runProperties.getCntxtAlts()));
 
         return properties;
+    }
+
+    private void copyFont(List<Object> targetProperties, RPr sourceRunProperties) {
+        copyDeepIfNotNull(targetProperties, sourceRunProperties, RPrAbstract::getRFonts);
+    }
+
+    private void copyColor(List<Object> targetProperties, RPr sourceRunProperties) {
+        copyDeepIfNotNull(targetProperties, sourceRunProperties, RPrAbstract::getColor);
+    }
+
+    private void copyStyle(List<Object> targetProperties, RPr sourceRunProperties) {
+        copyDeepIfNotNull(targetProperties, sourceRunProperties, RPrAbstract::getRStyle);
+    }
+
+    private void copyHighlight(List<Object> targetProperties, RPr sourceRunProperties) {
+        copyDeepIfNotNull(targetProperties, sourceRunProperties, RPrAbstract::getHighlight);
+    }
+
+    private void copyUnderline(List<Object> targetProperties, RPr sourceRunProperties) {
+        copyDeepIfNotNull(targetProperties, sourceRunProperties, RPrAbstract::getU);
+    }
+
+    private void copyDeepIfNotNull(List<Object> targetProperties, RPr sourceRunProperties, Function<RPr, ?> propertyExtractor) {
+        var value = propertyExtractor.apply(sourceRunProperties);
+        if (value != null) targetProperties.add(XmlUtils.deepCopy(value));
     }
 
     private void addIfNotNull(List<Object> existingProperties, JAXBElement<?> element) {

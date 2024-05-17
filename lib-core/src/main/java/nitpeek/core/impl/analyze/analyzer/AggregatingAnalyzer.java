@@ -18,9 +18,9 @@ import java.util.List;
  */
 public final class AggregatingAnalyzer implements Analyzer {
 
-    private final List<Analyzer> analyzers;
+    private final List<? extends Analyzer> analyzers;
 
-    public AggregatingAnalyzer(List<Analyzer> analyzers) {
+    public AggregatingAnalyzer(List<? extends Analyzer> analyzers) {
         this.analyzers = analyzers;
     }
 

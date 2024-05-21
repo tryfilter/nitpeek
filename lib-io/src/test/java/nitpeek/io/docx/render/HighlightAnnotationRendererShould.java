@@ -101,6 +101,22 @@ final class HighlightAnnotationRendererShould {
     }
 
     @Test
+    void addHighlightOfNewColorIfSameHighlightAlreadyPresent() {
+
+        DocxTestUtil.applyStyleItalicBlueHighlight(runToHighlight);
+        highlightAnnotationRenderer.renderAnnotation(new RenderableAnnotation(getMessage(), List.of(new SingletonRun(runToHighlight))));
+
+        Highlight highlight = runToHighlight.getRPr().getHighlight();
+        assertNotNull(highlight);
+        assertNotEquals(highlightColor.getName(), highlight.getVal());
+    }
+
+    @Test
+    void preserveExistingHighlightInChangeTrackingIfSameColorAsDefaultHighlightColor() {
+        preserveExistingFormatElementInChangeTracking(DocxTestUtil::applyStyleItalicBlueHighlight, RPrAbstract::getHighlight, Highlight.class);
+    }
+
+    @Test
     void preserveExistingHighlightInChangeTracking() {
         preserveExistingFormatElementInChangeTracking(DocxTestUtil::applyStyleIntenseEmphasisRedHighlightUnderline, RPrAbstract::getHighlight, Highlight.class);
     }

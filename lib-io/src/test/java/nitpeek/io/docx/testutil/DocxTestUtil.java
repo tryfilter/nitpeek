@@ -41,6 +41,15 @@ public final class DocxTestUtil {
         run.getContent().add(objectFactory.createRT(textElement));
     }
 
+    public static void applyStyleItalicBlueHighlight(R run) {
+        RPr runProperties = new RPr();
+        runProperties.setI(new BooleanDefaultTrue());
+        var highlight = objectFactory.createHighlight();
+        highlight.setVal("blue");
+        runProperties.setHighlight(highlight);
+        run.setRPr(runProperties);
+    }
+
     public static void applyStyleItalicBoldTimesNewRomanYellow(R run) {
         RPr runProperties = new RPr();
         runProperties.setI(new BooleanDefaultTrue());

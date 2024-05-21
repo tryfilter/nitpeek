@@ -37,9 +37,15 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
     private void highlightRun(R run, String authorString) {
         var runProperties = getOrCreateRunProperties(run);
         trackChangeWithAuthor(runProperties, authorString);
-        var highlight = new Highlight();
-        highlight.setVal(highlightColor.getName());
-        runProperties.setHighlight(highlight);
+        var existingHighlight = runProperties.getHighlight();
+        var newHighlight = new Highlight();
+        if (existingHighlight != null && highlightColor.getName().equals(existingHighlight.getVal())) {
+            newHighlight.setVal(highlightColor.closestColor().getName());
+        } else {
+            newHighlight.setVal(highlightColor.getName());
+        }
+
+        runProperties.setHighlight(newHighlight);
     }
 
     private RPr getOrCreateRunProperties(R run) {
@@ -58,7 +64,7 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
         change.setRPr(copyOriginalProperties(runProperties));
         runProperties.setRPrChange(change);
     }
-    
+
     private CTRPrChange.RPr copyOriginalProperties(RPr runProperties) {
         var properties = objectFactory.createCTRPrChangeRPr();
 
@@ -143,23 +149,108 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
     }
 
     public enum HighlightColor {
-        BLACK("black"),
-        BLUE("blue"),
-        CYAN("cyan"),
-        GREEN("green"),
-        MAGENTA("magenta"),
-        RED("red"),
-        YELLOW("yellow"),
-        WHITE("white"),
-        DARK_BLUE("darkBlue"),
-        DARK_CYAN("darkCyan"),
-        DARK_GREEN("darkGreen"),
-        DARK_MAGENTA("darkMagenta"),
-        DARK_RED("darkRed"),
-        DARK_YELLOW("darkYellow"),
-        DARK_GRAY("darkGray"),
-        LIGHT_GRAY("lightGray"),
-        NONE("none");
+        BLACK("black") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_GRAY;
+            }
+        },
+        BLUE("blue") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_BLUE;
+            }
+        },
+        CYAN("cyan") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_CYAN;
+            }
+        },
+        GREEN("green") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_GREEN;
+            }
+        },
+        MAGENTA("magenta") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_MAGENTA;
+            }
+        },
+        RED("red") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_RED;
+            }
+        },
+        YELLOW("yellow") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_YELLOW;
+            }
+        },
+        WHITE("white") {
+            @Override
+            public HighlightColor closestColor() {
+                return LIGHT_GRAY;
+            }
+        },
+        DARK_BLUE("darkBlue") {
+            @Override
+            public HighlightColor closestColor() {
+                return BLUE;
+            }
+        },
+        DARK_CYAN("darkCyan") {
+            @Override
+            public HighlightColor closestColor() {
+                return CYAN;
+            }
+        },
+        DARK_GREEN("darkGreen") {
+            @Override
+            public HighlightColor closestColor() {
+                return GREEN;
+            }
+        },
+        DARK_MAGENTA("darkMagenta") {
+            @Override
+            public HighlightColor closestColor() {
+                return MAGENTA;
+            }
+        },
+        DARK_RED("darkRed") {
+            @Override
+            public HighlightColor closestColor() {
+                return RED;
+            }
+        },
+        DARK_YELLOW("darkYellow") {
+            @Override
+            public HighlightColor closestColor() {
+                return YELLOW;
+            }
+        },
+        DARK_GRAY("darkGray") {
+            @Override
+            public HighlightColor closestColor() {
+                return LIGHT_GRAY;
+            }
+        },
+        LIGHT_GRAY("lightGray") {
+            @Override
+            public HighlightColor closestColor() {
+                return DARK_GRAY;
+            }
+        },
+        NONE("none") {
+            @Override
+            public HighlightColor closestColor() {
+                return NONE;
+            }
+        };
         private final String name;
 
         public String getName() {
@@ -169,5 +260,7 @@ public final class HighlightAnnotationRenderer implements AnnotationRenderer {
         HighlightColor(String name) {
             this.name = name;
         }
+
+        public abstract HighlightColor closestColor();
     }
 }

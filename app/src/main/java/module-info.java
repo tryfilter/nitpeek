@@ -1,7 +1,7 @@
-module nitpeek.app.main {
-    requires nitpeek.lib.core;
-    requires nitpeek.lib.client;
-    requires nitpeek.lib.io;
+module com.nitpeek.app.main {
+    requires com.nitpeek.lib.core;
+    requires com.nitpeek.lib.client;
+    requires com.nitpeek.lib.io;
 
     requires org.slf4j;
 }

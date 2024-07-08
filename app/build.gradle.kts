@@ -5,9 +5,9 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":lib-core"))
-    implementation(project(":lib-client"))
-    implementation(project(":lib-io"))
+    implementation(project(":nitpeek-core"))
+    implementation(project(":nitpeek-client"))
+    implementation(project(":nitpeek-io"))
     implementation(libs.slf4j.api)
     runtimeOnly(libs.log.impl)
     runtimeOnly(libs.log4j.bridge.slf4j)
@@ -15,8 +15,8 @@ dependencies {
 
 
 application {
-    mainModule = "nitpeek.app.main"
-    mainClass = "nitpeek.client.console.Main"
+    mainModule = "com.nitpeek.app.main"
+    mainClass = "com.nitpeek.client.console.Main"
 }
 
 repositories {

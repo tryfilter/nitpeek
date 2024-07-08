@@ -1,4 +1,5 @@
 [versions]
+nitpeek = "0.0-alpha"
 junit-jupiter = "5.10.1"
 java = "21"
 pdf-box = "3.0.1"

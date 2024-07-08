@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":lib-core"))
+    implementation(project(":nitpeek-core"))
 }
 
 repositories {

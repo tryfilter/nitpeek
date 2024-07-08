@@ -11,8 +11,8 @@ pluginManagement {
 
 rootProject.name = "nitpeek"
 include("app")
-include("lib-core")
-include("lib-client")
-include("demo-plugin")
-include("lib-io")
+include("nitpeek-core")
+include("nitpeek-client")
+include("nitpeek-io")
 include("lib-collection-util")
+include("demo-plugin")

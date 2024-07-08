@@ -1,3 +1,3 @@
-module nitpeek.lib.collection {
-    exports nitpeek.util.collection;
+module com.nitpeek.lib.collection {
+    exports com.nitpeek.util.collection;
 }

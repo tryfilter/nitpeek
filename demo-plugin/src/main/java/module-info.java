@@ -1,9 +1,9 @@
-import nitpeek.core.api.plugin.Plugin;
-import nitpeek.plugins.demoplugin.plugin1.DemoPlugin;
+import com.nitpeek.core.api.plugin.Plugin;
+import com.nitpeek.plugins.demoplugin.plugin1.DemoPlugin;
 
-module nitpeek.demo.plugins.demoplugin {
-    requires nitpeek.lib.core;
+module com.nitpeek.demo.plugins.demoplugin {
+    requires com.nitpeek.lib.core;
     
     provides Plugin with DemoPlugin;
-    opens nitpeek.plugins.demoplugin.plugin1 to nitpeek.lib.core;
+    opens com.nitpeek.plugins.demoplugin.plugin1 to com.nitpeek.lib.core;
 }

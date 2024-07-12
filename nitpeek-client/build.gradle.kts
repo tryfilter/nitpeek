@@ -1,5 +1,6 @@
 plugins {
     id("convention-java")
+    id("convention-publish-maven")
 }
 
 dependencies {

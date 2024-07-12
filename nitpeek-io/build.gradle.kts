@@ -1,6 +1,7 @@
 plugins {
     id("convention-java")
     id("org.gradlex.extra-java-module-info").version(libs.versions.extraJavaModuleInfo)
+    id("convention-publish-maven")
 }
 
 repositories {

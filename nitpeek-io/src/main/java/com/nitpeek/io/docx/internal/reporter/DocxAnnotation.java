@@ -12,7 +12,7 @@ import com.nitpeek.io.docx.render.RenderableAnnotation;
  * A {@code DocxAnnotation} may cross run boundaries, making it generally impractical for direct rendering.
  * For actually rendering an annotation in a DOCX document, a {@link RenderableAnnotation} can be used.
  *
- * @param message       represents the text & author of the annotation
+ * @param message       represents the text &amp; author of the annotation
  * @param textSelection defines the selection of text in the document that the annotation pertains to
  */
 public record DocxAnnotation<C extends CompositeRun>(Message message, DocxTextSelection<C> textSelection) {

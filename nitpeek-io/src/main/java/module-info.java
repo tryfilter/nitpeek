@@ -1,6 +1,5 @@
 module com.nitpeek.lib.io {
     requires com.nitpeek.lib.core;
-    requires com.nitpeek.lib.collection;
     requires org.apache.pdfbox;
     requires org.apache.pdfbox.io;
     requires org.slf4j;

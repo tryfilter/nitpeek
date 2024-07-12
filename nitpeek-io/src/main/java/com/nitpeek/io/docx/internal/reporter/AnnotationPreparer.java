@@ -5,7 +5,7 @@ import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.internal.common.DocxTextSelection;
 import com.nitpeek.io.docx.render.RenderableAnnotation;
 import com.nitpeek.io.docx.types.SplittableRun;
-import com.nitpeek.util.collection.ListEnds;
+import com.nitpeek.io.util.collection.ListEnds;
 
 import java.util.Collection;
 import java.util.List;

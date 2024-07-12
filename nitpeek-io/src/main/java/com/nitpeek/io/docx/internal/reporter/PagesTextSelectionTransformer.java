@@ -7,7 +7,7 @@ import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.DocxParagraph;
 import com.nitpeek.io.docx.types.DocxSegment;
 import com.nitpeek.io.docx.types.SplittableRun;
-import com.nitpeek.util.collection.ListEnds;
+import com.nitpeek.io.util.collection.ListEnds;
 
 import java.util.ArrayList;
 import java.util.Collection;

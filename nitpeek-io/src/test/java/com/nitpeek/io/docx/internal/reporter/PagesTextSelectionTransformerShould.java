@@ -9,7 +9,7 @@ import com.nitpeek.io.docx.internal.common.RunRenderer;
 import com.nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.SplittableRun;
-import com.nitpeek.util.collection.ListEnds;
+import com.nitpeek.io.util.collection.ListEnds;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.junit.jupiter.api.Test;

@@ -12,7 +12,7 @@ import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.DocxPage;
 import com.nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
-import com.nitpeek.util.collection.ListEnds;
+import com.nitpeek.io.util.collection.ListEnds;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;

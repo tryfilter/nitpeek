@@ -1,4 +1,4 @@
-package com.nitpeek.util.collection;
+package com.nitpeek.io.util.collection;
 
 import org.junit.jupiter.api.Test;
 

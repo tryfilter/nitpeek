@@ -1,24 +1,25 @@
 package com.nitpeek.io.docx.internal.pagesource;
 
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
 import com.nitpeek.core.api.report.ReportingException;
 import com.nitpeek.io.docx.internal.common.DocxUtil;
-import com.nitpeek.io.docx.internal.common.SimpleDocxSegment;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleParagraphRenderer;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
 import com.nitpeek.io.docx.internal.reporter.SegmentedDocxPage;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.DocxPage;
-import com.nitpeek.io.docx.types.DocxSegment;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.docx4j.wml.*;
+import org.docx4j.wml.CTFtnEdnRef;
+import org.docx4j.wml.P;
+import org.docx4j.wml.R;
 
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtractor {
@@ -26,24 +27,26 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
     private final MainDocumentPart document;
     private final WordprocessingMLPackage docx;
 
-    private final Set<Integer> currentPageFootnotes = new HashSet<>();
-    private final List<P> currentPageParagraphs = new ArrayList<>();
-
-    private final List<SegmentedDocxPage<CompositeRun>> pages = new ArrayList<>();
+    private final List<PageBuilder> pages = new ArrayList<>();
 
     private final ParagraphTransformer paragraphTransformer = new CompositingParagraphTransformer(new ComplexRunsGrouper());
 
     private final UnaryOperator<DocxPage<CompositeRun>> pageTransformer;
 
+    private PageBuilder currentPage;
     @Override
     public List<SegmentedDocxPage<CompositeRun>> extractPages() {
-        return List.copyOf(pages);
+        return List.copyOf(pages.stream()
+                .map(pageBuilder -> pageTransformer.apply(pageBuilder.build()))
+                .map(DefaultDocxPage::new)
+                .toList());
     }
 
     public ParagraphPreservingDocxPageExtractor(WordprocessingMLPackage docx, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws ReportingException {
         this.docx = docx;
         this.document = docx.getMainDocumentPart();
         this.pageTransformer = pageTransformer;
+        this.currentPage = new PageBuilder(docx, paragraphTransformer, 0);
         try {
             collectPages();
         } catch (JAXBException | XPathBinderAssociationIsPartialException e) {
@@ -67,11 +70,11 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
         }
 
         // Add last page
-        if (!currentPageParagraphs.isEmpty()) finishCurrentPage();
+        if (currentPage.hasBodyContent()) startNextPage();
     }
 
     private void appendParagraph(P paragraph) throws JAXBException, XPathBinderAssociationIsPartialException {
-        if (isParagraphOnNewPage(paragraph)) finishCurrentPage();
+        if (isParagraphOnNewPage(paragraph)) startNextPage();
         processParagraph(paragraph);
     }
 
@@ -81,82 +84,39 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
 
     private void processParagraph(P currentParagraph) {
 
-        boolean paragraphAdded = false;
-        boolean pageIsOver = false;
-        var runs = DocxUtil.getRuns(currentParagraph);
-        for (int i = 0; i < runs.size(); i++) {
-            var run = runs.get(i);
-            saveFootnotes(run);
-            if (isRunOnNextPage(run)) {
-                pageIsOver = true;
-                paragraphAdded = addParagraphIfNotEmptyUpTo(i, currentParagraph);
-            }
+        addParagraphIfNotEmpty(currentParagraph);
+
+        for (R run : DocxUtil.getRuns(currentParagraph)) {
+            saveFootnotes(run, currentPage);
+            if (isRunOnNextPage(run)) startNextPage();
         }
 
-        if (!paragraphAdded) addParagraphIfNotEmptyUpTo(runs.size(), currentParagraph);
-        if (pageIsOver) finishCurrentPage();
     }
+
 
     /**
      * Because paragraphs are equivalent to lines in {@code TextCoordinate} terms, only consider a paragraph to be part
      * of the current page if any of the runs belonging to the current page have visible contents.
      * Otherwise, the row count of the body gets inflated from a paragraph that is not actually visible on the page.
      */
-    private boolean addParagraphIfNotEmptyUpTo(int firstExcludedRun, P paragraph) {
+    private void addParagraphIfNotEmpty(P p) {
         // We don't care about the actual page coordinates, we just want to check if something at all would be rendered
         var simpleRenderer = new SimpleParagraphRenderer(new SimpleRunRenderer(0, 0, new SimpleArabicNumberRenderer()));
 
-        int lastIncludedRun = firstExcludedRun - 1;
-        var paragraphPart = paragraphTransformer.transform(paragraph).partitionTo(lastIncludedRun);
-        // If up to the specified run nothing would get rendered, consider the paragraph empty and don't add it to the
-        // current page
-        if (simpleRenderer.render(paragraphPart).isEmpty()) return false;
+        var paragraph = paragraphTransformer.transform(p);
+        if (simpleRenderer.render(paragraph).isEmpty()) return;
 
-        currentPageParagraphs.add(paragraph);
-        return true;
+        currentPage.addBodyParagraph(p);
     }
 
-
-    private void finishCurrentPage() {
-
-        int currentPage = currentPageNumber();
-
-        var header = new ComponentSegmentExtractor<>(docx, Hdr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
-        var footer = new ComponentSegmentExtractor<>(docx, Ftr.class, currentPage, paragraphTransformer).extractSegment().orElse(null);
-
-        var body = assembleBodySegment(currentPageParagraphs);
-        var footnotes = computeFootnotes();
-        var preProcessedPage = pageTransformer.apply(new SimpleDocxPage<>(header, body, footnotes, footer));
-        pages.add(new DefaultDocxPage<>(preProcessedPage));
-        resetPageState();
+    private void startNextPage() {
+        pages.add(currentPage);
+        currentPage = new PageBuilder(docx, paragraphTransformer, pages.size());
     }
 
-    private DocxSegment<CompositeRun> assembleBodySegment(List<P> paragraphs) {
-        return new SimpleDocxSegment<>(paragraphs.stream().map(paragraphTransformer::transform).toList());
-    }
-
-    private int currentPageNumber() {
-        return pages.size();
-    }
-
-    private void resetPageState() {
-        currentPageParagraphs.clear();
-        currentPageFootnotes.clear();
-    }
-
-    private Map<Integer, DocxSegment<CompositeRun>> computeFootnotes() {
-        var result = new HashMap<Integer, DocxSegment<CompositeRun>>();
-        for (int footnoteRef : currentPageFootnotes) {
-            var footnote = new FootnotesSegmentExtractor(docx, footnoteRef, paragraphTransformer).extractSegment();
-            footnote.ifPresent(f -> result.put(footnoteRef, f));
-        }
-
-        return result;
-    }
-
-    private void saveFootnotes(R run) {
+    private void saveFootnotes(R run, PageBuilder pageBuilder) {
         var footnoteReferences = DocxUtil.keepElementsOfType(getChildren(run), CTFtnEdnRef.class);
-        currentPageFootnotes.addAll(footnoteReferences.stream().map(CTFtnEdnRef::getId).map(BigInteger::intValue).toList());
+        pageBuilder.addFootnoteReferences(footnoteReferences.stream().map(CTFtnEdnRef::getId).map(BigInteger::intValue).toList());
     }
 
     private boolean isRunOnNextPage(R run) {

@@ -1,11 +1,5 @@
-package com.nitpeek.io.docx.render;
+package com.nitpeek.io.docx.internal.reporter;
 
-import com.nitpeek.io.docx.DocxPageSource;
-import com.nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
-import com.nitpeek.io.docx.internal.pagesource.DocxPageExtractor;
-import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
-import com.nitpeek.io.docx.internal.reporter.*;
-import jakarta.xml.bind.JAXBException;
 import com.nitpeek.core.api.process.RuleSetProvider;
 import com.nitpeek.core.api.report.ReportingException;
 import com.nitpeek.core.api.translate.Translation;
@@ -13,9 +7,14 @@ import com.nitpeek.core.impl.process.RulesBasedPageConsumer;
 import com.nitpeek.core.impl.process.SimplePageProcessor;
 import com.nitpeek.core.impl.process.SimpleProcessor;
 import com.nitpeek.io.docx.internal.common.RunRendererFactory;
+import com.nitpeek.io.docx.internal.pagesource.DefaultDocxPageExtractor;
+import com.nitpeek.io.docx.internal.pagesource.DocxPageExtractor;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
+import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
+import com.nitpeek.io.docx.render.AnnotationRenderer;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.DocxPage;
+import jakarta.xml.bind.JAXBException;
 import org.docx4j.jaxb.XPathBinderAssociationIsPartialException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 

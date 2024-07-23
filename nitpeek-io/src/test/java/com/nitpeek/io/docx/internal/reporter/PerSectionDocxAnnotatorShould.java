@@ -12,8 +12,6 @@ import com.nitpeek.core.impl.config.SimpleContext;
 import com.nitpeek.core.impl.process.SimpleRuleSetProvider;
 import com.nitpeek.core.impl.translate.CoreEnglishTranslation;
 import com.nitpeek.io.docx.render.HighlightAnnotationRenderer;
-import com.nitpeek.io.docx.render.PerSectionDocxAnnotator;
-import com.nitpeek.io.docx.render.SimpleDocxAnnotator;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.junit.jupiter.api.Assertions;

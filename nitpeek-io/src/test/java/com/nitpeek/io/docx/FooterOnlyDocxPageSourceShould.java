@@ -1,5 +1,6 @@
 package com.nitpeek.io.docx;
 
+import com.nitpeek.io.docx.internal.reporter.DocxPageSource;
 import com.nitpeek.io.testutil.TestFile;
 import com.nitpeek.io.testutil.TestFileParagraphs;
 import jakarta.xml.bind.JAXBException;

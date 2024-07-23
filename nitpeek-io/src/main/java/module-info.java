@@ -14,4 +14,5 @@ module com.nitpeek.lib.io {
     exports com.nitpeek.io.pdf.util;
     exports com.nitpeek.io.docx;
     exports com.nitpeek.io.docx.util;
+    exports com.nitpeek.io.docx.render;
 }

@@ -1,4 +1,4 @@
-package com.nitpeek.io.docx;
+package com.nitpeek.io.docx.internal.reporter;
 
 import jakarta.xml.bind.JAXBException;
 import com.nitpeek.core.api.common.TextPage;

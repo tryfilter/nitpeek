@@ -1,11 +1,5 @@
-package com.nitpeek.io.docx.render;
+package com.nitpeek.io.docx.internal.reporter;
 
-import com.nitpeek.io.docx.DocxPageSource;
-import com.nitpeek.io.docx.internal.common.RunRendererFactory;
-import com.nitpeek.io.docx.internal.pagesource.DefaultFootnoteContentExtractor;
-import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
-import com.nitpeek.io.docx.internal.reporter.*;
-import com.nitpeek.io.docx.types.SplittableRun;
 import com.nitpeek.core.api.analyze.Rule;
 import com.nitpeek.core.api.config.Configuration;
 import com.nitpeek.core.api.config.Context;
@@ -16,11 +10,16 @@ import com.nitpeek.core.api.translate.Translation;
 import com.nitpeek.core.impl.config.ConfiguredPageProcessor;
 import com.nitpeek.core.impl.process.RulesBasedPageConsumer;
 import com.nitpeek.core.impl.process.SimpleProcessor;
+import com.nitpeek.io.docx.internal.common.RunRendererFactory;
+import com.nitpeek.io.docx.internal.pagesource.DefaultFootnoteContentExtractor;
 import com.nitpeek.io.docx.internal.pagesource.DefaultFootnoteReferenceExtractor;
 import com.nitpeek.io.docx.internal.pagesource.DocxFootnotesProvider;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
+import com.nitpeek.io.docx.internal.pagesource.render.SimpleRunRenderer;
+import com.nitpeek.io.docx.render.AnnotationRenderer;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.types.DocxPage;
+import com.nitpeek.io.docx.types.SplittableRun;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 
 import java.util.List;

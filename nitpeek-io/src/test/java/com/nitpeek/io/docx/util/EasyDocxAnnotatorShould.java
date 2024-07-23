@@ -11,7 +11,7 @@ import com.nitpeek.core.impl.analyze.analyzer.LiteralReplacer;
 import com.nitpeek.core.impl.process.ListPageConsumer;
 import com.nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
 import com.nitpeek.io.SimpleAnnotator;
-import com.nitpeek.io.docx.DocxPageSource;
+import com.nitpeek.io.docx.internal.reporter.DocxPageSource;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

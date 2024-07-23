@@ -8,7 +8,6 @@ import com.nitpeek.core.impl.analyze.analyzer.RegexReplacer;
 import com.nitpeek.core.impl.common.SimpleIdentifier;
 import com.nitpeek.core.impl.process.SimpleRuleSetProvider;
 import com.nitpeek.core.impl.translate.DefaultFallbackEnglishTranslation;
-import com.nitpeek.io.docx.render.SimpleDocxAnnotator;
 import com.nitpeek.io.docx.types.DocxPage;
 import com.nitpeek.io.docx.types.CompositeRun;
 import com.nitpeek.io.docx.render.HighlightAnnotationRenderer;

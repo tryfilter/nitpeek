@@ -12,7 +12,7 @@ repositories {
 
 
 dependencies {
-    implementation(project(":nitpeek-core"))
+    api(project(":nitpeek-core"))
     implementation(libs.apache.pdfbox)
     implementation(libs.slf4j.api)
     implementation(libs.bundles.docx4j)

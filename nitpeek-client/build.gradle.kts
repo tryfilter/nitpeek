@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":nitpeek-core"))
+    api(project(":nitpeek-core"))
     implementation(libs.slf4j.api)
 
     // Plugins need to be present on the module path in order to be picked up by the application.

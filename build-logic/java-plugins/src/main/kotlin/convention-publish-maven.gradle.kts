@@ -7,12 +7,12 @@ val libs = the<LibrariesForLibs>()
 
 plugins {
     id("maven-publish")
-    id("java")
+    id("java-library")
 }
 
 group = "com.nitpeek"
 // artifact id defaults to the directory name of each submodule, which is what we want
-version = libs.versions.nitpeek.get()
+// version must be passed when publishing with the -Pversion flag
 
 java {
     withSourcesJar()
@@ -23,9 +23,19 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = group.toString()
-            version = version.toString()
 
             from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/tryfilter/test-gradle-publish-monorepo")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
         }
     }
 }

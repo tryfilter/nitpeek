@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":nitpeek-core"))
+    api(project(":nitpeek-core"))
 }
 
 repositories {

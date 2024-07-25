@@ -3,6 +3,7 @@ package com.nitpeek.io.docx;
 import com.nitpeek.core.api.process.Nitpicker;
 import com.nitpeek.core.api.process.RuleSetProvider;
 import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.core.api.translate.Translation;
 import com.nitpeek.core.impl.config.SimpleContext;
 import com.nitpeek.io.docx.internal.pagesource.ParagraphPreservingDocxPageExtractor;
@@ -45,13 +46,20 @@ public class ParagraphPreservingDocxNitpicker implements Nitpicker {
      */
     @Override
     public void nitpick(InputStream input, OutputStream analysisResult, Set<RuleSetProvider> ruleSetsToApply) throws ReportingException {
+        WordprocessingMLPackage docx = null;
         try {
             var annotator = new PerSectionDocxAnnotator(ruleSetsToApply, i18n, ParagraphPreservingDocxPageExtractor::new, new SimpleContext());
-            var docx = WordprocessingMLPackage.load(input);
+            docx = WordprocessingMLPackage.load(input);
             annotator.annotateDocument(docx, annotationRenderer);
+
+        } catch (Docx4JException e) {
+            throw new ReportingException("Unable to open DOCX document", e, Problem.INPUT);
+        }
+
+        try {
             docx.save(analysisResult);
         } catch (Docx4JException e) {
-            throw new ReportingException("Unable to open/save DOCX document", e);
+            throw new ReportingException("Unable to save DOCX document", e, Problem.OUTPUT);
         }
     }
 }

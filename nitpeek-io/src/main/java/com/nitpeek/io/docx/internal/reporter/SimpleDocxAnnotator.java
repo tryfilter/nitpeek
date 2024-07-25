@@ -2,6 +2,7 @@ package com.nitpeek.io.docx.internal.reporter;
 
 import com.nitpeek.core.api.process.RuleSetProvider;
 import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.core.api.translate.Translation;
 import com.nitpeek.core.impl.process.RulesBasedPageConsumer;
 import com.nitpeek.core.impl.process.SimplePageProcessor;
@@ -54,7 +55,7 @@ public final class SimpleDocxAnnotator implements DocxAnnotator {
         try {
             return new DefaultDocxPageExtractor(docx, pageTransformer);
         } catch (JAXBException | XPathBinderAssociationIsPartialException e) {
-            throw new ReportingException("Unable to extract pages from DOCX", e);
+            throw new ReportingException("Unable to extract pages from DOCX", e, Problem.PROCESSING);
         }
     }
 }

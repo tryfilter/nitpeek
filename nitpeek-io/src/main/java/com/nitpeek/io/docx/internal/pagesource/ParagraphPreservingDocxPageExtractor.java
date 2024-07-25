@@ -1,6 +1,7 @@
 package com.nitpeek.io.docx.internal.pagesource;
 
 import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.io.docx.internal.common.DocxUtil;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleArabicNumberRenderer;
 import com.nitpeek.io.docx.internal.pagesource.render.SimpleParagraphRenderer;
@@ -50,7 +51,7 @@ public final class ParagraphPreservingDocxPageExtractor implements DocxPageExtra
         try {
             collectPages();
         } catch (JAXBException | XPathBinderAssociationIsPartialException e) {
-            throw new ReportingException("Unable to extract pages from DOCX", e);
+            throw new ReportingException("Unable to extract pages from DOCX", e, Problem.PROCESSING);
         }
     }
 

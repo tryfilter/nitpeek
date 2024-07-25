@@ -1,12 +1,11 @@
 package com.nitpeek.io.docx;
 
+import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.impl.process.ListPageConsumer;
 import com.nitpeek.io.docx.internal.reporter.DocxPageSource;
+import com.nitpeek.io.docx.internal.reporter.PageTransformers;
 import com.nitpeek.io.testutil.TestFile;
 import com.nitpeek.io.testutil.TestFileParagraphs;
-import jakarta.xml.bind.JAXBException;
-import com.nitpeek.core.impl.process.ListPageConsumer;
-import com.nitpeek.io.docx.internal.reporter.PageTransformers;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ final class BodyOnlyDocxPageSourceShould {
 
     @Test
     void throwForInvalidFile() {
-        assertThrows(Docx4JException.class, () -> {
+        assertThrows(ReportingException.class, () -> {
             try (var input = BodyOnlyDocxPageSourceShould.class.getResourceAsStream("../TestFile.txt")) {
                 DocxPageSource.createFrom(input);
             }
@@ -26,7 +25,7 @@ final class BodyOnlyDocxPageSourceShould {
     }
 
     @Test
-    void extractTextFromPages() throws IOException, Docx4JException, JAXBException {
+    void extractTextFromPages() throws IOException, ReportingException {
 
         try (var input = BodyOnlyDocxPageSourceShould.class.getResourceAsStream("TestFile.docx")) {
 
@@ -45,7 +44,7 @@ final class BodyOnlyDocxPageSourceShould {
      * form; the DOCX page source sees each paragraph as a single line of text.
      */
     @Test
-    void extractTextFromPagesWithLongerParagraphs() throws IOException, Docx4JException, JAXBException {
+    void extractTextFromPagesWithLongerParagraphs() throws IOException, ReportingException {
 
         try (var input = BodyOnlyDocxPageSourceShould.class.getResourceAsStream("TestFile_Paragraphs.docx")) {
 

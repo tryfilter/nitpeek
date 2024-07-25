@@ -2,6 +2,8 @@ package com.nitpeek.io.pdf;
 
 import com.nitpeek.core.api.process.PageConsumer;
 import com.nitpeek.core.api.process.PageSource;
+import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.core.impl.process.StringPageSource;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
@@ -26,16 +28,21 @@ public final class PdfPageSource implements PageSource {
      * @param input representing a valid PDF file. The InputStream is not closed by this method.
      * @return a page source containing all pages of the provided PDF
      */
-    public static PdfPageSource createFrom(InputStream input) throws IOException {
+    public static PdfPageSource createFrom(InputStream input) throws ReportingException {
         try (var randomAccess = new RandomAccessReadBuffer(input);
              var pdf = Loader.loadPDF(randomAccess)) {
-
             return new PdfPageSource(toMemoryPageSource(pdf));
+        } catch (IOException e) {
+            throw new ReportingException("Unable to read PDF", e, Problem.INPUT);
         }
     }
 
-    PdfPageSource(PDDocument pdf) throws IOException {
-        this.memoryPageSource = toMemoryPageSource(pdf);
+    PdfPageSource(PDDocument pdf) throws ReportingException {
+        try {
+            this.memoryPageSource = toMemoryPageSource(pdf);
+        } catch (IOException e) {
+            throw new ReportingException("Unable to create PageSource from PDF", e, Problem.INPUT);
+        }
     }
 
     PdfPageSource(PageSource pageSource) {

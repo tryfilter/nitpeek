@@ -4,6 +4,7 @@ import com.nitpeek.core.api.common.Feature;
 import com.nitpeek.core.api.common.TextCoordinate;
 import com.nitpeek.core.api.common.TextPage;
 import com.nitpeek.core.api.common.TextSelection;
+import com.nitpeek.core.api.report.ReportingException;
 import com.nitpeek.core.impl.common.AnonymousSingleComponentFeature;
 import com.nitpeek.core.impl.process.ListPageConsumer;
 import com.nitpeek.io.pdf.SectionExtractor.ComponentWithSections;
@@ -27,7 +28,7 @@ final class SectionExtractorShould {
 
     private final List<TextPage> pages = new ListPageConsumer(PdfPageSource.createFrom(getPdfStream())).getPages();
 
-    SectionExtractorShould() throws IOException {
+    SectionExtractorShould() throws IOException, ReportingException {
     }
 
     @AfterEach

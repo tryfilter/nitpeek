@@ -1,6 +1,7 @@
 package com.nitpeek.io.pdf;
 
 import com.nitpeek.core.api.common.TextPage;
+import com.nitpeek.core.api.report.ReportingException;
 import com.nitpeek.core.impl.process.ListPageConsumer;
 import com.nitpeek.io.testutil.TestFile;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ final class PdfPageSourceShould {
 
     @Test
     void throwForInvalidFile() {
-        assertThrows(IOException.class, () -> {
+        assertThrows(ReportingException.class, () -> {
             try (var input = PdfPageSourceShould.class.getResourceAsStream("../TestFile.txt")) {
                 PdfPageSource.createFrom(input);
             }
@@ -24,7 +25,7 @@ final class PdfPageSourceShould {
     }
 
     @Test
-    void extractTextFromPages() throws IOException {
+    void extractTextFromPages() throws IOException, ReportingException {
 
         try (var input = PdfPageSourceShould.class.getResourceAsStream("TestFile.pdf")) {
 

@@ -6,6 +6,8 @@ import com.nitpeek.core.api.report.ReportingTarget;
 import java.io.IOException;
 import java.io.Writer;
 
+import static com.nitpeek.core.api.report.ReportingException.*;
+
 public final class WriterReportingTarget implements ReportingTarget {
 
     private final Writer writer;
@@ -20,7 +22,7 @@ public final class WriterReportingTarget implements ReportingTarget {
             writer.append(string);
             writer.flush();
         } catch (IOException e) {
-            throw new ReportingException(e);
+            throw new ReportingException(e, Problem.OUTPUT);
         }
     }
 }

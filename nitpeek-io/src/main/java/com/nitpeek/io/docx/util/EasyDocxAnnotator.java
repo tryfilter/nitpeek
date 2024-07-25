@@ -1,5 +1,6 @@
 package com.nitpeek.io.docx.util;
 
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.io.SimpleAnnotator;
 import com.nitpeek.io.docx.ParagraphPreservingDocxNitpicker;
 import com.nitpeek.io.docx.render.HighlightAnnotationRenderer;
@@ -8,6 +9,7 @@ import com.nitpeek.core.api.report.ReportingException;
 import com.nitpeek.core.api.translate.Translation;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
@@ -26,15 +28,20 @@ public final class EasyDocxAnnotator implements SimpleAnnotator {
     @Override
     public void annotateFeatures(Path inputDocx, Path outputDirectory) throws ReportingException {
 
-        var outputPath = outputPath(inputDocx, outputDirectory);
-        try (
-                var input = Files.newInputStream(inputDocx);
-                var output = Files.newOutputStream(outputPath)
-        ) {
+        var outputDocx = outputPath(inputDocx, outputDirectory);
+        try (var input = Files.newInputStream(inputDocx)) {
+            annotate(input, outputDocx);
+        } catch (IOException e) {
+            throw new ReportingException("Unable to open input file " + inputDocx + " for annotating", e, Problem.INPUT);
+        }
+    }
+
+    private void annotate(InputStream input, Path outputDocx) throws ReportingException {
+        try (var output = Files.newOutputStream(outputDocx)) {
             var nitpicker = new ParagraphPreservingDocxNitpicker(i18n, new HighlightAnnotationRenderer(HighlightAnnotationRenderer.HighlightColor.CYAN));
             nitpicker.nitpick(input, output, ruleSetProviders);
         } catch (IOException e) {
-            throw new ReportingException("Unable to open required files for annotating (input file = " + inputDocx + ", output file = " + outputPath, e);
+            throw new ReportingException("Unable to open output file " + outputDocx + " for annotating", e, Problem.OUTPUT);
         }
     }
 }

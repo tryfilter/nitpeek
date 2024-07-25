@@ -1,5 +1,7 @@
 package com.nitpeek.io.docx.internal.reporter;
 
+import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import jakarta.xml.bind.JAXBException;
 import com.nitpeek.core.api.common.TextPage;
 import com.nitpeek.core.api.process.PageConsumer;
@@ -34,13 +36,16 @@ public final class DocxPageSource implements PageSource {
      * @param pageTransformer the transformer to use before reading the page contents
      * @return a page source containing all pages of the provided DOCX
      */
-    public static PageSource createFrom(InputStream input, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws Docx4JException, JAXBException {
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(input);
-
-        return new DocxPageSource(toMemoryPageSource(wordMLPackage, pageTransformer));
+    public static PageSource createFrom(InputStream input, UnaryOperator<DocxPage<CompositeRun>> pageTransformer) throws ReportingException {
+        try {
+            WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load(input);
+            return new DocxPageSource(toMemoryPageSource(wordMLPackage, pageTransformer));
+        } catch (Docx4JException | JAXBException e) {
+            throw new ReportingException("Unable to load DOCX document from input stream", e, Problem.INPUT);
+        }
     }
 
-    public static PageSource createFrom(InputStream input) throws Docx4JException, JAXBException {
+    public static PageSource createFrom(InputStream input) throws ReportingException {
         return createFrom(input, UnaryOperator.identity());
     }
 

@@ -3,6 +3,7 @@ package com.nitpeek.io.pdf;
 import com.nitpeek.core.api.common.Feature;
 import com.nitpeek.core.api.report.Reporter;
 import com.nitpeek.core.api.report.ReportingException;
+import com.nitpeek.core.api.report.ReportingException.Problem;
 import com.nitpeek.core.api.translate.Translation;
 import com.nitpeek.core.impl.process.ListPageConsumer;
 import org.apache.pdfbox.Loader;
@@ -44,13 +45,28 @@ public final class PdfCommentReporter implements Reporter {
         try (var randomAccess = new RandomAccessReadBuffer(originalPdf);
              var inputPdf = Loader.loadPDF(randomAccess)
         ) {
-            var inputPages = new ListPageConsumer(new PdfPageSource(inputPdf)).getPages();
-            var sessionExtractor = new SectionExtractor(features, inputPages);
-            addCommentsForFeatures(inputPdf, sessionExtractor, i18n);
-
-            inputPdf.save(annotatedPdf);
+            reportTo(inputPdf, features, i18n);
+            saveAnnotatedPdf(inputPdf);
         } catch (IOException e) {
-            throw new ReportingException("Unable to annotate PDF with features.", e);
+            throw new ReportingException("Unable to open input PDF for annotating.", e, Problem.INPUT);
+        }
+    }
+
+    private void saveAnnotatedPdf(PDDocument pdf) throws ReportingException {
+        try {
+            pdf.save(annotatedPdf);
+        } catch (IOException e) {
+            throw new ReportingException("Unable to write annotated PDF", e, Problem.OUTPUT);
+        }
+    }
+
+    private void reportTo(PDDocument pdf, List<Feature> features, Translation i18n) throws ReportingException {
+        try {
+            var inputPages = new ListPageConsumer(new PdfPageSource(pdf)).getPages();
+            var sessionExtractor = new SectionExtractor(features, inputPages);
+            addCommentsForFeatures(pdf, sessionExtractor, i18n);
+        } catch (IOException e) {
+            throw new ReportingException("Unable to add comments to PDF", e, Problem.PROCESSING);
         }
     }
 

@@ -8,8 +8,6 @@ import com.nitpeek.core.impl.common.SimpleFeatureComponent;
 import com.nitpeek.core.impl.common.SimpleFeatureType;
 import com.nitpeek.core.impl.common.StandardFeature;
 import com.nitpeek.core.internal.Confidence;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,6 @@ import static com.nitpeek.core.impl.translate.CoreTranslationKeys.REPLACE_LITERA
  * This analyzer is strongly processing-order independent.
  */
 public final class RegexReplacer implements Analyzer {
-
-    private final Logger log = LoggerFactory.getLogger(RegexReplacer.class);
 
     private final Pattern pattern;
     private final String replacement;
@@ -67,25 +63,8 @@ public final class RegexReplacer implements Analyzer {
 
     private void addFeatures(String textSection, TextPage page, int lineNumber) {
         var replacementComponents = getReplacements(textSection, page, lineNumber);
-        if (log.isTraceEnabled() && !replacementComponents.isEmpty()) {
-            log.atTrace().log("Creating a feature for each of these {} components: {}.{}",
-                    replacementComponents.size(),
-                    formatComponents(replacementComponents),
-                    System.lineSeparator()
-            );
-        }
         var featuresStream = replacementComponents.stream().map(this::wrapComponent);
         features.addAll(featuresStream.toList());
-    }
-
-    private String formatComponents(List<FeatureComponent> components) {
-        StringBuilder builder = new StringBuilder("[");
-        for (var component: components) {
-            builder.append(component.getCoordinates()).append(": '");
-            builder.append(component.getRelevantTextPortion().orElse("")).append("'").append(", ");
-        }
-        builder.append("]");
-        return builder.toString();
     }
 
     private Feature wrapComponent(FeatureComponent component) {

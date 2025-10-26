@@ -1,5 +1,6 @@
 package com.nitpeek.plugins.demoplugin.plugin1;
 
+import com.nitpeek.core.api.process.StandardRuleSetTags;
 import com.nitpeek.plugins.demoplugin.plugin1.internal.DemoTranslationProvider;
 import com.nitpeek.plugins.demoplugin.plugin1.internal.InternalTranslationKeys;
 import com.nitpeek.core.api.analyze.Rule;
@@ -67,11 +68,13 @@ public final class DemoPlugin implements Plugin {
         return Set.of(
                 new SimpleRuleSetProvider(
                         Set.of(replace42WithMeaning, replace4xWith42),
-                        new SimpleIdentifier(id("MEANING_OF_LIFE"), InternalTranslationKeys.RULESET_MEANING_NAME.key(), InternalTranslationKeys.RULESET_MEANING_DESCRIPTION.key())
+                        new SimpleIdentifier(id("MEANING_OF_LIFE"), InternalTranslationKeys.RULESET_MEANING_NAME.key(), InternalTranslationKeys.RULESET_MEANING_DESCRIPTION.key()),
+                        Set.of(StandardRuleSetTags.languageEnglish(), StandardRuleSetTags.contentBody())
                 ),
                 new SimpleRuleSetProvider(
                         Set.of(deleteTest),
-                        new SimpleIdentifier(id("DELETION"), InternalTranslationKeys.RULESET_DELETE_NAME.key(), InternalTranslationKeys.RULESET_DELETE_DESCRIPTION.key())
+                        new SimpleIdentifier(id("DELETION"), InternalTranslationKeys.RULESET_DELETE_NAME.key(), InternalTranslationKeys.RULESET_DELETE_DESCRIPTION.key()),
+                        Set.of(StandardRuleSetTags.languageGerman(), StandardRuleSetTags.contentBody(), StandardRuleSetTags.contentFootnotes())
                 )
         );
     }

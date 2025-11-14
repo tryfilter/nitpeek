@@ -1,39 +1,44 @@
 package com.nitpeek.io.docx.internal.reporter;
 
-import com.nitpeek.core.api.analyze.Rule;
 import com.nitpeek.core.api.process.RuleSetProvider;
 import com.nitpeek.core.api.process.RuleSetTag;
-import com.nitpeek.core.impl.process.FilteringRuleSetProvider;
 import com.nitpeek.core.impl.process.RuleSetProviderFilters;
-import com.nitpeek.core.impl.process.SimpleRuleSetProvider;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.nitpeek.core.api.process.StandardRuleSetTags.*;
 
 public final class BodyFootnotesRuleSetPartitioner {
 
-    private final RuleSetProvider universallyApplicableRules;
-    private final RuleSetProvider rulesApplicableToBody;
-    private final RuleSetProvider rulesApplicableToFootnotes;
+    private final Set<RuleSetProvider> universallyApplicableRules;
+    private final Set<RuleSetProvider> rulesApplicableToBody;
+    private final Set<RuleSetProvider> rulesApplicableToFootnotes;
 
     public BodyFootnotesRuleSetPartitioner(Set<RuleSetProvider> ruleSetProviders) {
-        this.universallyApplicableRules = new FilteringRuleSetProvider(ruleSetProviders, this::isRuleSetProviderUniversallyApplicable);
-        this.rulesApplicableToBody = keepAllExcept(universallyApplicableRules.getRules(), new FilteringRuleSetProvider(ruleSetProviders, this::isRuleSetProviderApplicableToBody));
-        this.rulesApplicableToFootnotes = keepAllExcept(universallyApplicableRules.getRules(), new FilteringRuleSetProvider(ruleSetProviders, this::isRuleSetProviderApplicableToFootnotes));
+        this.universallyApplicableRules = ruleSetProviders.stream()
+                .filter(this::isRuleSetProviderUniversallyApplicable)
+                .collect(Collectors.toUnmodifiableSet());
+        this.rulesApplicableToBody = ruleSetProviders.stream()
+                .filter(this::isRuleSetProviderApplicableToBody)
+                .filter(rsp -> !universallyApplicableRules.contains(rsp))
+                .collect(Collectors.toUnmodifiableSet());
+        this.rulesApplicableToFootnotes = ruleSetProviders.stream()
+                .filter(this::isRuleSetProviderApplicableToFootnotes)
+                .filter(rsp -> !universallyApplicableRules.contains(rsp))
+                .collect(Collectors.toUnmodifiableSet());
     }
 
-    public Set<Rule> rulesApplicableUniversally() {
-        return universallyApplicableRules.getRules();
+    public Set<RuleSetProvider> rulesApplicableUniversally() {
+        return universallyApplicableRules;
     }
 
-    public Set<Rule> rulesApplicableToBody() {
-        return rulesApplicableToBody.getRules();
+    public Set<RuleSetProvider> rulesApplicableToBody() {
+        return rulesApplicableToBody;
     }
 
-    public Set<Rule> rulesApplicableToFootnotes() {
-        return rulesApplicableToFootnotes.getRules();
+    public Set<RuleSetProvider> rulesApplicableToFootnotes() {
+        return rulesApplicableToFootnotes;
     }
 
     private boolean isRuleSetProviderUniversallyApplicable(RuleSetProvider ruleSetProvider) {
@@ -48,11 +53,5 @@ public final class BodyFootnotesRuleSetPartitioner {
 
     private boolean isRuleSetProviderApplicableToFootnotes(RuleSetProvider ruleSetProvider) {
         return RuleSetProviderFilters.matchesAllTags(ruleSetProvider, Set.of(contentFootnotes()));
-    }
-
-    private RuleSetProvider keepAllExcept(Set<Rule> rulesToRemove, RuleSetProvider ruleSetProvider) {
-        var resultingRules = new HashSet<>(ruleSetProvider.getRules());
-        resultingRules.removeAll(rulesToRemove);
-        return new SimpleRuleSetProvider(resultingRules, ruleSetProvider.getRuleSetId());
     }
 }

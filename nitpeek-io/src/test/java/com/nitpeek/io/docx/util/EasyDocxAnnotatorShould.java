@@ -1,6 +1,7 @@
 package com.nitpeek.io.docx.util;
 
 import com.google.common.jimfs.Jimfs;
+import com.nitpeek.core.api.common.NoFilter;
 import com.nitpeek.io.testutil.FileUtil;
 import jakarta.xml.bind.JAXBException;
 import com.nitpeek.core.api.analyze.Rule;
@@ -47,6 +48,7 @@ final class EasyDocxAnnotatorShould {
         Files.createDirectory(outputDir);
         when(ruleSetProvider.getRules()).thenReturn(Set.of(rule));
         when(rule.createAnalyzer()).thenReturn(new LiteralReplacer("line", "replace", true));
+        when(ruleSetProvider.getFilter()).thenReturn(new NoFilter());
     }
 
     @Test
